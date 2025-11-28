@@ -63,7 +63,7 @@ const CourseDetails = () => {
         fetchCourseAndStatus();
     }, [id, user]);
 
-    // এনরোল এবং আন-এনরোল করার জন্য টগল ফাংশন
+
     const handleEnrollmentToggle = async () => {
         if (!user) {
             toast.error("Please login first.");

@@ -2,15 +2,15 @@ import React from 'react';
 import { Link, useRouteError } from 'react-router-dom';
 
 const ErrorPage = () => {
-    // useRouteError হুকটি রাউটিং সম্পর্কিত যেকোনো এরর অবজেক্টকে ধরে ফেলে
+
     const error = useRouteError();
-    console.error(error); // ডিবাগিং এর জন্য কনসোলে এররটি দেখতে পারেন
+    console.error(error); 
 
     let status = error.status || 404;
     let statusText = error.statusText || "Page Not Found";
     let message = "Sorry, we couldn’t find the page you’re looking for.";
 
-    // যদি এটি 404 এরর না হয়ে অন্য কোনো এরর হয়
+   
     if (status !== 404) {
         message = error.message || "An unexpected error has occurred.";
     }

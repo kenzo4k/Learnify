@@ -13,8 +13,7 @@ import Newsletter from './Newsletter';
 const Home = () => {
     useEffect(() => {
         document.title = "Home | CourseFlow";
-    }, []); // খালি dependency array মানে এটি শুধু প্রথমবার রেন্ডার হওয়ার সময় চলবে
-    // Optional: for dynamic title
+    }, []); 
     useEffect(() => {
         document.title = 'CourseFlow | Home';
     }, []);

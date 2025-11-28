@@ -2,36 +2,30 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth'; // আপনার কাস্টম হুক
+import useAuth from '../hooks/useAuth'; 
 
 const Login = () => {
     const { register, handleSubmit } = useForm();
-    const { signIn, googleSignIn } = useAuth(); // আপনার AuthContext থেকে আসা ফাংশন
+    const { signIn, googleSignIn } = useAuth(); 
     
-    // React Router থেকে প্রয়োজনীয় হুক
     const navigate = useNavigate();
     const location = useLocation();
-    // ব্যবহারকারী কোন পেজ থেকে এই লগইন পেজে এসেছে, তা বের করা হচ্ছে
-    // PrivateRoute থেকে state এর মাধ্যমে এই তথ্য পাঠানো হয়েছিল
+
     const from = location.state?.from?.pathname || "/";
     
-    // ইমেইল-পাসওয়ার্ড দিয়ে লগইন হ্যান্ডলার
     const onSubmit = data => {
         signIn(data.email, data.password)
             .then(() => {
                 toast.success("Login Successful!");
-                // লগইন সফল হলে, ব্যবহারকারীকে তার আগের পেজে বা হোমপেজে পাঠিয়ে দেওয়া হচ্ছে
                 navigate(from, { replace: true });
             })
             .catch(err => toast.error(err.message));
     };
     
-    // গুগল সাইন-ইন হ্যান্ডলার
     const handleGoogleLogin = () => {
         googleSignIn()
             .then(() => {
                 toast.success("Login Successful!");
-                // এখানেও লগইন সফল হলে ব্যবহারকারীকে আগের পেজে ফেরত পাঠানো হচ্ছে
                 navigate(from, { replace: true });
             })
             .catch(err => toast.error(err.message));

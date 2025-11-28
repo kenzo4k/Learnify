@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 // react-slick এর CSS ফাইল
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// ব্যানার ইমেজগুলো যৌক্তিকভাবে ইম্পোর্ট করা হয়েছে
 import banner1 from '../../assets/banner/banner1.jpg';
 import banner2 from '../../assets/banner/banner2.jpg';
 import banner3 from '../../assets/banner/banner3.png';
@@ -15,28 +14,26 @@ import banner5 from '../../assets/banner/banner5.png';
 import banner6 from '../../assets/banner/banner6.png';
 
 const Banner = () => {
-    // react-slick এর সেটিংস
     const settings = {
         dots: true,
         infinite: true,
         speed: 1000,
-        fade: false, // fade বন্ধ করে slide করা হবে
+        fade: false, 
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3500, // 3.5 সেকেন্ড পর পর স্ক্রল
+        autoplaySpeed: 3500, 
         cssEase: 'ease-in-out',
-        pauseOnHover: true, // হোভার করলে থেমে যাবে
+        pauseOnHover: true, 
         pauseOnFocus: true,
         appendDots: dots => (
             <div>
-              {/* কাস্টম ডট স্টাইলিংয়ের জন্য একটি className যোগ করা হয়েছে */}
+              {}
               <ul className="m-0 slick-dots-custom"> {dots} </ul>
             </div>
         ),
     };
 
-    // স্লাইডের ডেটা
     const slideData = [
         { bg: banner1, title: 'Unlock Your Potential with Expert-Led Courses', subtitle: 'Dive into a world of knowledge with thousands of courses taught by industry pioneers.' },
         { bg: banner2, title: 'Learn on Your Schedule, Anywhere', subtitle: 'Our flexible learning options are designed to fit your busy lifestyle. Start learning today!' },
@@ -46,7 +43,6 @@ const Banner = () => {
         { bg: banner6, title: 'Transform Your Future, One Skill at a Time', subtitle: 'Your journey to personal and professional growth begins here. What will you learn today?' },
     ];
 
-    // Framer Motion এর জন্য অ্যানিমেশন ভ্যারিয়েন্ট
     const textVariants = {
         hidden: { opacity: 0, y: 30 },
         visible: { 
@@ -58,7 +54,7 @@ const Banner = () => {
 
     return (
         <>
-            {/* এই স্টাইলগুলো index.css বা App.css ফাইলে রাখলে আরও ভালো হয় */}
+            {}
             <style>
                 {`
                     .slick-dots-custom { 
@@ -124,21 +120,21 @@ const Banner = () => {
                     {slideData.map((slide, index) => (
                         <div key={index} className="relative h-[65vh] w-full overflow-hidden">
                             
-                            {/* ব্যাকগ্রাউন্ড ইমেজ এবং কালো ওভারলে */}
+                            {}
                             <div
                                 className="absolute inset-0 bg-no-repeat transform transition-transform duration-700 hover:scale-105"
                                 style={{
                                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${slide.bg})`,
-                                    backgroundPosition: ' center', // উপরের অংশ দেখাবে
+                                    backgroundPosition: ' center', 
                                     backgroundSize: 'cover',
                                     width: '100%',
                                     height: '100%'
                                 }}
                             />
                             
-                            {/* টেক্সট এবং বাটন কন্টেন্ট */}
+                            {}
                             <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 py-6">
-                                {/* <<< পরিবর্তন: অ্যানিমেশন রি-ট্রিগার করার জন্য key যোগ করা হয়েছে >>> */}
+                                {}
                                 <motion.div 
                                     key={index}
                                     className="max-w-4xl w-full"
