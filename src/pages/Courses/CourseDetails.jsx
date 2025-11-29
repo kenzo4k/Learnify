@@ -23,7 +23,7 @@ const CourseDetails = () => {
     useEffect(() => {
         const fetchCourseAndStatus = async () => {
             setLoading(true);
-            document.title = "Course Details | CourseFlow";
+            document.title = "Course Details | Learnify";
 
             try {
                 const courseResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/courses/${id}`);
@@ -31,7 +31,7 @@ const CourseDetails = () => {
 
                 const courseData = await courseResponse.json();
                 setCourse(courseData);
-                document.title = `${courseData.title} | CourseFlow`;
+                document.title = `${courseData.title} | Learnify`;
 
                 const token = localStorage.getItem('access-token');
                 if (user && token) {

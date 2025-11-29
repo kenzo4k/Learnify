@@ -11,16 +11,16 @@ import Newsletter from './Newsletter';
 
 
 const Home = () => {
-    useEffect(() => {
-        document.title = "Home | CourseFlow";
-    }, []); 
-    useEffect(() => {
-        document.title = 'CourseFlow | Home';
-    }, []);
+  useEffect(() => {
+    document.title = "Home | Learnify";
+  }, []);
+  useEffect(() => {
+    document.title = 'Learnify | Home';
+  }, []);
 
   return (
     <div>
-     
+
       {/* 1. Banner Section */}
       <Banner />
 
@@ -35,7 +35,7 @@ const Home = () => {
 
       {/* 5. Extra Section 1: Top Instructors */}
       <TopInstructors />
-      
+
       {/* 6. Extra Section 2: Testimonials */}
       <Testimonials />
 

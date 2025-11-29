@@ -10,7 +10,7 @@ const Footer = () => {
     <footer className="bg-gray-900 text-gray-300">
       {/* Gradient Top Border */}
       <div className="h-1 bg-gradient-to-r from-purple-500 to-blue-600"></div>
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
         <div className="px-6 py-12 border-b border-gray-800 flex flex-col lg:flex-row justify-between items-center gap-8 bg-gray-800/50 rounded-xl my-8">
@@ -20,18 +20,18 @@ const Footer = () => {
               Subscribe to get exclusive course updates, learning resources, and special offers.
             </p>
           </div>
-          <form 
-            onSubmit={(e) => {e.preventDefault(); e.target.reset()}} 
+          <form
+            onSubmit={(e) => { e.preventDefault(); e.target.reset() }}
             className="flex flex-col sm:flex-row gap-3 w-full max-w-md"
           >
-            <input 
-              type="email" 
-              placeholder="Your email address" 
+            <input
+              type="email"
+              placeholder="Your email address"
               required
               className="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white placeholder-gray-400"
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg font-medium text-white transition-all duration-300"
             >
               Subscribe
@@ -44,7 +44,7 @@ const Footer = () => {
           {/* Column 1: Brand Info */}
           <div className="space-y-6">
             <div className="flex items-center">
-              <img src={logo} alt="CourseFlow Logo" className="w-12 h-12 mr-3" />
+              <img src={logo} alt="Learnify Logo" className="w-12 h-12 mr-3" />
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
                 Learnify
               </span>
@@ -52,7 +52,7 @@ const Footer = () => {
             <p className="text-gray-400">
               Empowering learners worldwide with high-quality, accessible education for all skill levels.
             </p>
-            
+
             <div className="flex items-center space-x-4">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-gray-800 hover:bg-blue-600 rounded-full transition-colors">
                 <FaFacebookF className="text-lg text-gray-300 hover:text-white" />
