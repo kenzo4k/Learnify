@@ -71,27 +71,6 @@ const Register = () => {
                             </div>
                         </div>
 
-                        {/* Photo URL field */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                <Image className="w-4 h-4 text-blue-400" />
-                                Photo URL
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="url"
-                                    {...register("photoURL", { required: "Photo URL is required" })}
-                                    placeholder="https://example.com/photo.jpg"
-                                    className={`w-full px-4 py-3 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                                        errors.photoURL ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
-                                    }`}
-                                />
-                                {errors.photoURL && (
-                                    <p className="text-red-400 text-xs mt-1">{errors.photoURL.message}</p>
-                                )}
-                            </div>
-                        </div>
-
                         {/* Email field */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
