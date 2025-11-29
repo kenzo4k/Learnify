@@ -44,7 +44,7 @@
     "globals": "^16.0.0",
     "vite": "^6.3.5"
   },
-  "description": "CourseFlow is a modern, full-stack web application designed to provide a seamless experience for students and instructors. Users can browse a wide range of courses, enroll with a single click, and manage their learning journey. Instructors can add, update, and manage their own courses through a secure dashboard.",
+  "description": "Learnify is a modern, full-stack web application designed to provide a seamless experience for students and instructors. Users can browse a wide range of courses, enroll with a single click, and manage their learning journey. Instructors can add, update, and manage their own courses through a secure dashboard.",
   "main": "eslint.config.js",
   "keywords": [],
   "author": "",
