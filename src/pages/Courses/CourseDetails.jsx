@@ -19,7 +19,7 @@ const CourseDetails = () => {
     const [enrollLoading, setEnrollLoading] = useState(false);
     const [userEnrollmentCount, setUserEnrollmentCount] = useState(0);
 
-    // Data fetching এবং Dynamic Title সেট করার জন্য একটিমাত্র useEffect
+    // Data fetching Dynamic Title useEffect
     useEffect(() => {
         const fetchCourseAndStatus = async () => {
             setLoading(true);
@@ -355,13 +355,13 @@ const CourseDetails = () => {
                                     <button
                                         onClick={handleEnrollmentToggle}
                                         className={`btn btn-wide w-full ${isEnrolled ? 'btn-warning' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-indigo-600 hover:bg-indigo-700 text-white')}`}
-                                        disabled={enrollLoading || isEnrollmentLimitReached} // এখানে নতুন কন্ডিশন যোগ করা হয়েছে
+                                        disabled={enrollLoading || isEnrollmentLimitReached}
                                     >
                                         {enrollLoading ? (
                                             <span className="loading loading-spinner loading-sm"></span>
                                         ) : isEnrolled ? (
                                             '✓ Enrolled (Click to Un-enroll)'
-                                        ) : isEnrollmentLimitReached ? ( // এখানে নতুন টেক্সট দেখানো হচ্ছে
+                                        ) : isEnrollmentLimitReached ? (
                                             'Enrollment Limit Reached'
                                         ) : (
                                             'Enroll Now'

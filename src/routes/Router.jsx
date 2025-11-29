@@ -13,7 +13,7 @@ import EditCourse from "../pages/Courses/EditCourse";
 import ErrorPage from "../pages/ErrorPage";
 import AllCourses from "../pages/Courses/AllCourses";
 import Dashboard from "../pages/Home/DashBoard";
-import PrivateRoute from "./PrivateRoute"; // <<< PrivateRoute ইম্পোর্ট করুন
+import PrivateRoute from "./PrivateRoute"; // <<< PrivateRoute
 
 const router = createBrowserRouter([
   {
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "courses",
-        element: <AllCourses />, // সকল কোর্স পেজটি আমরা পাবলিক রাখছি
+        element: <AllCourses />,
       },
       {
         path: "courses/category/:category",
@@ -44,10 +44,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/course/:id",
-        element: <CourseDetails />, // কোর্স ডিটেইলস দেখতে লগইন লাগবে
+        element: <CourseDetails />,
       },
 
-      // --- Private Routes (সুরক্ষিত রুট) ---
+      // --- Private Routes 
       {
         path: "/add-course",
         element: <PrivateRoute><AddCourse /></PrivateRoute>,

@@ -6,7 +6,7 @@ import { FiBook, FiUser, FiTrash2, FiArrowLeft, FiClock, FiStar, FiZap } from 'r
 import { motion } from 'framer-motion';
 import CourseCard from '../../components/shared/CourseCard'; // Import CourseCard
 
-// --- Skeleton Loader Component (কোনো পরিবর্তন নেই) ---
+// --- Skeleton Loader Component 
 const CourseCardSkeleton = () => (
     <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 p-4 animate-pulse">
         <div className="h-48 bg-slate-700 rounded-lg mb-4"></div>
@@ -26,7 +26,7 @@ const MyEnrolledCourses = () => {
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // useEffect এবং handleRemoveEnrollment ফাংশন অপরিবর্তিত আছে, কারণ এগুলো সঠিকভাবে কাজ করছে
+    // useEffect এবং handleRemoveEnrollment
     useEffect(() => {
         let isMounted = true;
         const fetchEnrolledCourses = async () => {
@@ -80,9 +80,9 @@ const MyEnrolledCourses = () => {
 
                 const data = await response.json();
                 if (!response.ok || data.enrolled) throw new Error(data.message || 'Failed to remove enrollment.');
-                
+
                 Swal.fire({ title: 'Removed!', text: 'Your enrollment has been successfully removed.', icon: 'success', background: '#1f2937', color: '#f3f4f6', timer: 2000, showConfirmButton: false });
-                
+
                 setEnrolledCourses(prev => prev.filter(course => course._id !== courseId));
             } catch (error) {
                 Swal.fire({ icon: 'error', title: 'Operation Failed', text: error.message, background: '#1f2937', color: '#f3f4f6' });
@@ -109,7 +109,6 @@ const MyEnrolledCourses = () => {
         );
     }
 
-    // <<< ডিজাইন: অ্যানিমেশনের জন্য ভ্যারিয়েন্ট তৈরি করা হয়েছে >>>
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -125,7 +124,7 @@ const MyEnrolledCourses = () => {
 
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8">
-            <motion.div 
+            <motion.div
                 className="max-w-7xl mx-auto"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -151,22 +150,22 @@ const MyEnrolledCourses = () => {
                 </div>
 
                 {enrolledCourses.length > 0 ? (
-                    <motion.div 
+                    <motion.div
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
                     >
                         {enrolledCourses.map((course) => (
-                            <motion.div 
-                                key={course.enrollmentId} 
+                            <motion.div
+                                key={course.enrollmentId}
                                 variants={itemVariants}
                                 className="relative group bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-1"
                             >
                                 <CourseCard course={course} />
                                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <div className="flex space-x-4">
-                                        <button 
+                                        <button
                                             onClick={(e) => { e.preventDefault(); handleRemoveEnrollment(course._id, course.title); }}
                                             className="btn btn-error btn-circle text-white hover:bg-red-700 tooltip" data-tip="Remove Enrollment"
                                         >
@@ -178,7 +177,7 @@ const MyEnrolledCourses = () => {
                         ))}
                     </motion.div>
                 ) : (
-                    <motion.div 
+                    <motion.div
                         className="bg-slate-800 rounded-lg p-8 text-center border-2 border-dashed border-slate-700 mt-10"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}

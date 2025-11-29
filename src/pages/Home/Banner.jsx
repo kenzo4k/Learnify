@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { motion } from 'framer-motion';
-// react-slick এর CSS ফাইল
+// react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import banner1 from '../../assets/banner/banner1.jpg';
@@ -18,18 +18,18 @@ const Banner = () => {
         dots: true,
         infinite: true,
         speed: 1000,
-        fade: false, 
+        fade: false,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3500, 
+        autoplaySpeed: 3500,
         cssEase: 'ease-in-out',
-        pauseOnHover: true, 
+        pauseOnHover: true,
         pauseOnFocus: true,
         appendDots: dots => (
             <div>
-              {}
-              <ul className="m-0 slick-dots-custom"> {dots} </ul>
+                { }
+                <ul className="m-0 slick-dots-custom"> {dots} </ul>
             </div>
         ),
     };
@@ -45,8 +45,8 @@ const Banner = () => {
 
     const textVariants = {
         hidden: { opacity: 0, y: 30 },
-        visible: { 
-            opacity: 1, 
+        visible: {
+            opacity: 1,
             y: 0,
             transition: { duration: 0.6, ease: "easeOut" }
         }
@@ -54,7 +54,7 @@ const Banner = () => {
 
     return (
         <>
-            {}
+            { }
             <style>
                 {`
                     .slick-dots-custom { 
@@ -114,28 +114,28 @@ const Banner = () => {
                     }
                 `}
             </style>
-            
+
             <div className="relative z-0">
                 <Slider {...settings}>
                     {slideData.map((slide, index) => (
                         <div key={index} className="relative h-[65vh] w-full overflow-hidden">
-                            
-                            {}
+
+                            { }
                             <div
                                 className="absolute inset-0 bg-no-repeat transform transition-transform duration-700 hover:scale-105"
                                 style={{
                                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${slide.bg})`,
-                                    backgroundPosition: ' center', 
+                                    backgroundPosition: ' center',
                                     backgroundSize: 'cover',
                                     width: '100%',
                                     height: '100%'
                                 }}
                             />
-                            
-                            {}
+
+                            { }
                             <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 py-6">
-                                {}
-                                <motion.div 
+                                { }
+                                <motion.div
                                     key={index}
                                     className="max-w-4xl w-full"
                                     initial="hidden"
@@ -144,21 +144,21 @@ const Banner = () => {
                                         visible: { transition: { staggerChildren: 0.15 } }
                                     }}
                                 >
-                                    <motion.h1 
+                                    <motion.h1
                                         className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 md:mb-4 leading-tight"
                                         variants={textVariants}
                                     >
                                         {slide.title}
                                     </motion.h1>
-                                    <motion.p 
+                                    <motion.p
                                         className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-4 md:mb-6 px-2"
                                         variants={textVariants}
                                     >
                                         {slide.subtitle}
                                     </motion.p>
-                                    
+
                                     <motion.div variants={textVariants}>
-                                        <Link 
+                                        <Link
                                             to="/courses"
                                             className="btn btn-primary btn-sm md:btn-md lg:btn-lg rounded-full zpx-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105"
                                         >
