@@ -7,11 +7,7 @@ import { Link } from 'react-router-dom';
 
 const categories = [
     { name: 'Development', icon: <FaCode /> },
-    { name: 'Design', icon: <FaPaintBrush /> },
-    { name: 'Music', icon: <FaMusic /> },
-    { name: 'Photography', icon: <FaCamera /> },
-    { name: 'Marketing', icon: <FaChartLine /> },
-    { name: 'Video', icon: <FaFilm /> },
+    { name: 'Design', icon: <FaPaintBrush /> }
 ];
 
 const Categories = () => {
@@ -26,15 +22,17 @@ const Categories = () => {
                         Explore our wide range of course categories and find the perfect one for you.
                     </p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                    {categories.map((category, index) => (
-                        <Link to={`/courses/category/${category.name}`} key={index}>
-                            <div className="flex flex-col items-center p-6 bg-gray-700 rounded-lg text-white hover:bg-gray-600 transition-colors duration-300">
-                                <div className="text-4xl mb-4 text-blue-400">{category.icon}</div>
-                                <h3 className="text-lg font-semibold">{category.name}</h3>
-                            </div>
-                        </Link>
-                    ))}
+                <div className="flex justify-center">
+                    <div className="grid grid-cols-2 gap-6 max-w-md">
+                        {categories.map((category, index) => (
+                            <Link to={`/courses/category/${category.name}`} key={index}>
+                                <div className="flex flex-col items-center p-6 bg-gray-700 rounded-lg text-white hover:bg-gray-600 transition-colors duration-300">
+                                    <div className="text-4xl mb-4 text-blue-400">{category.icon}</div>
+                                    <h3 className="text-lg font-semibold">{category.name}</h3>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

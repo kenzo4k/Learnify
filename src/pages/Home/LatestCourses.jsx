@@ -2,23 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CourseCard from '../../components/shared/CourseCard'; 
+import CourseCard from '../../components/shared/CourseCard';
 import LoadingSpinner from '../../components/shared/LoadingSpinner';
 
 const LatestCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); 
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         axios.get('https://course-management-system-server-woad.vercel.app/api/courses/latest')
             .then(res => {
-                setCourses(res.data);
+                // Filter out courses that were "deleted" in this session
+                const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
+                const filteredData = res.data.filter(course => !deletedCourseIds.includes(course._id));
+
+                setCourses(filteredData);
                 setLoading(false);
             })
             .catch(err => {
                 console.error("Error fetching latest courses:", err);
-                setError("Could not load the latest courses. Please try again later."); 
+                setError("Could not load the latest courses. Please try again later.");
                 setLoading(false);
             });
     }, []);
@@ -39,9 +43,9 @@ const LatestCourses = () => {
 
     return (
 
-        <div className="bg-gray-900 py-24"> 
+        <div className="bg-gray-900 py-24">
             <div className="container mx-auto px-4">
-                {}
+                { }
                 <div className="text-center mb-12">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
                         Our Latest Courses
@@ -50,8 +54,8 @@ const LatestCourses = () => {
                         Explore the newest additions to our catalog and stay ahead with the latest skills and technologies.
                     </p>
                 </div>
-                
-                {}
+
+                { }
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {courses.map(course => (
                         <CourseCard key={course._id} course={course} />
