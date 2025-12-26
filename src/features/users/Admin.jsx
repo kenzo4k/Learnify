@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import toast from 'react-hot-toast';
-import { 
-  Users, 
-  BookOpen, 
-  DollarSign, 
-  TrendingUp, 
-  Settings, 
+import {
+  Users,
+  BookOpen,
+  DollarSign,
+  TrendingUp,
+  Settings,
   LogOut,
   UserCheck,
   UserX,
@@ -16,7 +16,8 @@ import {
   Trash2,
   Eye,
   Award,
-  Calendar
+  Calendar,
+  AlertTriangle
 } from 'lucide-react';
 
 const Admin = () => {
@@ -43,7 +44,7 @@ const Admin = () => {
   const fetchAdminData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch statistics
       const statsResponse = await fetch('https://course-management-system-server-woad.vercel.app/api/admin/stats');
       const statsData = await statsResponse.json();
@@ -155,11 +156,10 @@ const Admin = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-medium capitalize transition-colors ${
-                activeTab === tab
-                  ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+              className={`px-4 py-2 font-medium capitalize transition-colors ${activeTab === tab
+                ? 'text-blue-400 border-b-2 border-blue-400'
+                : 'text-gray-400 hover:text-white'
+                }`}
             >
               {tab}
             </button>
@@ -343,9 +343,8 @@ const Admin = () => {
                         <td className="py-3 px-4">{user.email}</td>
                         <td className="py-3 px-4">{user.role || 'User'}</td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            user.status === 'active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
-                          }`}>
+                          <span className={`px-2 py-1 rounded text-xs ${user.status === 'active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
+                            }`}>
                             {user.status || 'active'}
                           </span>
                         </td>
@@ -397,9 +396,8 @@ const Admin = () => {
                         <td className="py-3 px-4">{instructor.totalStudents || 0}</td>
                         <td className="py-3 px-4">${instructor.totalRevenue || 0}</td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            instructor.status === 'active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
-                          }`}>
+                          <span className={`px-2 py-1 rounded text-xs ${instructor.status === 'active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
+                            }`}>
                             {instructor.status || 'active'}
                           </span>
                         </td>
@@ -408,13 +406,13 @@ const Admin = () => {
                             <button className="p-1 text-blue-400 hover:bg-blue-900 rounded">
                               <Eye className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleInstructorAction(instructor._id, 'suspend')}
                               className="p-1 text-yellow-400 hover:bg-yellow-900 rounded"
                             >
                               <UserX className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleInstructorAction(instructor._id, 'approve')}
                               className="p-1 text-green-400 hover:bg-green-900 rounded"
                             >
@@ -461,9 +459,8 @@ const Admin = () => {
                         <td className="py-3 px-4">{course.enrolledStudents || 0}</td>
                         <td className="py-3 px-4">${course.price}</td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            course.status === 'published' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
-                          }`}>
+                          <span className={`px-2 py-1 rounded text-xs ${course.status === 'published' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
+                            }`}>
                             {course.status || 'draft'}
                           </span>
                         </td>

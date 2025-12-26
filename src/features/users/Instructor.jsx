@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import toast from 'react-hot-toast';
-import { 
-  BookOpen, 
-  Users, 
-  DollarSign, 
-  TrendingUp, 
+import {
+  BookOpen,
+  Users,
+  DollarSign,
+  TrendingUp,
   Plus,
   Edit,
   Trash2,
@@ -15,8 +15,10 @@ import {
   Star,
   Calendar,
   Award,
-  Clock
+  Clock,
+  AlertTriangle
 } from 'lucide-react';
+import AtRiskStudents from '../../components/instructor/AtRiskStudents';
 
 const Instructor = () => {
   const { user } = React.useContext(AuthContext);
@@ -40,7 +42,7 @@ const Instructor = () => {
   const fetchInstructorData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch instructor statistics
       const statsResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/instructor/stats?email=${user.email}`);
       const statsData = await statsResponse.json();
@@ -103,17 +105,16 @@ const Instructor = () => {
 
         {/* Navigation Tabs */}
         <div className="flex space-x-1 mb-8 border-b border-gray-700">
-          {['overview', 'courses', 'students', 'analytics'].map((tab) => (
+          {['overview', 'courses', 'students', 'at-risk', 'analytics'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-medium capitalize transition-colors ${
-                activeTab === tab
+              className={`px-4 py-2 font-medium capitalize transition-colors ${activeTab === tab
                   ? 'text-blue-400 border-b-2 border-blue-400'
                   : 'text-gray-400 hover:text-white'
-              }`}
+                }`}
             >
-              {tab}
+              {tab === 'at-risk' ? 'At-Risk Students' : tab}
             </button>
           ))}
         </div>
@@ -295,9 +296,8 @@ const Instructor = () => {
                         </td>
                         <td className="py-3 px-4">${course.revenue || 0}</td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            course.status === 'published' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
-                          }`}>
+                          <span className={`px-2 py-1 rounded text-xs ${course.status === 'published' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
+                            }`}>
                             {course.status || 'draft'}
                           </span>
                         </td>
@@ -350,8 +350,8 @@ const Instructor = () => {
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
                             <div className="w-24 bg-gray-700 rounded-full h-2">
-                              <div 
-                                className="bg-blue-500 h-2 rounded-full" 
+                              <div
+                                className="bg-blue-500 h-2 rounded-full"
                                 style={{ width: `${student.progress || 0}%` }}
                               ></div>
                             </div>
@@ -372,6 +372,11 @@ const Instructor = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* At-Risk Students Tab */}
+        {activeTab === 'at-risk' && (
+          <AtRiskStudents />
         )}
 
         {/* Analytics Tab */}
