@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 // react-slick
 import "slick-carousel/slick/slick.css";
@@ -157,12 +158,18 @@ const Banner = () => {
                                         {slide.subtitle}
                                     </motion.p>
 
-                                    <motion.div variants={textVariants}>
+                                    <motion.div variants={textVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
                                         <Link
                                             to="/courses"
-                                            className="btn btn-primary btn-sm md:btn-md lg:btn-lg rounded-full zpx-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105"
+                                            className="btn btn-primary btn-sm md:btn-md lg:btn-lg rounded-full px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105"
                                         >
                                             Explore Courses
+                                        </Link>
+                                        <Link
+                                            to="/assessment"
+                                            className="btn btn-secondary btn-sm md:btn-md lg:btn-lg rounded-full px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105 bg-gradient-to-r from-teal-500 to-blue-500 border-none text-white hover:opacity-90"
+                                        >
+                                            Take Assessment
                                         </Link>
                                     </motion.div>
                                 </motion.div>

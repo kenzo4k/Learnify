@@ -3,6 +3,7 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/public/Home";
+import PreCourseAssessment from "../pages/public/PreCourseAssessment";
 import Login from "../features/auth/Login";
 import Register from "../features/auth/Register";
 import AddCourse from "../features/courses/AddCourse";
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/assessment",
+        element: <PreCourseAssessment />,
       },
       {
         path: "/Auth/login",
