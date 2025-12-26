@@ -82,6 +82,19 @@ const Navbar = () => {
               All Courses
             </NavLink>
 
+            <NavLink
+              to="/assessment"
+              className={({ isActive }) =>
+                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-teal-600 to-blue-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                }`
+              }
+            >
+              Assessment
+            </NavLink>
+
             {user && (
               <>
                 <NavLink
@@ -332,6 +345,20 @@ const Navbar = () => {
             }
           >
             All Courses
+          </NavLink>
+
+          <NavLink
+            to="/assessment"
+            onClick={closeMobileMenu}
+            className={({ isActive }) =>
+              `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
+                isActive
+                  ? 'bg-gradient-to-r from-teal-600 to-blue-600 text-white'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`
+            }
+          >
+            Assessment
           </NavLink>
 
           {user && (
