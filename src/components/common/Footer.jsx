@@ -38,7 +38,6 @@ const Footer = () => {
             </button>
           </form>
         </div>
-
         {/* Main Footer Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-12">
           {/* Column 1: Brand Info */}
@@ -102,6 +101,8 @@ const Footer = () => {
                 <IoLocationSharp className="text-purple-400 mt-1 mr-3 flex-shrink-0" />
                 <span className="text-gray-400">
                   610 cairo-street, sidi besh, alexandria
+=======
+                  610 cairo-street, sidi besh, alexandria
                 </span>
               </li>
               <li className="flex items-center">
@@ -109,10 +110,15 @@ const Footer = () => {
                 <a href="tel:+8801234567890" className="text-gray-400 hover:text-purple-400 transition-colors">
                   +20 1121193709
                 </a>
+=======
+                  +20 1121193709
+                </a>
               </li>
               <li className="flex items-center">
                 <IoMail className="text-purple-400 mr-3" />
                 <a href="mailto:support@shikshaalo.com" className="text-gray-400 hover:text-purple-400 transition-colors">
+                  support@Learnify.com
+=======
                   support@Learnify.com
                 </a>
               </li>
