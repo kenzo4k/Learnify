@@ -19,7 +19,9 @@ import Student from "../features/users/Student";
 import AdminRoute from "./AdminRoute";
 import InstructorRoute from "./InstructorRoute";
 import StudentRoute from "./StudentRoute";
-import PrivateRoute from "./PrivateRoute"; // <<< PrivateRoute
+import PrivateRoute from "./PrivateRoute";
+import CourseAssessment from "../features/assessment/CourseAssessment";
+import CourseContent from "../features/courses/CourseContent";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ const router = createBrowserRouter([
       {
         path: "/course/:id",
         element: <CourseDetails />,
+      },
+      {
+        path: "/course/:id/learn",
+        element: <CourseContent />,
+      },
+      {
+        path: "/course/:id/assessment",
+        element: <CourseAssessment />,
       },
       {
         path: "/manage-courses",

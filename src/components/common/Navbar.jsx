@@ -30,14 +30,14 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-2xl border-b border-gray-700 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           {/* Logo and Brand */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200">
-                <img 
-                  src="/src/assets/logo/Course_logo.png" 
-                  alt="Learnify" 
+                <img
+                  src="/src/assets/logo/Course_logo.png"
+                  alt="Learnify"
                   className="w-6 h-6 object-contain"
                   onError={(e) => {
                     e.target.style.display = 'none';
@@ -59,23 +59,21 @@ const Navbar = () => {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`
               }
             >
               Home
             </NavLink>
-            
+
             <NavLink
               to="/courses"
               className={({ isActive }) =>
-                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`
               }
             >
@@ -87,36 +85,33 @@ const Navbar = () => {
                 <NavLink
                   to="/add-course"
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
                   Add Course
                 </NavLink>
-                
+
                 <NavLink
                   to="/manage-courses"
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
                   Manage Courses
                 </NavLink>
-                
+
                 <NavLink
                   to="/my-enrolled-courses"
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
@@ -126,10 +121,9 @@ const Navbar = () => {
                 <NavLink
                   to="/dashboard"
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
@@ -140,10 +134,9 @@ const Navbar = () => {
                   <NavLink
                     to="/admin"
                     className={({ isActive }) =>
-                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        isActive
-                          ? 'bg-red-600 text-white shadow-lg'
-                          : 'text-red-400 hover:text-white hover:bg-red-900'
+                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                        ? 'bg-red-600 text-white shadow-lg'
+                        : 'text-red-400 hover:text-white hover:bg-red-900'
                       }`
                     }
                   >
@@ -155,10 +148,9 @@ const Navbar = () => {
                   <NavLink
                     to="/instructor"
                     className={({ isActive }) =>
-                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        isActive
-                          ? 'bg-green-600 text-white shadow-lg'
-                          : 'text-green-400 hover:text-white hover:bg-green-900'
+                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                        ? 'bg-green-600 text-white shadow-lg'
+                        : 'text-green-400 hover:text-white hover:bg-green-900'
                       }`
                     }
                   >
@@ -170,10 +162,9 @@ const Navbar = () => {
                   <NavLink
                     to="/student"
                     className={({ isActive }) =>
-                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        isActive
-                          ? 'bg-purple-600 text-white shadow-lg'
-                          : 'text-purple-400 hover:text-white hover:bg-purple-900'
+                      `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+                        ? 'bg-purple-600 text-white shadow-lg'
+                        : 'text-purple-400 hover:text-white hover:bg-purple-900'
                       }`
                     }
                   >
@@ -279,9 +270,8 @@ const Navbar = () => {
               className="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
             >
               <svg
-                className={`w-6 h-6 transform transition-transform duration-200 ${
-                  isMobileMenuOpen ? 'rotate-90' : ''
-                }`}
+                className={`w-6 h-6 transform transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : ''
+                  }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -299,35 +289,32 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden bg-gray-800 border-t border-gray-700 transform transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen
-            ? 'opacity-100 max-h-96 visible'
-            : 'opacity-0 max-h-0 invisible overflow-hidden'
-        }`}
+        className={`md:hidden bg-gray-800 border-t border-gray-700 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen
+          ? 'opacity-100 max-h-96 visible'
+          : 'opacity-0 max-h-0 invisible overflow-hidden'
+          }`}
       >
         <div className="px-4 py-3 space-y-1">
           <NavLink
             to="/"
             onClick={closeMobileMenu}
             className={({ isActive }) =>
-              `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-300 hover:text-white hover:bg-gray-700'
               }`
             }
           >
             Home
           </NavLink>
-          
+
           <NavLink
             to="/courses"
             onClick={closeMobileMenu}
             className={({ isActive }) =>
-              `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                ? 'bg-blue-600 text-white'
+                : 'text-gray-300 hover:text-white hover:bg-gray-700'
               }`
             }
           >
@@ -340,38 +327,35 @@ const Navbar = () => {
                 to="/add-course"
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
-                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
               >
                 Add Course
               </NavLink>
-              
+
               <NavLink
                 to="/manage-courses"
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
-                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
               >
                 Manage Courses
               </NavLink>
-              
+
               <NavLink
                 to="/my-enrolled-courses"
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
-                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
               >
@@ -382,10 +366,9 @@ const Navbar = () => {
                 to="/dashboard"
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
-                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
               >
@@ -397,10 +380,9 @@ const Navbar = () => {
                   to="/admin"
                   onClick={closeMobileMenu}
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                      isActive
-                        ? 'bg-red-600 text-white'
-                        : 'text-red-400 hover:text-white hover:bg-red-900'
+                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                      ? 'bg-red-600 text-white'
+                      : 'text-red-400 hover:text-white hover:bg-red-900'
                     }`
                   }
                 >
@@ -413,10 +395,9 @@ const Navbar = () => {
                   to="/instructor"
                   onClick={closeMobileMenu}
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                      isActive
-                        ? 'bg-green-600 text-white'
-                        : 'text-green-400 hover:text-white hover:bg-green-900'
+                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                      ? 'bg-green-600 text-white'
+                      : 'text-green-400 hover:text-white hover:bg-green-900'
                     }`
                   }
                 >
@@ -429,10 +410,9 @@ const Navbar = () => {
                   to="/student"
                   onClick={closeMobileMenu}
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${
-                      isActive
-                        ? 'bg-purple-600 text-white'
-                        : 'text-purple-400 hover:text-white hover:bg-purple-900'
+                    `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
+                      ? 'bg-purple-600 text-white'
+                      : 'text-purple-400 hover:text-white hover:bg-purple-900'
                     }`
                   }
                 >

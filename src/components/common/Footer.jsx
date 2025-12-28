@@ -38,7 +38,6 @@ const Footer = () => {
             </button>
           </form>
         </div>
-
         {/* Main Footer Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-12">
           {/* Column 1: Brand Info */}
@@ -101,31 +100,26 @@ const Footer = () => {
               <li className="flex items-start">
                 <IoLocationSharp className="text-purple-400 mt-1 mr-3 flex-shrink-0" />
                 <span className="text-gray-400">
-<<<<<<< HEAD:src/components/shared/Footer.jsx
-                  Alexandria ,Egypt
+                  610 cairo-street, sidi besh, alexandria
 =======
                   610 cairo-street, sidi besh, alexandria
->>>>>>> 48c6cf7e6148c6958f8a42f4a24ecf893740b216:src/components/common/Footer.jsx
                 </span>
               </li>
               <li className="flex items-center">
                 <IoCall className="text-purple-400 mr-3" />
                 <a href="tel:+8801234567890" className="text-gray-400 hover:text-purple-400 transition-colors">
-<<<<<<< HEAD:src/components/shared/Footer.jsx
-                  01007202636                </a>
+                  +20 1121193709
+                </a>
 =======
                   +20 1121193709
                 </a>
->>>>>>> 48c6cf7e6148c6958f8a42f4a24ecf893740b216:src/components/common/Footer.jsx
               </li>
               <li className="flex items-center">
                 <IoMail className="text-purple-400 mr-3" />
                 <a href="mailto:support@shikshaalo.com" className="text-gray-400 hover:text-purple-400 transition-colors">
-<<<<<<< HEAD:src/components/shared/Footer.jsx
-                  support@learnify.com
+                  support@Learnify.com
 =======
                   support@Learnify.com
->>>>>>> 48c6cf7e6148c6958f8a42f4a24ecf893740b216:src/components/common/Footer.jsx
                 </a>
               </li>
               <li className="flex items-center">
@@ -134,7 +128,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <IoLogoWhatsapp className="text-purple-400 mr-3" />
-                <a href="https://wa.me/01007202636" className="text-gray-400 hover:text-purple-400 transition-colors">
+                <a href="https://wa.me/8801234567890" className="text-gray-400 hover:text-purple-400 transition-colors">
                   Chat on WhatsApp
                 </a>
               </li>

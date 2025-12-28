@@ -33,10 +33,37 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider);
     };
 
-    const updateUserProfile = (name, photo) => {
-        return updateProfile(auth.currentUser, {
-            displayName: name, photoURL: photo
-        });
+    const updateUserProfile = async (data) => {
+        try {
+            // Update the user's profile in Firebase
+            await updateProfile(auth.currentUser, {
+                displayName: data.displayName,
+                photoURL: data.photoURL
+            });
+
+            // Update the user object with the role
+            setUser(prev => ({
+                ...prev,
+                displayName: data.displayName,
+                photoURL: data.photoURL,
+                role: data.role || 'student' // Default to 'student' if no role is provided
+            }));
+
+            // Here you would typically save the user data to your backend
+            // For example:
+            // await axios.post('/api/users', {
+            //     uid: auth.currentUser.uid,
+            //     email: auth.currentUser.email,
+            //     displayName: data.displayName,
+            //     photoURL: data.photoURL,
+            //     role: data.role || 'student'
+            // });
+
+            return Promise.resolve();
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            return Promise.reject(error);
+        }
     };
 
     const logOut = () => {
@@ -46,19 +73,38 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                axios.post('https://course-management-system-server-woad.vercel.app/api/jwt', { email: currentUser.email })
-                    .then(res => {
-                        localStorage.setItem('access-token', res.data.token);
-                        setLoading(false);
+                try {
+                    // Here you would typically fetch the user's role from your backend
+                    // For now, we'll use a default role of 'student' if not set
+                    const userWithRole = {
+                        ...currentUser,
+                        role: currentUser.role || 'student'
+                    };
+
+                    setUser(userWithRole);
+
+                    // Get JWT token
+                    const tokenResponse = await axios.post('https://course-management-system-server-woad.vercel.app/api/jwt', {
+                        email: currentUser.email,
+                        role: userWithRole.role
                     });
+
+                    localStorage.setItem('access-token', tokenResponse.data.token);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error during authentication:', error);
+                    // toast.error('Failed to authenticate. Please try again.');
+                    setLoading(false);
+                }
             } else {
+                setUser(null);
                 localStorage.removeItem('access-token');
                 setLoading(false);
             }
         });
+
         return () => unsubscribe();
     }, []);
 

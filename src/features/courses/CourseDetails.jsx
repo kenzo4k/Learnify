@@ -370,7 +370,15 @@ const CourseDetails = () => {
                                 )}
                             </div>
 
-                            {/* Tags */}
+                            {/* Assessment Button */}
+                            <div className="mt-4">
+                                <button
+                                    onClick={() => navigate(`/course/${id}/assessment`)}
+                                    className="btn btn-success btn-wide w-full bg-green-600 hover:bg-green-700 text-white"
+                                >
+                                    Take Assessment
+                                </button>
+                            </div>
                             {course?.tags && course.tags.length > 0 && (
                                 <div className="mt-6">
                                     <h3 className="text-sm font-medium text-gray-400 mb-2">Tags:</h3>

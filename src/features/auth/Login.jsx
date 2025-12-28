@@ -1,70 +1,94 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { Link, useNavigate } from 'react-router-dom';
+
+// Hardcoded credentials for each role
+const HARDCODED_CREDENTIALS = {
+    student: {
+        email: 'student@learnify.com',
+        password: 'student123',
+        role: 'student'
+    },
+    instructor: {
+        email: 'instructor@learnify.com',
+        password: 'instructor123',
+        role: 'instructor'
+    },
+    admin: {
+        email: 'admin@learnify.com',
+        password: 'admin123',
+        role: 'admin'
+    }
+};
 
 const Login = () => {
-    const { register, handleSubmit } = useForm();
-    const { signIn, googleSignIn } = useAuth();
-
+    const { register, handleSubmit, setValue } = useForm();
     const navigate = useNavigate();
-    const location = useLocation();
+    const [accountType, setAccountType] = useState('student');
+    const [error, setError] = useState('');
 
-    const from = location.state?.from?.pathname || "/";
+    const handleLogin = (data) => {
+        const { email, password } = data;
 
-    // Original login with Firebase
-    // const onSubmit = data => {
-    //     signIn(data.email, data.password)
-    //         .then(() => {
-    //             toast.success("Login Successful!");
-    //             navigate(from, { replace: true });
-    //         })
-    //         .catch(err => toast.error(err.message));
-    // };
+        // Check credentials for the selected account type
+        const credentials = HARDCODED_CREDENTIALS[accountType];
 
-    // New login with fixed credentials
-    const onSubmit = data => {
-        const FIXED_EMAIL = 'emad@gmail.com';
-        const FIXED_PASSWORD = 'emad123';
+        if (email === credentials.email && password === credentials.password) {
+            // Store user data in localStorage
+            const userData = {
+                email: credentials.email,
+                role: credentials.role,
+                isAuthenticated: true
+            };
 
-        if (data.email === FIXED_EMAIL && data.password === FIXED_PASSWORD) {
-            toast.success("Login Successful!");
-            navigate(from, { replace: true });
+            localStorage.setItem('user', JSON.stringify(userData));
+            toast.success(`Welcome back, ${credentials.role}!`);
+
+            // Redirect based on role
+            switch (credentials.role) {
+                case 'admin':
+                    navigate('/admin');
+                    break;
+                case 'instructor':
+                    navigate('/instructor');
+                    break;
+                case 'student':
+                default:
+                    navigate('/student');
+            }
         } else {
-            toast.error("Invalid email or password");
+            setError('Invalid email or password');
+            toast.error('Invalid credentials');
         }
     };
 
-    const handleGoogleLogin = () => {
-        googleSignIn()
-            .then(() => {
-                toast.success("Login Successful!");
-                navigate(from, { replace: true });
-            })
-            .catch(err => toast.error(err.message));
+    // Update form fields when account type changes
+    const handleAccountTypeChange = (type) => {
+        setAccountType(type);
+        setValue('email', '');
+        setValue('password', '');
+        setError('');
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                {/* Background blur effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/10 to-cyan-400/10 blur-3xl"></div>
 
-                {/* Main card */}
                 <div className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
-                    {/* Gradient border effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 rounded-2xl"></div>
                     <div className="absolute inset-[1px] bg-gray-800/90 rounded-2xl"></div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="relative p-8 space-y-6">
-                        {/* Header */}
+                    <form onSubmit={handleSubmit(handleLogin)} className="relative p-8 space-y-6">
                         <div className="text-center space-y-2">
                             <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
                                 Welcome Back
                             </h1>
                             <p className="text-gray-400">Sign in to your account</p>
                         </div>
+
+                      
 
                         {/* Email Field */}
                         <div className="space-y-2">
@@ -75,10 +99,9 @@ const Login = () => {
                                 <input
                                     type="email"
                                     {...register("email", { required: true })}
-                                    placeholder="Enter your email"
+                                    placeholder={`Enter your ${accountType} email`}
                                     className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                                 />
-                                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-500/0 to-cyan-500/0 hover:from-indigo-500/10 hover:to-cyan-500/10 pointer-events-none transition-all duration-200"></div>
                             </div>
                         </div>
 
@@ -94,7 +117,30 @@ const Login = () => {
                                     placeholder="Enter your password"
                                     className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                                 />
-                                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-indigo-500/0 to-cyan-500/0 hover:from-indigo-500/10 hover:to-cyan-500/10 pointer-events-none transition-all duration-200"></div>
+                            </div>
+                            {error && (
+                                <p className="mt-1 text-sm text-red-400">{error}</p>
+                            )}
+                        </div>
+                          {/* Account Type Selector */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-300">
+                                Account Type
+                            </label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {['student', 'instructor', 'admin'].map((type) => (
+                                    <button
+                                        key={type}
+                                        type="button"
+                                        onClick={() => handleAccountTypeChange(type)}
+                                        className={`py-2 px-4 rounded-lg text-sm font-medium transition-colors ${accountType === type
+                                                ? 'bg-indigo-600 text-white'
+                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            }`}
+                                    >
+                                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -103,7 +149,7 @@ const Login = () => {
                             type="submit"
                             className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-indigo-500/25 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform hover:scale-105 transition-all duration-200"
                         >
-                            Sign In
+                            Sign In as {accountType.charAt(0).toUpperCase() + accountType.slice(1)}
                         </button>
 
                         {/* Divider */}
@@ -119,7 +165,6 @@ const Login = () => {
                         {/* Google Login Button */}
                         <button
                             type="button"
-                            onClick={handleGoogleLogin}
                             className="w-full py-3 px-4 bg-transparent border-2 border-gray-600 hover:border-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-500/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 flex items-center justify-center space-x-3"
                         >
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -131,16 +176,7 @@ const Login = () => {
                             <span>Continue with Google</span>
                         </button>
 
-                        {/* Register Link */}
-                        <p className="text-center text-gray-400">
-                            New here?{' '}
-                            <Link
-                                to="/register"
-                                className="text-indigo-400 hover:text-indigo-300 font-semibold hover:underline transition-colors duration-200"
-                            >
-                                Create an account
-                            </Link>
-                        </p>
+                      
                     </form>
                 </div>
             </div>

@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Lock, Image, UserPlus, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, UserPlus, ArrowRight, ChevronDown } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 
 const Register = () => {
-    const { register, handleSubmit, formState: { errors }, watch } = useForm();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm({
+        defaultValues: {
+            role: 'student' // Default role
+        }
+    });
     const { createUser, updateUserProfile } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -18,10 +22,26 @@ const Register = () => {
     const onSubmit = async (data) => {
         setIsLoading(true);
         try {
-            await createUser(data.email, data.password);
-            await updateUserProfile(data.name, data.photoURL);
+            // Create user with email and password
+            const userCredential = await createUser(data.email, data.password);
+
+            // Update user profile with name and role
+            await updateUserProfile({
+                displayName: data.name,
+                photoURL: data.photoURL,
+                role: data.role // Save role in user profile
+            });
+
             toast.success("Registration successful!");
-            navigate('/');
+
+            // Redirect based on role
+            if (data.role === 'instructor') {
+                navigate('/instructor/dashboard');
+            } else if (data.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/student/dashboard');
+            }
         } catch (error) {
             toast.error(error.message || "An unexpected error occurred.");
         } finally {
@@ -61,9 +81,8 @@ const Register = () => {
                                     type="text"
                                     {...register("name", { required: "Name is required" })}
                                     placeholder="Enter your full name"
-                                    className={`w-full px-4 py-3 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                                        errors.name ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
-                                    }`}
+                                    className={`w-full px-4 py-3 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${errors.name ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
+                                        }`}
                                 />
                                 {errors.name && (
                                     <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>
@@ -88,9 +107,8 @@ const Register = () => {
                                         }
                                     })}
                                     placeholder="Enter your email"
-                                    className={`w-full px-4 py-3 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                                        errors.email ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
-                                    }`}
+                                    className={`w-full px-4 py-3 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${errors.email ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
+                                        }`}
                                 />
                                 {errors.email && (
                                     <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
@@ -119,9 +137,8 @@ const Register = () => {
                                         }
                                     })}
                                     placeholder="Create a strong password"
-                                    className={`w-full px-4 py-3 pr-12 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                                        errors.password ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
-                                    }`}
+                                    className={`w-full px-4 py-3 pr-12 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${errors.password ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
+                                        }`}
                                 />
                                 <button
                                     type="button"
@@ -151,9 +168,8 @@ const Register = () => {
                                             value === password || "The passwords do not match"
                                     })}
                                     placeholder="Confirm your password"
-                                    className={`w-full px-4 py-3 pr-12 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                                        errors.confirmPassword ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
-                                    }`}
+                                    className={`w-full px-4 py-3 pr-12 bg-gray-700/80 text-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${errors.confirmPassword ? 'border-red-500 bg-red-900/20' : 'border-gray-600 hover:border-gray-500'
+                                        }`}
                                 />
                                 <button
                                     type="button"
@@ -166,6 +182,25 @@ const Register = () => {
                             {errors.confirmPassword && (
                                 <p className="text-red-400 text-xs mt-1">{errors.confirmPassword.message}</p>
                             )}
+                        </div>
+
+                        {/* Role Selection */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                                <User className="w-4 h-4 text-blue-400" />
+                                Account Type
+                            </label>
+                            <div className="relative">
+                                <select
+                                    {...register("role", { required: "Please select a role" })}
+                                    className="w-full px-4 py-3 bg-gray-700/80 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none"
+                                >
+                                    <option value="student">Student</option>
+                                    <option value="instructor">Instructor</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                                <ChevronDown className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+                            </div>
                         </div>
 
                         {/* Submit button */}
