@@ -48,6 +48,26 @@ const adminSampleData = {
   ],
 };
 
+// Sample data - ONLY for display
+const sampleStats = {
+  totalCourses: 8,
+  totalUsers: 45,
+  totalRevenue: 2100,
+  avgRating: 4.2
+};
+
+const sampleCourses = [
+  { _id: 1, title: "Web Development Bootcamp", instructor: "Ahmed Khan", students: 45, revenue: 1200, status: "Active" },
+  { _id: 2, title: "Python Basics", instructor: "Fatima Ali", students: 32, revenue: 650, status: "Active" },
+  { _id: 3, title: "React Fundamentals", instructor: "Omar Hassan", students: 38, revenue: 800, status: "Active" }
+];
+
+const sampleUsers = [
+  { _id: 1, name: "Ahmed Khan", email: "ahmed@email.com", role: "Instructor", createdAt: "2024-01-05", status: "Active" },
+  { _id: 2, name: "Fatima Ali", email: "fatima@email.com", role: "Instructor", createdAt: "2024-01-03", status: "Active" },
+  { _id: 3, name: "Zainab Ahmed", email: "zainab@email.com", role: "Student", createdAt: "2024-01-10", status: "Active" }
+];
+
 const formatCurrency = (value) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -104,7 +124,10 @@ const Dashboard = () => {
     }
   };
 
-  const filteredCourses = courses.filter(course =>
+  const coursesToDisplay = courses && courses.length > 0 ? courses : sampleCourses;
+  const usersToDisplay = users && users.length > 0 ? users : sampleUsers;
+
+  const filteredCourses = coursesToDisplay.filter(course =>
     course.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -246,7 +269,7 @@ const Dashboard = () => {
                   value={
                     USE_ADMIN_SAMPLE_DATA && isAdmin
                       ? adminSampleData.stats.totalCourses
-                      : courses.length
+                      : courses.length > 0 ? courses.length : sampleStats.totalCourses
                   }
                   icon={BookOpen}
                   color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-cyan-600' : 'bg-blue-500'}
@@ -257,7 +280,7 @@ const Dashboard = () => {
                   value={
                     USE_ADMIN_SAMPLE_DATA && isAdmin
                       ? adminSampleData.stats.totalUsers
-                      : users.length
+                      : users.length > 0 ? users.length : sampleStats.totalUsers
                   }
                   icon={Users}
                   color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-blue-600' : 'bg-green-500'}
@@ -268,7 +291,7 @@ const Dashboard = () => {
                   value={
                     USE_ADMIN_SAMPLE_DATA && isAdmin
                       ? formatCurrency(adminSampleData.stats.totalRevenue)
-                      : "$12,450"
+                      : formatCurrency(sampleStats.totalRevenue)
                   }
                   icon={DollarSign}
                   color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-indigo-600' : 'bg-purple-500'}
@@ -279,7 +302,7 @@ const Dashboard = () => {
                   value={
                     USE_ADMIN_SAMPLE_DATA && isAdmin
                       ? adminSampleData.stats.avgRating
-                      : '4.8'
+                      : sampleStats.avgRating
                   }
                   icon={Star}
                   color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-sky-600' : 'bg-orange-500'}
@@ -462,7 +485,7 @@ const Dashboard = () => {
                   </div>
                   <div className="p-6">
                     <div className="space-y-4">
-                      {courses.slice(0, 5).map((course) => (
+                      {coursesToDisplay.slice(0, 5).map((course) => (
                         <div key={course._id} className="flex items-center justify-between p-4 border rounded-lg">
                           <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -537,10 +560,13 @@ const Dashboard = () => {
                           Instructor
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Price
+                          Students
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Students
+                          Revenue
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Actions
@@ -562,10 +588,17 @@ const Dashboard = () => {
                             {course.instructor}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            ${course.price || 0}
+                            {course.students || 0}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {course.students || 0}
+                            {course.revenue ? formatCurrency(course.revenue) : formatCurrency(course.price || 0)}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              (course.status || 'Active') === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {course.status || 'Active'}
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div className="flex items-center space-x-2">
@@ -613,10 +646,13 @@ const Dashboard = () => {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Joined
                         </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {users.map((user) => (
+                      {usersToDisplay.map((user) => (
                         <tr key={user._id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -637,7 +673,14 @@ const Dashboard = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                            {new Date(user.createdAt).toLocaleDateString()}
+                            {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              (user.status || 'Active') === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {user.status || 'Active'}
+                            </span>
                           </td>
                         </tr>
                       ))}
