@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import { FaPlay, FaCheckCircle, FaLock, FaFilePdf, FaBook } from 'react-icons/fa';
 import { BsFileText } from 'react-icons/bs';
@@ -11,6 +11,8 @@ import toast from 'react-hot-toast';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import QuizEditor from '../../components/forms/QuizEditor';
+import ProgressBar from '../../components/common/ProgressBar';
+import XPCounter from '../../components/common/XPCounter';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -18,7 +20,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const CourseContent = () => {
     const { id: courseId } = useParams();
     const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     // State
     const [course, setCourse] = useState(null);
@@ -26,7 +27,7 @@ const CourseContent = () => {
     const [error, setError] = useState(null);
     const [activeLesson, setActiveLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState(new Set());
-    const [isEnrolled, setIsEnrolled] = useState(false);
+    const [, setIsEnrolled] = useState(false); // Reserved for future use
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [earnedXP, setEarnedXP] = useState(0);
@@ -178,16 +179,17 @@ export default Welcome;</code></pre>
 
             // Set first lesson as active by default
             if (sampleCourse?.sections?.[0]?.lessons?.[0]) {
-                setActiveLesson(sampleCourse.sections[0].lessons[0]);
+            setActiveLesson(sampleCourse.sections[0].lessons[0]);
             }
 
-        } catch (err) {
+            } catch {
             setError('حدث خطأ في تحميل محتوى الدورة');
             toast.error('فشل تحميل محتوى الدورة');
-        } finally {
+            } finally {
             setLoading(false);
-        }
-    }, [courseId]);
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, [courseId]);
 
     // Handle lesson completion
     const markLessonComplete = (lessonId) => {
@@ -389,6 +391,7 @@ export default Welcome;</code></pre>
     }
 
     const progress = calculateProgress();
+    const totalLessons = course?.sections?.reduce((total, section) => total + (section.lessons?.length || 0), 0);
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -396,25 +399,31 @@ export default Welcome;</code></pre>
             <header className="bg-gray-800 border-b border-gray-700">
                 <div className="container mx-auto px-4 py-4">
                     <h1 className="text-2xl font-bold">{course?.title || 'Course Content'}</h1>
-                    <div className="mt-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-400">
-                                Progress: {progress}% Complete
-                            </span>
-                            <span className="text-sm text-gray-400">
-                                {completedLessons.size} of {course?.sections?.reduce((total, section) =>
-                                    total + (section.lessons?.length || 0), 0
-                                )} lessons
-                            </span>
+                    <div className="mt-4 space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <ProgressBar
+                                    current={completedLessons.size}
+                                    max={totalLessons}
+                                    label="Lessons Completed"
+                                    color="cyan"
+                                />
+                            </div>
+                            <div>
+                                <ProgressBar
+                                    current={progress}
+                                    max={100}
+                                    label="Course Progress"
+                                    color="blue"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
                             <span className="text-sm text-yellow-400 font-bold">
                                 XP Earned: {earnedXP}
                             </span>
+                            <XPCounter xp={450} compact />
                         </div>
-                        <progress
-                            className="progress progress-primary w-full mt-1"
-                            value={progress}
-                            max="100"
-                        ></progress>
                     </div>
                 </div>
             </header>
@@ -478,7 +487,7 @@ export default Welcome;</code></pre>
                 <aside className="w-64 bg-gray-900 border-l border-gray-800 p-4 flex-shrink-0">
                     <h2 className="text-lg font-semibold mb-4 text-yellow-400">Leaderboard</h2>
                     <ul className="space-y-3">
-                        {leaderboard.map((user, idx) => (
+                        {leaderboard.map((user) => (
                             <li key={user.name} className="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-2">
                                 <span className="flex items-center gap-2">
                                     <span className="text-xl">{user.badge}</span>

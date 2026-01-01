@@ -11,3 +11,7 @@ export { default as DataTable } from './DataTable';
 export { default as Leaderboard } from './Leaderboard';
 export { default as Badges } from './Badges';
 export { default as RecommendedCourses } from './RecommendedCourses';
+
+export { default as XPCounter } from './XPCounter';
+export { default as ProgressBar } from './ProgressBar';
+export { default as AchievementsList } from './Achievements';
