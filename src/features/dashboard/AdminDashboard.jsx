@@ -13,10 +13,47 @@ import {
   Filter,
   TrendingUp,
   UserCheck,
+  UserPlus,
   Settings,
   Menu,
   X
 } from 'lucide-react';
+
+const USE_ADMIN_SAMPLE_DATA = true;
+
+const adminSampleData = {
+  stats: {
+    totalCourses: 8,
+    totalUsers: 45,
+    totalRevenue: 2100,
+    avgRating: 4.2,
+  },
+  courses: [
+    { id: '1', title: 'Web Development Bootcamp', instructor: 'Ahmed Khan', students: 45, revenue: 1200, status: 'Active' },
+    { id: '2', title: 'Python Basics', instructor: 'Fatima Ali', students: 32, revenue: 650, status: 'Active' },
+    { id: '3', title: 'React Fundamentals', instructor: 'Omar Hassan', students: 38, revenue: 800, status: 'Active' },
+  ],
+  users: [
+    { id: '1', name: 'Ahmed Khan', email: 'ahmed@email.com', role: 'Instructor', joinDate: '2024-01-05', status: 'Active' },
+    { id: '2', name: 'Fatima Ali', email: 'fatima@email.com', role: 'Instructor', joinDate: '2024-01-03', status: 'Active' },
+    { id: '3', name: 'Zainab Ahmed', email: 'zainab@email.com', role: 'Student', joinDate: '2024-01-10', status: 'Active' },
+  ],
+  recentEnrollments: [
+    { id: '1', user: 'Zainab Ahmed', course: 'Web Development', date: '2 hours ago' },
+    { id: '2', user: 'Omar Hassan', course: 'Python Basics', date: 'Yesterday' },
+  ],
+  popularCourses: [
+    { id: '1', title: 'Web Development Bootcamp', students: 45 },
+    { id: '3', title: 'React Fundamentals', students: 38 },
+  ],
+};
+
+const formatCurrency = (value) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value);
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -30,11 +67,15 @@ const Dashboard = () => {
 
   // Check if user is admin or instructor
   const isAdmin = user?.email === 'admin@learnify.com' || user?.email === 'emad@gmail.com';
-  const isInstructor = !isAdmin && user;
+  const isInstructor = Boolean(!isAdmin && user);
 
   useEffect(() => {
+    if (USE_ADMIN_SAMPLE_DATA && isAdmin) {
+      setLoading(false);
+    }
+
     fetchData();
-  }, []);
+  }, [isAdmin]);
 
   const fetchData = async () => {
     try {
@@ -67,15 +108,23 @@ const Dashboard = () => {
     course.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const StatCard = ({ title, value, icon: Icon, color }) => (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
+  const StatCard = ({ title, value, icon: Icon, color, dark = false }) => (
+    <div
+      className={`rounded-lg shadow-sm border p-6 ${
+        dark ? 'bg-gray-900 border-gray-800' : 'bg-white'
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-600 mb-1">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className={`text-sm mb-1 ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+            {title}
+          </p>
+          <p className={`text-2xl font-bold ${dark ? 'text-white' : 'text-gray-900'}`}>
+            {value}
+          </p>
         </div>
         <div className={`p-3 rounded-full ${color}`}>
-          <Icon className="w-6 h-6 text-white" />
+          {React.createElement(Icon, { className: 'w-6 h-6 text-white' })}
         </div>
       </div>
     </div>
@@ -124,7 +173,9 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700">{user?.displayName || 'User'}</p>
-                <p className="text-xs text-gray-500 capitalize">{isAdmin ? 'Admin' : 'Instructor'}</p>
+                <p className="text-xs text-gray-500 capitalize">
+                  {isAdmin ? 'Admin' : isInstructor ? 'Instructor' : 'User'}
+                </p>
               </div>
             </div>
           </div>
@@ -192,57 +243,246 @@ const Dashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
                   title="Total Courses"
-                  value={courses.length}
+                  value={
+                    USE_ADMIN_SAMPLE_DATA && isAdmin
+                      ? adminSampleData.stats.totalCourses
+                      : courses.length
+                  }
                   icon={BookOpen}
-                  color="bg-blue-500"
+                  color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-cyan-600' : 'bg-blue-500'}
+                  dark={USE_ADMIN_SAMPLE_DATA && isAdmin}
                 />
                 <StatCard
                   title="Total Users"
-                  value={users.length}
+                  value={
+                    USE_ADMIN_SAMPLE_DATA && isAdmin
+                      ? adminSampleData.stats.totalUsers
+                      : users.length
+                  }
                   icon={Users}
-                  color="bg-green-500"
+                  color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-blue-600' : 'bg-green-500'}
+                  dark={USE_ADMIN_SAMPLE_DATA && isAdmin}
                 />
                 <StatCard
                   title="Total Revenue"
-                  value="$12,450"
+                  value={
+                    USE_ADMIN_SAMPLE_DATA && isAdmin
+                      ? formatCurrency(adminSampleData.stats.totalRevenue)
+                      : "$12,450"
+                  }
                   icon={DollarSign}
-                  color="bg-purple-500"
+                  color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-indigo-600' : 'bg-purple-500'}
+                  dark={USE_ADMIN_SAMPLE_DATA && isAdmin}
                 />
                 <StatCard
                   title="Avg Rating"
-                  value="4.8"
+                  value={
+                    USE_ADMIN_SAMPLE_DATA && isAdmin
+                      ? adminSampleData.stats.avgRating
+                      : '4.8'
+                  }
                   icon={Star}
-                  color="bg-orange-500"
+                  color={USE_ADMIN_SAMPLE_DATA && isAdmin ? 'bg-sky-600' : 'bg-orange-500'}
+                  dark={USE_ADMIN_SAMPLE_DATA && isAdmin}
                 />
               </div>
 
-              {/* Recent Courses */}
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="p-6 border-b">
-                  <h2 className="text-lg font-semibold text-gray-900">Recent Courses</h2>
-                </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {courses.slice(0, 5).map((course) => (
-                      <div key={course._id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <BookOpen className="w-6 h-6 text-blue-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-gray-900">{course.title}</h3>
-                            <p className="text-sm text-gray-500">{course.instructor}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-gray-900">${course.price || 0}</p>
-                          <p className="text-xs text-gray-500">{course.students || 0} students</p>
-                        </div>
+              {USE_ADMIN_SAMPLE_DATA && isAdmin ? (
+                <div className="space-y-6">
+                  {/* Sample tables */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Sample Courses Table */}
+                    <div className="bg-gray-900 rounded-lg shadow-sm border border-gray-800 overflow-hidden">
+                      <div className="p-6 border-b border-gray-800">
+                        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                          <BookOpen className="w-5 h-5 text-cyan-400" />
+                          Sample Courses
+                        </h2>
                       </div>
-                    ))}
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-800/60">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Title
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Instructor
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Students
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Revenue
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Status
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-800">
+                            {adminSampleData.courses.map((course) => (
+                              <tr key={course.id} className="hover:bg-gray-800/40">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                                  {course.title}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                  {course.instructor}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                  {course.students}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                  {formatCurrency(course.revenue)}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="inline-flex items-center rounded-full bg-green-900/40 px-2.5 py-1 text-xs font-semibold text-green-300 border border-green-800">
+                                    {course.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Sample Users Table */}
+                    <div className="bg-gray-900 rounded-lg shadow-sm border border-gray-800 overflow-hidden">
+                      <div className="p-6 border-b border-gray-800">
+                        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                          <Users className="w-5 h-5 text-blue-400" />
+                          Sample Users
+                        </h2>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-800/60">
+                            <tr>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Name
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Email
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Role
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Join Date
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                Status
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-800">
+                            {adminSampleData.users.map((u) => (
+                              <tr key={u.id} className="hover:bg-gray-800/40">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                                  {u.name}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                  {u.email}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="inline-flex items-center rounded-full bg-cyan-900/40 px-2.5 py-1 text-xs font-semibold text-cyan-300 border border-cyan-800">
+                                    {u.role}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                  {u.joinDate}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="inline-flex items-center rounded-full bg-green-900/40 px-2.5 py-1 text-xs font-semibold text-green-300 border border-green-800">
+                                    {u.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Recent Enrollments + Popular Courses */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-gray-900 rounded-lg shadow-sm border border-gray-800">
+                      <div className="p-6 border-b border-gray-800">
+                        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                          <UserPlus className="w-5 h-5 text-cyan-400" />
+                          Recent Enrollments
+                        </h2>
+                      </div>
+                      <div className="p-6 space-y-3">
+                        {adminSampleData.recentEnrollments.map((enrollment) => (
+                          <div
+                            key={enrollment.id}
+                            className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-800/20 px-4 py-3"
+                          >
+                            <div>
+                              <p className="text-white font-medium">{enrollment.user}</p>
+                              <p className="text-sm text-gray-400">{enrollment.course}</p>
+                            </div>
+                            <span className="text-xs text-gray-400">{enrollment.date}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-900 rounded-lg shadow-sm border border-gray-800">
+                      <div className="p-6 border-b border-gray-800">
+                        <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-blue-400" />
+                          Popular Courses
+                        </h2>
+                      </div>
+                      <div className="p-6 space-y-3">
+                        {adminSampleData.popularCourses.map((course) => (
+                          <div
+                            key={course.id}
+                            className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-800/20 px-4 py-3"
+                          >
+                            <div>
+                              <p className="text-white font-medium">{course.title}</p>
+                              <p className="text-sm text-gray-400">{course.students} students</p>
+                            </div>
+                            <span className="text-cyan-300 text-sm font-semibold">#{course.id}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-white rounded-lg shadow-sm border">
+                  <div className="p-6 border-b">
+                    <h2 className="text-lg font-semibold text-gray-900">Recent Courses</h2>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      {courses.slice(0, 5).map((course) => (
+                        <div key={course._id} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <BookOpen className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-gray-900">{course.title}</h3>
+                              <p className="text-sm text-gray-500">{course.instructor}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-gray-900">${course.price || 0}</p>
+                            <p className="text-xs text-gray-500">{course.students || 0} students</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
