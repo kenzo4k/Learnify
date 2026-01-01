@@ -15,3 +15,4 @@ export { default as RecommendedCourses } from './RecommendedCourses';
 export { default as XPCounter } from './XPCounter';
 export { default as ProgressBar } from './ProgressBar';
 export { default as AchievementsList } from './Achievements';
+export { default as StatsGrid } from './StatsGrid';

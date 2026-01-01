@@ -1,126 +1,180 @@
-// src/Users/Student/Student.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
-import toast from 'react-hot-toast';
 import { 
   BookOpen, 
   Award,
   Clock,
-  TrendingUp,
+  Target,
   Calendar,
-  DollarSign,
   Play,
   CheckCircle,
   Star,
-  BarChart3,
-  Users,
-  Target
+  TrendingUp,
+  AlertTriangle,
+  ArrowRight,
+  Flame
 } from 'lucide-react';
 
-import { Leaderboard, Badges, RecommendedCourses } from '../../components/common';
-import recommendationService from '../../services/recommendationService';
+import { StatsGrid, ProgressBar, Leaderboard, Badges } from '../../components/common';
+import ProgressCard from '../../components/common/ProgressCard';
+
+// Sample data structure
+const sampleDashboard = {
+  stats: {
+    enrolledCourses: 5,
+    inProgress: 2,
+    completed: 3,
+    currentLevel: 4,
+    totalXP: 450
+  },
+  courses: [
+    { 
+      id: 1,
+      title: "Web Development Fundamentals", 
+      progress: 42, 
+      lessons: "5/12 lessons completed",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400",
+      lastAccessed: "Today",
+      category: "Web Development"
+    },
+    { 
+      id: 2,
+      title: "Python Programming", 
+      progress: 60, 
+      lessons: "9/15 lessons completed",
+      image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400",
+      lastAccessed: "2 days ago",
+      category: "Python"
+    },
+    { 
+      id: 3,
+      title: "Data Science Basics", 
+      progress: 85, 
+      lessons: "11/13 lessons completed",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
+      lastAccessed: "Yesterday",
+      category: "Data Science"
+    },
+    { 
+      id: 4,
+      title: "React Fundamentals", 
+      progress: 30, 
+      lessons: "3/10 lessons completed",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400",
+      lastAccessed: "3 days ago",
+      category: "Web Development"
+    },
+    { 
+      id: 5,
+      title: "JavaScript Advanced", 
+      progress: 100, 
+      lessons: "12/12 lessons completed",
+      image: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400",
+      lastAccessed: "1 week ago",
+      category: "Web Development"
+    }
+  ],
+  deadlines: [
+    { course: "Web Development", assignment: "Quiz", dueDate: "2024-01-10", daysLeft: 3 },
+    { course: "React Fundamentals", assignment: "Assignment", dueDate: "2024-01-09", daysLeft: 2 },
+    { course: "Python Programming", assignment: "Project", dueDate: "2024-01-14", daysLeft: 7 },
+    { course: "Data Science", assignment: "Quiz", dueDate: "2024-01-12", daysLeft: 5 }
+  ],
+  recommended: [
+    { 
+      id: 1,
+      title: "Continue: React Fundamentals", 
+      progress: 30, 
+      action: "View",
+      description: "2 lessons remaining"
+    },
+    { 
+      id: 2,
+      title: "Start: Node.js Basics", 
+      progress: 0, 
+      action: "View",
+      description: "Recommended based on progress"
+    },
+    { 
+      id: 3,
+      title: "Complete Quiz: Data Structures", 
+      progress: 100, 
+      action: "Take Quiz",
+      description: "Quiz pending"
+    }
+  ],
+  recentActivity: [
+    { action: "Completed Module 2", course: "Web Development", time: "2 hours ago", icon: "✅", xp: null },
+    { action: "Earned 50 XP", course: "HTML Quiz", time: "Yesterday", icon: "⭐", xp: 50 },
+    { action: "Started Course", course: "Python Fundamentals", time: "2 days ago", icon: "📚", xp: null },
+    { action: "Earned 100 XP", course: "Completed JavaScript Advanced", time: "3 days ago", icon: "🏆", xp: 100 }
+  ],
+  categoryProgress: [
+    { category: "Web Dev", progress: 70, color: "from-cyan-400 to-blue-500" },
+    { category: "Python", progress: 60, color: "from-green-400 to-emerald-500" },
+    { category: "Data Science", progress: 45, color: "from-purple-400 to-pink-500" },
+    { category: "Mobile Dev", progress: 30, color: "from-orange-400 to-red-500" },
+    { category: "DevOps", progress: 20, color: "from-yellow-400 to-orange-500" }
+  ]
+};
 
 const Student = () => {
   const { user } = React.useContext(AuthContext);
-  const [stats, setStats] = useState({
-    enrolledCourses: 0,
-    completedCourses: 0,
-    totalHours: 0,
-    certificates: 0,
-    averageGrade: 0,
-    inProgress: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
-  const [completedCourses, setCompletedCourses] = useState([]);
-  const [certificates, setCertificates] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
+  const [stats] = useState(sampleDashboard.stats);
+  const [courses] = useState(sampleDashboard.courses);
+  const [deadlines] = useState(sampleDashboard.deadlines);
+  const [recommended] = useState(sampleDashboard.recommended);
+  const [recentActivity] = useState(sampleDashboard.recentActivity);
+  const [categoryProgress] = useState(sampleDashboard.categoryProgress);
 
-  useEffect(() => {
-    fetchStudentData();
-  }, []);
-
-  const fetchStudentData = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch student statistics
-      const statsResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/student/stats?email=${user.email}`);
-      const statsData = await statsResponse.json();
-      setStats(statsData);
-
-      // Fetch enrolled courses
-      const enrolledResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/student/enrolled-courses?email=${user.email}`);
-      const enrolledData = await enrolledResponse.json();
-      setEnrolledCourses(enrolledData);
-
-      // Fetch completed courses
-      const completedResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/student/completed-courses?email=${user.email}`);
-      const completedData = await completedResponse.json();
-      setCompletedCourses(completedData);
-
-      // Fetch certificates
-      const certificatesResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/student/certificates?email=${user.email}`);
-      const certificatesData = await certificatesResponse.json();
-      setCertificates(certificatesData);
-
-    } catch (error) {
-      console.error('Error fetching student data:', error);
-      toast.error('Failed to load student data');
-    } finally {
-      setLoading(false);
-    }
+  const handleContinueCourse = (courseId) => {
+    console.log('Continuing course:', courseId);
   };
 
-  const handleCourseAction = async (courseId, action) => {
-    try {
-      const response = await fetch(`https://course-management-system-server-woad.vercel.app/api/student/courses/${courseId}/${action}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: user.email })
-      });
-
-      if (response.ok) {
-        toast.success(`Course ${action} successfully`);
-        fetchStudentData();
-      } else {
-        throw new Error('Failed to perform action');
-      }
-    } catch {
-      toast.error(`Failed to ${action} course`);
-    }
+  const getDeadlineColor = (daysLeft) => {
+    if (daysLeft <= 2) return 'text-red-400 bg-red-900/30 border-red-800';
+    if (daysLeft <= 5) return 'text-yellow-400 bg-yellow-900/30 border-yellow-800';
+    return 'text-green-400 bg-green-900/30 border-green-800';
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
+  const getDeadlineBadge = (daysLeft) => {
+    if (daysLeft <= 2) return <AlertTriangle className="w-4 h-4" />;
+    return <Calendar className="w-4 h-4" />;
+  };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Student Dashboard</h1>
-          <p className="text-gray-400">Track your learning progress and achievements</p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'Student'}! 👋
+              </h1>
+              <p className="text-gray-400">Track your learning progress and achievements</p>
+            </div>
+            <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-full">
+              <Flame className="w-5 h-5" />
+              <span className="font-semibold">{stats.currentLevel} Day Streak!</span>
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          <StatsGrid stats={stats} />
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-8 border-b border-gray-700">
-          {['overview', 'courses', 'progress', 'certificates'].map((tab) => (
+        <div className="flex space-x-1 mb-8 border-b border-gray-700 overflow-x-auto">
+          {['overview', 'courses', 'progress', 'achievements'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-medium capitalize transition-colors ${
+              className={`px-4 py-2 font-medium capitalize transition-colors whitespace-nowrap ${
                 activeTab === tab
-                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -129,301 +183,327 @@ const Student = () => {
           ))}
         </div>
 
-        {/* Main Content with Sidebar */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <>
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">Enrolled Courses</p>
-                        <p className="text-3xl font-bold">{stats.enrolledCourses}</p>
-                      </div>
-                      <BookOpen className="w-8 h-8 text-blue-400" />
-                    </div>
+        {/* Overview Tab */}
+        {activeTab === 'overview' && (
+          <div className="space-y-8">
+            {/* Progress Metrics Section */}
+            <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-6 flex items-center">
+                <TrendingUp className="w-5 h-5 mr-2 text-cyan-400" />
+                Progress Metrics
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Overall Completion */}
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-300">Overall Completion</span>
+                    <span className="text-cyan-400 font-semibold">45%</span>
                   </div>
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">Completed Courses</p>
-                        <p className="text-3xl font-bold">{stats.completedCourses}</p>
-                      </div>
-                      <CheckCircle className="w-8 h-8 text-green-400" />
-                    </div>
-                  </div>
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">Learning Hours</p>
-                        <p className="text-3xl font-bold">{stats.totalHours}</p>
-                      </div>
-                      <Clock className="w-8 h-8 text-yellow-400" />
-                    </div>
-                  </div>
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">Certificates</p>
-                        <p className="text-3xl font-bold">{stats.certificates}</p>
-                      </div>
-                      <Award className="w-8 h-8 text-purple-400" />
-                    </div>
-                  </div>
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">Average Grade</p>
-                        <p className="text-3xl font-bold">{stats.averageGrade.toFixed(1)}%</p>
-                      </div>
-                      <BarChart3 className="w-8 h-8 text-teal-400" />
-                    </div>
-                  </div>
-                  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-400 text-sm">In Progress</p>
-                        <p className="text-3xl font-bold">{stats.inProgress}</p>
-                      </div>
-                      <Target className="w-8 h-8 text-orange-400" />
-                    </div>
-                  </div>
+                  <ProgressBar current={45} max={100} color="cyan" />
+                  <p className="text-sm text-gray-400 mt-2">of all courses</p>
                 </div>
-                {/* Badges Section */}
-                <Badges userEmail={user.email} />
-                {/* Quick Actions */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Continue Learning */}
-                  <div className="bg-gray-800 rounded-lg border border-gray-700">
-                    <div className="p-6 border-b border-gray-700">
-                      <h2 className="text-xl font-semibold">Continue Learning</h2>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-4">
-                        {enrolledCourses.filter(course => course.progress < 100).slice(0, 3).map((course) => (
-                          <div key={course._id} className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <p className="font-medium">{course.title}</p>
-                              <div className="flex items-center space-x-2 mt-1">
-                                <div className="w-24 bg-gray-700 rounded-full h-2">
-                                  <div 
-                                    className="bg-blue-500 h-2 rounded-full" 
-                                    style={{ width: `${course.progress || 0}%` }}
-                                  ></div>
-                                </div>
-                                <span className="text-sm text-gray-400">{course.progress || 0}%</span>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => handleCourseAction(course._id, 'continue')}
-                              className="p-2 text-blue-400 hover:bg-blue-900 rounded"
-                            >
-                              <Play className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+
+                {/* Average Grade */}
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-300">Average Grade</span>
+                    <span className="text-green-400 font-semibold">85%</span>
                   </div>
-                  {/* Recent Achievements */}
-                  <div className="bg-gray-800 rounded-lg border border-gray-700">
-                    <div className="p-6 border-b border-gray-700">
-                      <h2 className="text-xl font-semibold">Recent Achievements</h2>
-                    </div>
-                    <div className="p-6">
-                      <div className="space-y-4">
-                        {completedCourses.slice(0, 3).map((course) => (
-                          <div key={course._id} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-5 h-5 text-green-400" />
-                              </div>
-                              <div>
-                                <p className="font-medium">{course.title}</p>
-                                <p className="text-sm text-gray-400">Completed on {new Date(course.completedDate).toLocaleDateString()}</p>
-                              </div>
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              Grade: {course.grade || 'N/A'}%
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <ProgressBar current={85} max={100} color="green" />
+                  <p className="text-sm text-gray-400 mt-2">Excellent performance!</p>
                 </div>
-                
-                {/* Recommended For You Section */}
-                <div className="bg-gray-800 rounded-lg border border-gray-700 mt-8">
-                  <div className="p-6 border-b border-gray-700 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-xl font-semibold">Recommended For You</h2>
-                      <p className="text-sm text-gray-400 mt-1">Personalized based on your learning progress</p>
-                    </div>
+
+                {/* Learning Hours */}
+                <div className="bg-gray-700 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-300">Total Learning Hours</span>
+                    <span className="text-purple-400 font-semibold">24h</span>
                   </div>
-                  <div className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      {recommendationService.getSampleRecommendations('mixed').recommendations.slice(0, 4).map(({ course, reason }) => (
-                        <Link 
-                          key={course.id} 
-                          to={`/course/${course.id}`}
-                          className="bg-gray-700 rounded-lg p-4 flex flex-col hover:bg-gray-600 transition-colors border border-gray-600 hover:border-cyan-500 group"
-                        >
-                          <div className="flex-shrink-0 mb-3">
+                  <ProgressBar current={24} max={100} color="purple" />
+                  <p className="text-sm text-gray-400 mt-2">Keep it up!</p>
+                </div>
+              </div>
+
+              {/* Category Progress Chart */}
+              <div className="mt-8">
+                <h3 className="text-lg font-medium mb-4">Category Progress</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                  {categoryProgress.map((cat, index) => (
+                    <div key={index} className="text-center">
+                      <div className="h-32 bg-gray-700 rounded-lg relative overflow-hidden mb-2">
+                        <div 
+                          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t ${cat.color} transition-all duration-500`}
+                          style={{ height: `${cat.progress}%` }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-lg font-bold text-white z-10">{cat.progress}%</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-300 font-medium">{cat.category}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Recommended Next Steps & Dead */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Recommended Next Steps */}
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h2 className="text-xl font-semibold mb-4 flex items-center">
+                  <Target className="w-5 h-5 mr-2 text-cyan-400" />
+                  Recommended Next Steps
+                </h2>
+                <div className="space-y-4">
+                  {recommended.map((item) => (
+                    <div 
+                      key={item.id}
+                      className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-cyan-500 transition-colors group"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-medium text-white mb-1">{item.title}</h3>
+                          <p className="text-sm text-gray-400">{item.description}</p>
+                        </div>
+                        {item.progress > 0 && (
+                          <span className="px-3 py-1 bg-cyan-900/50 text-cyan-300 text-xs rounded-full">
+                            {item.progress}%
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="w-32">
+                          <ProgressBar 
+                            current={item.progress} 
+                            max={100} 
+                            color={item.progress === 100 ? 'green' : 'blue'}
+                            height="h-2"
+                          />
+                        </div>
+                        <button className="px-4 py-2 bg-cyan-600 text-white text-sm rounded-lg hover:bg-cyan-700 transition-colors flex items-center group-hover:translate-x-1 transition-transform">
+                          {item.action}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Upcoming Deadlines */}
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <h2 className="text-xl font-semibold mb-4 flex items-center">
+                  <Calendar className="w-5 h-5 mr-2 text-cyan-400" />
+                  Upcoming Deadlines
+                </h2>
+                <div className="space-y-3">
+                  {deadlines.map((deadline, index) => (
+                    <div 
+                      key={index}
+                      className={`flex items-center justify-between p-4 rounded-lg border transition-colors ${getDeadlineColor(deadline.daysLeft)}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2">
+                          {getDeadlineBadge(deadline.daysLeft)}
+                        </div>
+                        <div>
+                          <p className="font-medium text-white">{deadline.course}</p>
+                          <p className="text-sm opacity-80">{deadline.assignment}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold">{deadline.daysLeft} days left</p>
+                        <p className="text-xs opacity-70">{new Date(deadline.dueDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Course Progress Grid */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold flex items-center">
+                  <BookOpen className="w-5 h-5 mr-2 text-cyan-400" />
+                  Course Progress
+                </h2>
+                <Link 
+                  to="/courses"
+                  className="text-cyan-400 hover:text-cyan-300 flex items-center text-sm"
+                >
+                  View All Courses
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courses.map((course) => (
+                  <ProgressCard
+                    key={course.id}
+                    {...course}
+                    actionText={course.progress === 100 ? 'Review' : 'Continue'}
+                    onAction={() => handleContinueCourse(course.id)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-cyan-400" />
+                Recent Activity
+              </h2>
+              <div className="space-y-4">
+                {recentActivity.map((activity, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-gray-700 rounded-lg border border-gray-600"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-xl">
+                        {activity.icon}
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">
+                          {activity.action}: {activity.course}
+                        </p>
+                        <p className="text-sm text-gray-400">{activity.time}</p>
+                      </div>
+                    </div>
+                    {activity.xp && (
+                      <div className="flex items-center text-yellow-400">
+                        <Star className="w-5 h-5 mr-1" />
+                        <span className="font-semibold">+{activity.xp} XP</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Courses Tab */}
+        {activeTab === 'courses' && (
+          <div className="bg-gray-800 rounded-xl border border-gray-700">
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-xl font-semibold">My Courses</h2>
+            </div>
+            <div className="p-6">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-700">
+                      <th className="text-left py-3 px-4">Course</th>
+                      <th className="text-left py-3 px-4">Progress</th>
+                      <th className="text-left py-3 px-4">Status</th>
+                      <th className="text-left py-3 px-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {courses.map((course) => (
+                      <tr key={course.id} className="border-b border-gray-700">
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-3">
                             <img 
                               src={course.image} 
                               alt={course.title}
-                              className="w-full h-32 object-cover rounded group-hover:scale-105 transition-transform"
+                              className="w-16 h-12 object-cover rounded"
+                            />
+                            <div>
+                              <p className="font-medium">{course.title}</p>
+                              <p className="text-sm text-gray-400">{course.category}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="w-32">
+                            <ProgressBar 
+                              current={course.progress} 
+                              max={100} 
+                              color={course.progress === 100 ? 'green' : 'cyan'}
+                              height="h-2"
                             />
                           </div>
-                          <span className="text-xs font-medium text-purple-400 uppercase tracking-wide mb-1">
-                            {course.category}
+                          <p className="text-sm text-gray-400 mt-1">{course.progress}%</p>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            course.progress === 100 
+                              ? 'bg-green-900 text-green-300' 
+                              : 'bg-yellow-900 text-yellow-300'
+                          }`}>
+                            {course.progress === 100 ? 'Completed' : 'In Progress'}
                           </span>
-                          <h3 className="font-semibold text-white mb-2 line-clamp-2">{course.title}</h3>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="px-2 py-0.5 bg-blue-900/50 text-blue-300 text-xs rounded-full">
-                              {course.level}
-                            </span>
-                            <span className="text-xs text-gray-400">{course.rating} ★</span>
-                          </div>
-                          <p className="text-xs text-cyan-300 mt-auto">
-                            {reason}
-                          </p>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-            {/* Courses Tab */}
-            {activeTab === 'courses' && (
-              // ...existing code for courses tab...
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
-                <div className="p-6 border-b border-gray-700">
-                  <h2 className="text-xl font-semibold">My Courses</h2>
-                </div>
-                <div className="p-6">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-700">
-                          <th className="text-left py-3 px-4">Course</th>
-                          <th className="text-left py-3 px-4">Instructor</th>
-                          <th className="text-left py-3 px-4">Progress</th>
-                          <th className="text-left py-3 px-4">Grade</th>
-                          <th className="text-left py-3 px-4">Status</th>
-                          <th className="text-left py-3 px-4">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {enrolledCourses.map((course) => (
-                          <tr key={course._id} className="border-b border-gray-700">
-                            <td className="py-3 px-4">{course.title}</td>
-                            <td className="py-3 px-4">{course.instructor}</td>
-                            <td className="py-3 px-4">
-                              <div className="flex items-center space-x-2">
-                                <div className="w-24 bg-gray-700 rounded-full h-2">
-                                  <div 
-                                    className="bg-blue-500 h-2 rounded-full" 
-                                    style={{ width: `${course.progress || 0}%` }}
-                                  ></div>
-                                </div>
-                                <span className="text-sm">{course.progress || 0}%</span>
-                              </div>
-                            </td>
-                            <td className="py-3 px-4">{course.grade || 'N/A'}%</td>
-                            <td className="py-3 px-4">
-                              <span className={`px-2 py-1 rounded text-xs ${
-                                course.progress === 100 ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'
-                              }`}>
-                                {course.progress === 100 ? 'Completed' : 'In Progress'}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4">
-                              <div className="flex space-x-2">
-                                <button className="p-1 text-blue-400 hover:bg-blue-900 rounded">
-                                  <Play className="w-4 h-4" />
-                                </button>
-                                <button className="p-1 text-gray-400 hover:bg-gray-700 rounded">
-                                  <BookOpen className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* Progress Tab */}
-            {activeTab === 'progress' && (
-              // ...existing code for progress tab...
-              <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <h2 className="text-xl font-semibold mb-6">Learning Progress</h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="bg-gray-700 p-4 rounded">
-                    <h3 className="text-lg font-medium mb-4">Weekly Activity</h3>
-                    <div className="h-48 flex items-center justify-center text-gray-400">
-                      Progress chart would go here
-                    </div>
-                  </div>
-                  <div className="bg-gray-700 p-4 rounded">
-                    <h3 className="text-lg font-medium mb-4">Course Completion Rate</h3>
-                    <div className="h-48 flex items-center justify-center text-gray-400">
-                      Completion chart would go here
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* Certificates Tab */}
-            {activeTab === 'certificates' && (
-              // ...existing code for certificates tab...
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
-                <div className="p-6 border-b border-gray-700">
-                  <h2 className="text-xl font-semibold">My Certificates</h2>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {certificates.map((certificate) => (
-                      <div key={certificate._id} className="bg-gray-700 rounded-lg p-6 border border-gray-600">
-                        <div className="flex items-center justify-center mb-4">
-                          <Award className="w-16 h-16 text-yellow-400" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-center mb-2">{certificate.courseTitle}</h3>
-                        <p className="text-gray-400 text-sm text-center mb-4">
-                          Issued on {new Date(certificate.issuedDate).toLocaleDateString()}
-                        </p>
-                        <div className="flex space-x-2">
-                          <button className="flex-1 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-                            View
+                        </td>
+                        <td className="py-3 px-4">
+                          <button className="p-2 text-cyan-400 hover:bg-cyan-900 rounded">
+                            <Play className="w-4 h-4" />
                           </button>
-                          <button className="flex-1 px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition-colors">
-                            Download
-                          </button>
-                        </div>
-                      </div>
+                        </td>
+                      </tr>
                     ))}
-                  </div>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Progress Tab */}
+        {activeTab === 'progress' && (
+          <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+            <h2 className="text-xl font-semibold mb-6">Detailed Progress</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-gray-700 p-6 rounded-lg">
+                <h3 className="text-lg font-medium mb-4 flex items-center">
+                  <TrendingUp className="w-5 h-5 mr-2 text-cyan-400" />
+                  Weekly Activity
+                </h3>
+                <div className="space-y-4">
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => (
+                    <div key={day} className="flex items-center space-x-3">
+                      <span className="w-12 text-sm text-gray-400">{day}</span>
+                      <div className="flex-1 bg-gray-600 rounded-full h-3">
+                        <div 
+                          className="bg-gradient-to-r from-cyan-400 to-blue-500 h-3 rounded-full"
+                          style={{ width: `${[65, 80, 45, 90, 70, 30, 50][i]}%` }}
+                        />
+                      </div>
+                      <span className="text-sm text-gray-300 w-12"> {[2.5, 3, 2, 3.5, 2.8, 1.2, 2][i]}h</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
+              <div className="bg-gray-700 p-6 rounded-lg">
+                <h3 className="text-lg font-medium mb-4 flex items-center">
+                  <Award className="w-5 h-5 mr-2 text-cyan-400" />
+                  Achievements
+                </h3>
+                <div className="grid grid-cols-3 gap-4">
+                  {['First Course', '7 Day Streak', 'Top 10%', 'Fast Learner', 'Quiz Master', 'Perfect Score'].map((achievement, i) => (
+                    <div key={i} className="text-center p-4 bg-gray-600 rounded-lg">
+                      <div className="text-3xl mb-2">{['🎯', '🔥', '🏆', '⚡', '🧠', '💯'][i]}</div>
+                      <p className="text-xs text-gray-300">{achievement}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          {/* Sidebar */}
-          <div className="w-full lg:w-80 flex-shrink-0">
-            <Leaderboard />
+        )}
+
+        {/* Achievements Tab */}
+        {activeTab === 'achievements' && (
+          <div className="space-y-6">
+            <Badges userEmail={user?.email} />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Student;
