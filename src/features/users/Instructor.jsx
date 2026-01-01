@@ -1,4 +1,3 @@
-// src/pages/Instructor/Instructor.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
@@ -16,9 +15,17 @@ import {
   Calendar,
   Award,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Activity,
+  Target,
+  BarChart3,
+  Mail,
+  TrendingDown
 } from 'lucide-react';
 import AtRiskStudents from '../../components/instructor/AtRiskStudents';
+import AnalyticsChart from '../../components/instructor/AnalyticsChart';
 
 const Instructor = () => {
   const { user } = React.useContext(AuthContext);
@@ -35,8 +42,50 @@ const Instructor = () => {
   const [students, setStudents] = useState([]);
   const [activeTab, setActiveTab] = useState('overview');
 
+  // Sample analytics data
+  const sampleAnalytics = {
+    stats: {
+      totalStudents: 45,
+      activeCourses: 3,
+      avgClassGrade: 78,
+      completionRate: 72
+    },
+    gradeDistribution: [
+      { grade: 'A (90-100%)', count: 15, color: 'blue' },
+      { grade: 'B (80-89%)', count: 20, color: 'cyan' },
+      { grade: 'C (70-79%)', count: 8, color: 'yellow' },
+      { grade: 'D+ (60-69%)', count: 2, color: 'red' }
+    ],
+    students: [
+      { name: "Ahmed Khan", enrolled: "2024-01-05", courses: 3, grade: 85, completion: 90, status: "Active" },
+      { name: "Fatima Ali", enrolled: "2024-01-03", courses: 2, grade: 72, completion: 80, status: "Active" },
+      { name: "Omar Hassan", enrolled: "2024-01-10", courses: 1, grade: 45, completion: 30, status: "Inactive" },
+      { name: "Sarah Ahmed", enrolled: "2024-01-15", courses: 3, grade: 92, completion: 95, status: "Active" },
+      { name: "Zainab Ahmed", enrolled: "2024-01-08", courses: 2, grade: 55, completion: 45, status: "Active" },
+      { name: "Hassan Mohamed", enrolled: "2024-01-12", courses: 2, grade: 88, completion: 85, status: "Active" },
+      { name: "Layla Ibrahim", enrolled: "2024-01-20", courses: 1, grade: 78, completion: 75, status: "Active" },
+      { name: "Yusuf Abdullah", enrolled: "2024-01-18", courses: 3, grade: 82, completion: 88, status: "Active" }
+    ],
+    courseStats: [
+      { name: "Web Development", students: 25, completion: 85, avgGrade: 82, lastUpdated: "2024-01-20" },
+      { name: "Python Programming", students: 15, completion: 65, avgGrade: 75, lastUpdated: "2024-01-18" },
+      { name: "Data Science", students: 18, completion: 70, avgGrade: 78, lastUpdated: "2024-01-22" }
+    ],
+    engagement: {
+      participationRate: 68,
+      quizCompletion: "320/450",
+      submissionRate: 75,
+      avgTimeSpent: "4.2 hours"
+    },
+    atRisk: [
+      { name: "Omar Hassan", course: "Web Dev", grade: 45, status: "Failing" },
+      { name: "Zainab Ahmed", course: "Python", grade: 55, status: "At Risk" }
+    ]
+  };
+
   useEffect(() => {
     fetchInstructorData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchInstructorData = async () => {
@@ -81,7 +130,7 @@ const Instructor = () => {
       } else {
         throw new Error('Failed to perform action');
       }
-    } catch (error) {
+    } catch {
       toast.error(`Failed to ${action} course`);
     }
   };
@@ -379,21 +428,322 @@ const Instructor = () => {
           <AtRiskStudents />
         )}
 
-        {/* Analytics Tab */}
+        {/* Analytics Tab - COMPREHENSIVE DASHBOARD */}
         {activeTab === 'analytics' && (
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <h2 className="text-xl font-semibold mb-6">Performance Analytics</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-gray-700 p-4 rounded">
-                <h3 className="text-lg font-medium mb-4">Enrollment Trends</h3>
-                <div className="h-48 flex items-center justify-center text-gray-400">
-                  Analytics chart would go here
+          <div className="space-y-6">
+            {/* Header Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-100 text-sm font-medium">Total Students</p>
+                    <p className="text-4xl font-bold text-white mt-1">{sampleAnalytics.stats.totalStudents}</p>
+                    <p className="text-blue-100 text-xs mt-1">Enrolled across all courses</p>
+                  </div>
+                  <Users className="w-12 h-12 text-blue-200 opacity-80" />
                 </div>
               </div>
-              <div className="bg-gray-700 p-4 rounded">
-                <h3 className="text-lg font-medium mb-4">Revenue Overview</h3>
-                <div className="h-48 flex items-center justify-center text-gray-400">
-                  Analytics chart would go here
+
+              <div className="bg-gradient-to-br from-cyan-600 to-cyan-700 p-6 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-cyan-100 text-sm font-medium">Active Courses</p>
+                    <p className="text-4xl font-bold text-white mt-1">{sampleAnalytics.stats.activeCourses}</p>
+                    <p className="text-cyan-100 text-xs mt-1">Currently running</p>
+                  </div>
+                  <BookOpen className="w-12 h-12 text-cyan-200 opacity-80" />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-600 to-green-700 p-6 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">Avg Class Grade</p>
+                    <p className="text-4xl font-bold text-white mt-1">{sampleAnalytics.stats.avgClassGrade}%</p>
+                    <p className="text-green-100 text-xs mt-1">Overall performance</p>
+                  </div>
+                  <Target className="w-12 h-12 text-green-200 opacity-80" />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-600 to-purple-700 p-6 rounded-lg shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-100 text-sm font-medium">Completion Rate</p>
+                    <p className="text-4xl font-bold text-white mt-1">{sampleAnalytics.stats.completionRate}%</p>
+                    <p className="text-purple-100 text-xs mt-1">Course completion</p>
+                  </div>
+                  <CheckCircle className="w-12 h-12 text-purple-200 opacity-80" />
+                </div>
+              </div>
+            </div>
+
+            {/* Class Performance Overview */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Grade Distribution */}
+              <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-cyan-400" />
+                  Grade Distribution
+                </h2>
+                <AnalyticsChart 
+                  data={sampleAnalytics.gradeDistribution} 
+                  type="bar"
+                  maxValue={25}
+                />
+              </div>
+
+              {/* Completion & Engagement */}
+              <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-cyan-400" />
+                  Completion & Engagement
+                </h2>
+                <div className="space-y-6">
+                  <AnalyticsChart 
+                    data={{ 
+                      percentage: sampleAnalytics.stats.completionRate, 
+                      label: `${sampleAnalytics.stats.completionRate}% of students completed courses`
+                    }} 
+                    type="progress"
+                    title="Overall Completion Rate"
+                  />
+                  <AnalyticsChart 
+                    data={{ 
+                      percentage: sampleAnalytics.engagement.participationRate, 
+                      label: `${sampleAnalytics.engagement.participationRate}% students are actively participating`
+                    }} 
+                    type="progress"
+                    title="Student Participation"
+                  />
+                  <AnalyticsChart 
+                    data={{ 
+                      percentage: sampleAnalytics.engagement.submissionRate, 
+                      label: `${sampleAnalytics.engagement.submissionRate}% on-time assignment submissions`
+                    }} 
+                    type="progress"
+                    title="Assignment Submission Rate"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Course-wise Performance Cards */}
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <Award className="w-5 h-5 text-cyan-400" />
+                Course Performance Overview
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {sampleAnalytics.courseStats.map((course, index) => (
+                  <div key={index} className="bg-gray-700 rounded-lg p-5 border border-gray-600 hover:border-cyan-500 transition-colors">
+                    <h3 className="font-semibold text-lg mb-3">{course.name}</h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-400 text-sm">Students:</span>
+                        <span className="font-medium text-cyan-400">{course.students}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-400 text-sm">Avg Grade:</span>
+                        <span className="font-medium text-green-400">{course.avgGrade}%</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-400 text-sm">Completion:</span>
+                        <span className="font-medium text-blue-400">{course.completion}%</span>
+                      </div>
+                      <div className="pt-2 border-t border-gray-600">
+                        <p className="text-xs text-gray-400">Last updated: {course.lastUpdated}</p>
+                      </div>
+                      <button className="w-full mt-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        View Analytics
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Engagement Metrics */}
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                Engagement Metrics
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-gray-700 rounded-lg p-5 border border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <Activity className="w-8 h-8 text-cyan-400" />
+                    <span className="text-2xl font-bold text-cyan-400">{sampleAnalytics.engagement.participationRate}%</span>
+                  </div>
+                  <p className="text-gray-300 font-medium">Participation Rate</p>
+                  <p className="text-gray-400 text-sm mt-1">Students are active</p>
+                </div>
+
+                <div className="bg-gray-700 rounded-lg p-5 border border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <CheckCircle className="w-8 h-8 text-green-400" />
+                    <span className="text-2xl font-bold text-green-400">{sampleAnalytics.engagement.quizCompletion}</span>
+                  </div>
+                  <p className="text-gray-300 font-medium">Quiz Completion</p>
+                  <p className="text-gray-400 text-sm mt-1">Quizzes completed</p>
+                </div>
+
+                <div className="bg-gray-700 rounded-lg p-5 border border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <Calendar className="w-8 h-8 text-blue-400" />
+                    <span className="text-2xl font-bold text-blue-400">{sampleAnalytics.engagement.submissionRate}%</span>
+                  </div>
+                  <p className="text-gray-300 font-medium">On-Time Submissions</p>
+                  <p className="text-gray-400 text-sm mt-1">Assignment submission rate</p>
+                </div>
+
+                <div className="bg-gray-700 rounded-lg p-5 border border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <Clock className="w-8 h-8 text-purple-400" />
+                    <span className="text-2xl font-bold text-purple-400">{sampleAnalytics.engagement.avgTimeSpent}</span>
+                  </div>
+                  <p className="text-gray-300 font-medium">Avg Time Spent</p>
+                  <p className="text-gray-400 text-sm mt-1">Per course weekly</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Student Performance Table */}
+            <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="p-6 border-b border-gray-700">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <Users className="w-5 h-5 text-cyan-400" />
+                  Student Performance Overview
+                </h2>
+              </div>
+              <div className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Student Name</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Enrolled</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Courses</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Avg Grade</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Completion</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sampleAnalytics.students.map((student, index) => (
+                        <tr key={index} className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+                                {student.name.charAt(0)}
+                              </div>
+                              <span className="font-medium">{student.name}</span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-gray-300">{student.enrolled}</td>
+                          <td className="py-3 px-4 text-gray-300">{student.courses}</td>
+                          <td className="py-3 px-4">
+                            <span className={`font-semibold ${
+                              student.grade >= 80 ? 'text-green-400' : 
+                              student.grade >= 70 ? 'text-blue-400' : 
+                              student.grade >= 60 ? 'text-yellow-400' : 
+                              'text-red-400'
+                            }`}>
+                              {student.grade}%
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-24 bg-gray-700 rounded-full h-2">
+                                <div
+                                  className={`h-2 rounded-full ${
+                                    student.completion >= 80 ? 'bg-green-500' : 
+                                    student.completion >= 60 ? 'bg-blue-500' : 
+                                    student.completion >= 40 ? 'bg-yellow-500' : 
+                                    'bg-red-500'
+                                  }`}
+                                  style={{ width: `${student.completion}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-sm text-gray-400">{student.completion}%</span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              student.status === 'Active' 
+                                ? 'bg-green-900 text-green-300' 
+                                : 'bg-red-900 text-red-300'
+                            }`}>
+                              {student.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* At-Risk Students Section */}
+            <div className="bg-gray-800 rounded-lg border border-red-700 shadow-lg shadow-red-900/20">
+              <div className="p-6 border-b border-red-700 bg-red-900/20">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                  At-Risk Students (Need Attention)
+                </h2>
+                <p className="text-gray-400 text-sm mt-1">
+                  Students with grades below 60% or completion below 50%
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-700">
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Student Name</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Course</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Grade</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sampleAnalytics.atRisk.map((student, index) => (
+                        <tr key={index} className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-medium">
+                                {student.name.charAt(0)}
+                              </div>
+                              <span className="font-medium">{student.name}</span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-gray-300">{student.course}</td>
+                          <td className="py-3 px-4">
+                            <span className="font-semibold text-red-400">{student.grade}%</span>
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit ${
+                              student.status === 'Failing' 
+                                ? 'bg-red-900 text-red-300' 
+                                : 'bg-yellow-900 text-yellow-300'
+                            }`}>
+                              {student.status === 'Failing' ? <XCircle className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
+                              {student.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
+                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              Contact
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import { ASSESSMENT_CONFIG, getRandomQuestions, shuffleOptions } from './AssessmentConfig';
+import { ASSESSMENT_CONFIG, getRandomQuestions, shuffleOptions, QUESTION_TYPES } from './AssessmentConfig';
 
 const CourseAssessment = () => {
     const { id: courseId } = useParams();
@@ -60,7 +59,32 @@ const CourseAssessment = () => {
 
         currentTopicQuestions.forEach(question => {
             const userAnswer = selectedAnswers[question.id];
-            if (userAnswer !== question.correctAnswer) {
+            let isCorrect = false;
+
+            // Check answer based on question type
+            switch (question.type) {
+                case 'mcq':
+                    isCorrect = userAnswer === question.correctAnswer;
+                    break;
+                case 'fill_blank':
+                    isCorrect = userAnswer && userAnswer.trim().toLowerCase() === question.answer.trim().toLowerCase();
+                    break;
+                case 'matching':
+                    if (userAnswer && question.pairs) {
+                        isCorrect = question.pairs.every((pair, idx) => {
+                            return userAnswer[idx] === pair.right;
+                        });
+                    }
+                    break;
+                case 'true_false':
+                    isCorrect = userAnswer === question.correctAnswer;
+                    break;
+                default:
+                    // Legacy support for questions without type (assume MCQ)
+                    isCorrect = userAnswer === question.correctAnswer;
+            }
+
+            if (!isCorrect) {
                 wrongCount++;
             }
         });
@@ -277,32 +301,106 @@ const CourseAssessment = () => {
                         {currentQuestion.question}
                     </h2>
 
-                    <div className="space-y-3">
-                        {currentQuestion.options.map((option, index) => (
-                            <label
-                                key={index}
-                                className={`block p-4 rounded-lg border cursor-pointer transition-all ${selectedAnswers[currentQuestion.id] === index
-                                    ? 'border-indigo-500 bg-indigo-900/30'
-                                    : 'border-gray-600 hover:border-gray-500 hover:bg-gray-700/50'
-                                    }`}
+                    {/* MCQ Question */}
+                    {currentQuestion.type === 'mcq' && (
+                        <div className="space-y-3">
+                            {currentQuestion.options.map((option, index) => (
+                                <label
+                                    key={index}
+                                    className={`block p-4 rounded-lg border cursor-pointer transition-all ${selectedAnswers[currentQuestion.id] === index
+                                        ? 'border-indigo-500 bg-indigo-900/30'
+                                        : 'border-gray-600 hover:border-gray-500 hover:bg-gray-700/50'
+                                        }`}
+                                >
+                                    <input
+                                        type="radio"
+                                        name={currentQuestion.id}
+                                        value={index}
+                                        checked={selectedAnswers[currentQuestion.id] === index}
+                                        onChange={() => handleAnswerSelect(currentQuestion.id, index)}
+                                        className="mr-3"
+                                    />
+                                    <span className="text-gray-100">{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Fill in the Blank Question */}
+                    {currentQuestion.type === 'fill_blank' && (
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                                placeholder="Type your answer here..."
+                                value={selectedAnswers[currentQuestion.id] || ''}
+                                onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
+                            />
+                        </div>
+                    )}
+
+                    {/* Matching Question */}
+                    {currentQuestion.type === 'matching' && currentQuestion.pairs && (
+                        <div className="space-y-4">
+                            {currentQuestion.pairs.map((pair, idx) => (
+                                <div key={idx} className="flex items-center gap-4">
+                                    <div className="flex-1 p-3 bg-gray-700 rounded-lg text-white font-medium">
+                                        {pair.left}
+                                    </div>
+                                    <span className="text-gray-400">→</span>
+                                    <select
+                                        className="select select-bordered flex-1 bg-gray-700 text-white border-gray-600"
+                                        value={selectedAnswers[currentQuestion.id]?.[idx] || ''}
+                                        onChange={(e) => {
+                                            const currentAnswers = selectedAnswers[currentQuestion.id] || {};
+                                            handleAnswerSelect(currentQuestion.id, {
+                                                ...currentAnswers,
+                                                [idx]: e.target.value
+                                            });
+                                        }}
+                                    >
+                                        <option value="">Select match...</option>
+                                        {currentQuestion.pairs.map((_, optIdx) => (
+                                            <option key={optIdx} value={currentQuestion.pairs[optIdx].right}>
+                                                {currentQuestion.pairs[optIdx].right}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* True/False Question */}
+                    {currentQuestion.type === 'true_false' && (
+                        <div className="flex gap-4">
+                            <button
+                                className={`flex-1 p-6 rounded-lg border-2 font-bold text-lg transition-all ${
+                                    selectedAnswers[currentQuestion.id] === true
+                                        ? 'border-green-500 bg-green-900/30 text-green-400'
+                                        : 'border-gray-600 hover:border-gray-500 hover:bg-gray-700/50 text-gray-300'
+                                }`}
+                                onClick={() => handleAnswerSelect(currentQuestion.id, true)}
                             >
-                                <input
-                                    type="radio"
-                                    name={currentQuestion.id}
-                                    value={index}
-                                    checked={selectedAnswers[currentQuestion.id] === index}
-                                    onChange={() => handleAnswerSelect(currentQuestion.id, index)}
-                                    className="mr-3"
-                                />
-                                <span className="text-gray-100">{option}</span>
-                            </label>
-                        ))}
-                    </div>
+                                True
+                            </button>
+                            <button
+                                className={`flex-1 p-6 rounded-lg border-2 font-bold text-lg transition-all ${
+                                    selectedAnswers[currentQuestion.id] === false
+                                        ? 'border-red-500 bg-red-900/30 text-red-400'
+                                        : 'border-gray-600 hover:border-gray-500 hover:bg-gray-700/50 text-gray-300'
+                                }`}
+                                onClick={() => handleAnswerSelect(currentQuestion.id, false)}
+                            >
+                                False
+                            </button>
+                        </div>
+                    )}
 
                     <div className="mt-8 flex justify-end">
                         <button
                             onClick={handleNextQuestion}
-                            disabled={selectedAnswers[currentQuestion.id] === undefined}
+                            disabled={selectedAnswers[currentQuestion.id] === undefined || selectedAnswers[currentQuestion.id] === ''}
                             className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {currentQuestionIndex === currentTopicQuestions.length - 1 ? 'Complete Topic' : 'Next Question'}

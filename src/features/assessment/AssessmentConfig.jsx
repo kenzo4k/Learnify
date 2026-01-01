@@ -1,6 +1,14 @@
 // Assessment Configuration Template
 // Replace the placeholder values with your actual course details
 
+// Question type constants
+export const QUESTION_TYPES = {
+    MCQ: 'mcq',
+    FILL_BLANK: 'fill_blank',
+    MATCHING: 'matching',
+    TRUE_FALSE: 'true_false'
+};
+
 export const ASSESSMENT_CONFIG = {
     // Replace {COURSE_NAME} with your actual course title
     courseName: "Introduction to React Development",
@@ -26,7 +34,9 @@ export const ASSESSMENT_CONFIG = {
 // Question bank for different topics - customize based on your course content
 export const QUESTION_BANK = {
     "React Fundamentals": [
+        // MCQ Questions
         {
+            type: 'mcq',
             question: "What is React primarily used for?",
             options: [
                 "Building user interfaces",
@@ -37,6 +47,7 @@ export const QUESTION_BANK = {
             correctAnswer: 0
         },
         {
+            type: 'mcq',
             question: "Who created React?",
             options: [
                 "Google",
@@ -46,40 +57,33 @@ export const QUESTION_BANK = {
             ],
             correctAnswer: 1
         },
+        // Fill in the Blank
         {
-            question: "What does JSX stand for?",
-            options: [
-                "JavaScript XML",
-                "Java Syntax Extension",
-                "JavaScript Extension",
-                "JSON XML"
-            ],
-            correctAnswer: 0
+            type: 'fill_blank',
+            question: "JSX stands for _____ _____",
+            answer: "JavaScript XML"
         },
+        // Matching
         {
-            question: "React uses a ______ architecture to build applications.",
-            options: [
-                "Monolithic",
-                "Component-based",
-                "Layered",
-                "Microservices"
-            ],
-            correctAnswer: 1
+            type: 'matching',
+            question: "Match the React concept to its description",
+            pairs: [
+                { left: "Props", right: "Data passed from parent to child" },
+                { left: "State", right: "Component's internal data" },
+                { left: "JSX", right: "HTML-like syntax for React" }
+            ]
         },
+        // True/False
         {
-            question: "What is the purpose of ReactDOM.render()?",
-            options: [
-                "To render HTML elements",
-                "To render React components to the DOM",
-                "To render CSS styles",
-                "To render server-side code"
-            ],
-            correctAnswer: 1
+            type: 'true_false',
+            question: "React can only be used with JavaScript",
+            correctAnswer: false
         }
     ],
 
     "Components and Props": [
         {
+            type: 'mcq',
             question: "What are the two main types of React components?",
             options: [
                 "Static and Dynamic",
@@ -90,36 +94,26 @@ export const QUESTION_BANK = {
             correctAnswer: 1
         },
         {
-            question: "How do you pass data from parent to child component?",
-            options: [
-                "Using state",
-                "Using props",
-                "Using context",
-                "Using callbacks"
-            ],
-            correctAnswer: 1
+            type: 'fill_blank',
+            question: "Props is short for _____",
+            answer: "Properties"
         },
         {
-            question: "What is props short for?",
-            options: [
-                "Properties",
-                "Prototypes",
-                "Parameters",
-                "Propagations"
-            ],
-            correctAnswer: 0
+            type: 'matching',
+            question: "Match the component concept to its characteristic",
+            pairs: [
+                { left: "Functional Component", right: "Uses hooks" },
+                { left: "Class Component", right: "Uses render()" },
+                { left: "Props", right: "Read-only data" }
+            ]
         },
         {
-            question: "Are props mutable in React?",
-            options: [
-                "Yes, they can be modified",
-                "No, they are read-only",
-                "Only in class components",
-                "Only in functional components"
-            ],
-            correctAnswer: 1
+            type: 'true_false',
+            question: "Props can be modified by the child component",
+            correctAnswer: false
         },
         {
+            type: 'mcq',
             question: "What is the purpose of the key prop?",
             options: [
                 "To style components",
@@ -133,6 +127,7 @@ export const QUESTION_BANK = {
 
     "State Management": [
         {
+            type: 'mcq',
             question: "What is the purpose of state in React?",
             options: [
                 "To store component data that can change",
@@ -143,36 +138,26 @@ export const QUESTION_BANK = {
             correctAnswer: 0
         },
         {
-            question: "Which hook is used to manage state in functional components?",
-            options: [
-                "useEffect",
-                "useState",
-                "useContext",
-                "useReducer"
-            ],
-            correctAnswer: 1
+            type: 'fill_blank',
+            question: "The useState hook returns an array with the _____ value and a _____ function",
+            answer: "current, setter"
         },
         {
-            question: "What happens when state changes in React?",
-            options: [
-                "Nothing happens",
-                "The component re-renders",
-                "The app crashes",
-                "Only the state variable updates"
-            ],
-            correctAnswer: 1
+            type: 'matching',
+            question: "Match the state management concept to its description",
+            pairs: [
+                { left: "useState", right: "Manages local component state" },
+                { left: "useContext", right: "Shares state across components" },
+                { left: "useReducer", right: "Manages complex state logic" }
+            ]
         },
         {
-            question: "How do you update state in React?",
-            options: [
-                "By direct assignment",
-                "Using the setter function",
-                "Using setState() method",
-                "Using updateState() method"
-            ],
-            correctAnswer: 1
+            type: 'true_false',
+            question: "You should modify state directly in React",
+            correctAnswer: false
         },
         {
+            type: 'mcq',
             question: "Can state be shared between components?",
             options: [
                 "No, never",
@@ -186,6 +171,7 @@ export const QUESTION_BANK = {
 
     "Hooks and Effects": [
         {
+            type: 'mcq',
             question: "What is the purpose of useEffect hook?",
             options: [
                 "To handle side effects",
@@ -196,36 +182,26 @@ export const QUESTION_BANK = {
             correctAnswer: 0
         },
         {
-            question: "When does useEffect run by default?",
-            options: [
-                "Only on mount",
-                "Only on unmount",
-                "After every render",
-                "Never runs automatically"
-            ],
-            correctAnswer: 2
+            type: 'fill_blank',
+            question: "To make useEffect run only once on mount, pass an _____ array as the second argument",
+            answer: "empty"
         },
         {
-            question: "How do you make useEffect run only once on mount?",
-            options: [
-                "Pass empty array []",
-                "Pass null",
-                "Pass undefined",
-                "Pass [true]"
-            ],
-            correctAnswer: 0
+            type: 'matching',
+            question: "Match the hook to its purpose",
+            pairs: [
+                { left: "useEffect", right: "Handle side effects" },
+                { left: "useContext", right: "Access context values" },
+                { left: "useCallback", right: "Memoize functions" }
+            ]
         },
         {
-            question: "What is the cleanup function in useEffect?",
-            options: [
-                "A function that runs before the effect",
-                "A function that runs after the effect",
-                "A function that runs on unmount",
-                "A function that runs on mount"
-            ],
-            correctAnswer: 2
+            type: 'true_false',
+            question: "useEffect runs before the component renders",
+            correctAnswer: false
         },
         {
+            type: 'mcq',
             question: "Which hook is used for context API?",
             options: [
                 "useState",
@@ -245,8 +221,13 @@ export const getRandomQuestions = (topic, count) => {
     return shuffled.slice(0, Math.min(count, questions.length));
 };
 
-// Helper function to shuffle options
+// Helper function to shuffle options (only for MCQ questions)
 export const shuffleOptions = (question) => {
+    // Only shuffle options for MCQ questions
+    if (question.type !== 'mcq' || !question.options) {
+        return question;
+    }
+
     const options = [...question.options];
     const correctAnswer = options[question.correctAnswer];
 

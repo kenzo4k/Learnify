@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import { FaPlay, FaCheckCircle, FaLock, FaFilePdf, FaBook } from 'react-icons/fa';
 import { BsFileText } from 'react-icons/bs';
@@ -11,6 +11,8 @@ import toast from 'react-hot-toast';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import QuizEditor from '../../components/forms/QuizEditor';
+import ProgressBar from '../../components/common/ProgressBar';
+import XPCounter from '../../components/common/XPCounter';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -18,7 +20,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const CourseContent = () => {
     const { id: courseId } = useParams();
     const { user } = useContext(AuthContext);
-    const navigate = useNavigate();
 
     // State
     const [course, setCourse] = useState(null);
@@ -26,10 +27,12 @@ const CourseContent = () => {
     const [error, setError] = useState(null);
     const [activeLesson, setActiveLesson] = useState(null);
     const [completedLessons, setCompletedLessons] = useState(new Set());
-    const [isEnrolled, setIsEnrolled] = useState(false);
+    const [, setIsEnrolled] = useState(false); // Reserved for future use
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [earnedXP, setEarnedXP] = useState(0);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState({});
 
     // Sample data for testing
     const sampleCourse = {
@@ -123,29 +126,42 @@ export default Welcome;</code></pre>
                         type: "quiz",
                         questions: [
                             {
-                                question: "What is the primary language used in React?",
-                                options: ["Java", "JavaScript", "Python", "C#"],
-                                answer: 1
+                                id: 1,
+                                type: 'mcq',
+                                question: 'What does HTML stand for?',
+                                options: [
+                                    'Hyper Text Markup Language',
+                                    'High Tech Modern Language',
+                                    'Home Tool Markup Language',
+                                    'Hyperlinks and Text Markup Language'
+                                ],
+                                correctAnswer: 0,
+                                points: 1
                             },
                             {
-                                question: "Which of these are valid ways to create a React component?",
-                                options: [
-                                    "function MyComponent() {}",
-                                    "class MyComponent {}",
-                                    "const MyComponent = () => {}",
-                                    "All of the above"
-                                ],
-                                answer: 3
+                                id: 2,
+                                type: 'fillInBlank',
+                                question: 'CSS stands for _____ _____ _____',
+                                correctAnswer: 'Cascading Style Sheets',
+                                points: 1
                             },
                             {
-                                question: "What does JSX stand for?",
-                                options: [
-                                    "JavaScript XML",
-                                    "JavaScript Extension",
-                                    "JavaScript Syntax",
-                                    "JavaScript XML Syntax"
+                                id: 3,
+                                type: 'trueFalse',
+                                question: 'JavaScript can only run in web browsers.',
+                                correctAnswer: false,
+                                points: 1
+                            },
+                            {
+                                id: 4,
+                                type: 'matching',
+                                question: 'Match programming languages to their use:',
+                                pairs: [
+                                    { left: 'React', right: 'Web Frontend', correct: true },
+                                    { left: 'Django', right: 'Web Backend', correct: true },
+                                    { left: 'SQL', right: 'Database', correct: true }
                                 ],
-                                answer: 0
+                                points: 1
                             }
                         ],
                         xp: 25
@@ -178,16 +194,23 @@ export default Welcome;</code></pre>
 
             // Set first lesson as active by default
             if (sampleCourse?.sections?.[0]?.lessons?.[0]) {
-                setActiveLesson(sampleCourse.sections[0].lessons[0]);
+            setActiveLesson(sampleCourse.sections[0].lessons[0]);
             }
 
-        } catch (err) {
+            } catch {
             setError('حدث خطأ في تحميل محتوى الدورة');
             toast.error('فشل تحميل محتوى الدورة');
-        } finally {
+            } finally {
             setLoading(false);
-        }
-    }, [courseId]);
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, [courseId]);
+
+    // Reset quiz state when lesson changes
+    useEffect(() => {
+        setCurrentQuestionIndex(0);
+        setAnswers({});
+    }, [activeLesson?.id]);
 
     // Handle lesson completion
     const markLessonComplete = (lessonId) => {
@@ -202,6 +225,14 @@ export default Welcome;</code></pre>
         if (lesson && lesson.xp) {
             setEarnedXP(prevXP => prevXP + lesson.xp);
         }
+    };
+
+    // Handle quiz answer
+    const handleAnswer = (questionId, answer) => {
+        setAnswers(prev => ({
+            ...prev,
+            [questionId]: answer
+        }));
     };
 
     // Calculate course progress
@@ -287,35 +318,159 @@ export default Welcome;</code></pre>
                     </div>
                 );
             case 'quiz':
-                // عرض الكويز فقط بدون محرر أو تشغيل
+                const currentQuestion = activeLesson.questions?.[currentQuestionIndex];
+                if (!currentQuestion) return null;
+                
                 return (
                     <div className="py-8">
                         <h2 className="text-2xl font-bold mb-4">{activeLesson.title}</h2>
-                        <p className="text-gray-400 mb-4">Test your knowledge in this lesson</p>
-                        {activeLesson.questions?.map((q, idx) => (
-                            <div key={idx} className="mb-6 p-4 bg-gray-800 rounded-lg">
-                                <div className="font-semibold mb-2">{idx + 1}. {q.question}</div>
-                                <div className="space-y-2">
-                                    {q.options.map((opt, oidx) => (
-                                        <label key={oidx} className="flex items-center gap-2 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                name={`quiz-${activeLesson.id}-q${idx}`}
-                                                value={oidx}
-                                                className="radio radio-primary"
-                                            />
-                                            <span>{opt}</span>
-                                        </label>
-                                    ))}
+                        <p className="text-gray-400 mb-6">Test your knowledge in this lesson</p>
+                        
+                        <div className="mb-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-sm text-gray-400">
+                                    Question {currentQuestionIndex + 1} of {activeLesson.questions?.length}
+                                </span>
+                                <div className="inline-block">
+                                    <span className="px-3 py-1 bg-cyan-500 text-white rounded-full text-sm font-semibold">
+                                        {currentQuestion.type === 'mcq' && 'Multiple Choice'}
+                                        {currentQuestion.type === 'fillInBlank' && 'Fill in the Blank'}
+                                        {currentQuestion.type === 'trueFalse' && 'True/False'}
+                                        {currentQuestion.type === 'matching' && 'Matching'}
+                                    </span>
                                 </div>
                             </div>
-                        ))}
-                        <button
-                            className="btn btn-primary mt-4"
-                            onClick={() => markLessonComplete(activeLesson.id)}
-                        >
-                            Finish Quiz
-                        </button>
+
+                            <div className="bg-gray-700 rounded-lg p-6 min-h-[300px]">
+                                {currentQuestion.type === 'mcq' && (
+                                    <div className="space-y-3">
+                                        <p className="text-lg font-semibold mb-4">{currentQuestion.question}</p>
+                                        {currentQuestion.options.map((option, idx) => (
+                                            <label 
+                                                key={idx} 
+                                                className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                                                    answers[currentQuestion.id] === idx 
+                                                        ? 'border-cyan-500 bg-cyan-900/30' 
+                                                        : 'border-gray-600 hover:bg-gray-600'
+                                                }`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${currentQuestion.id}`}
+                                                    value={idx}
+                                                    checked={answers[currentQuestion.id] === idx}
+                                                    onChange={(e) => handleAnswer(currentQuestion.id, parseInt(e.target.value))}
+                                                    className="mr-3 radio radio-primary"
+                                                />
+                                                <span>{option}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {currentQuestion.type === 'fillInBlank' && (
+                                    <div className="space-y-3">
+                                        <p className="text-lg font-semibold mb-4">{currentQuestion.question}</p>
+                                        <input
+                                            type="text"
+                                            placeholder="Your answer..."
+                                            value={answers[currentQuestion.id] || ''}
+                                            onChange={(e) => handleAnswer(currentQuestion.id, e.target.value)}
+                                            className="w-full p-3 bg-gray-800 border border-gray-600 rounded text-white focus:border-cyan-500 focus:outline-none"
+                                        />
+                                    </div>
+                                )}
+
+                                {currentQuestion.type === 'trueFalse' && (
+                                    <div className="space-y-3">
+                                        <p className="text-lg font-semibold mb-4">{currentQuestion.question}</p>
+                                        <div className="flex gap-4">
+                                            <button
+                                                onClick={() => handleAnswer(currentQuestion.id, true)}
+                                                className={`flex-1 p-4 rounded text-white font-semibold transition-colors ${
+                                                    answers[currentQuestion.id] === true
+                                                        ? 'bg-green-700 ring-2 ring-green-400'
+                                                        : 'bg-green-600 hover:bg-green-700'
+                                                }`}
+                                            >
+                                                True
+                                            </button>
+                                            <button
+                                                onClick={() => handleAnswer(currentQuestion.id, false)}
+                                                className={`flex-1 p-4 rounded text-white font-semibold transition-colors ${
+                                                    answers[currentQuestion.id] === false
+                                                        ? 'bg-red-700 ring-2 ring-red-400'
+                                                        : 'bg-red-600 hover:bg-red-700'
+                                                }`}
+                                            >
+                                                False
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {currentQuestion.type === 'matching' && (
+                                    <div className="space-y-3">
+                                        <p className="text-lg font-semibold mb-4">{currentQuestion.question}</p>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <h4 className="font-semibold mb-3 text-cyan-400">Items</h4>
+                                                {currentQuestion.pairs.map((pair, idx) => (
+                                                    <div key={idx} className="p-3 bg-gray-800 rounded mb-2 border border-gray-600">
+                                                        {pair.left}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold mb-3 text-cyan-400">Match with</h4>
+                                                {currentQuestion.pairs.map((pair, idx) => (
+                                                    <div key={idx} className="p-3 bg-gray-800 rounded mb-2 border border-gray-600">
+                                                        {pair.right}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-gray-400 mt-3 italic">
+                                            Note: In a real quiz, you would drag and drop to match items.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex justify-between items-center mt-6">
+                                <button 
+                                    onClick={() => {
+                                        setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1));
+                                    }}
+                                    className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    disabled={currentQuestionIndex === 0}
+                                >
+                                    ← Previous
+                                </button>
+                                
+                                {currentQuestionIndex === activeLesson.questions.length - 1 ? (
+                                    <button 
+                                        onClick={() => {
+                                            markLessonComplete(activeLesson.id);
+                                            toast.success('Quiz completed!');
+                                        }}
+                                        className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded text-white font-semibold transition-colors"
+                                    >
+                                        Finish Quiz
+                                    </button>
+                                ) : (
+                                    <button 
+                                        onClick={() => {
+                                            setCurrentQuestionIndex(Math.min(activeLesson.questions.length - 1, currentQuestionIndex + 1));
+                                        }}
+                                        className="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        disabled={currentQuestionIndex === activeLesson.questions.length - 1}
+                                    >
+                                        Next →
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 );
             case 'coding':
@@ -389,6 +544,7 @@ export default Welcome;</code></pre>
     }
 
     const progress = calculateProgress();
+    const totalLessons = course?.sections?.reduce((total, section) => total + (section.lessons?.length || 0), 0);
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -396,25 +552,31 @@ export default Welcome;</code></pre>
             <header className="bg-gray-800 border-b border-gray-700">
                 <div className="container mx-auto px-4 py-4">
                     <h1 className="text-2xl font-bold">{course?.title || 'Course Content'}</h1>
-                    <div className="mt-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-400">
-                                Progress: {progress}% Complete
-                            </span>
-                            <span className="text-sm text-gray-400">
-                                {completedLessons.size} of {course?.sections?.reduce((total, section) =>
-                                    total + (section.lessons?.length || 0), 0
-                                )} lessons
-                            </span>
+                    <div className="mt-4 space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <ProgressBar
+                                    current={completedLessons.size}
+                                    max={totalLessons}
+                                    label="Lessons Completed"
+                                    color="cyan"
+                                />
+                            </div>
+                            <div>
+                                <ProgressBar
+                                    current={progress}
+                                    max={100}
+                                    label="Course Progress"
+                                    color="blue"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
                             <span className="text-sm text-yellow-400 font-bold">
                                 XP Earned: {earnedXP}
                             </span>
+                            <XPCounter xp={450} compact />
                         </div>
-                        <progress
-                            className="progress progress-primary w-full mt-1"
-                            value={progress}
-                            max="100"
-                        ></progress>
                     </div>
                 </div>
             </header>
@@ -478,7 +640,7 @@ export default Welcome;</code></pre>
                 <aside className="w-64 bg-gray-900 border-l border-gray-800 p-4 flex-shrink-0">
                     <h2 className="text-lg font-semibold mb-4 text-yellow-400">Leaderboard</h2>
                     <ul className="space-y-3">
-                        {leaderboard.map((user, idx) => (
+                        {leaderboard.map((user) => (
                             <li key={user.name} className="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-2">
                                 <span className="flex items-center gap-2">
                                     <span className="text-xl">{user.badge}</span>
