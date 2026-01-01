@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import { 
   BookOpen, 
@@ -22,57 +22,39 @@ import ProgressCard from '../../components/common/ProgressCard';
 // Sample data structure
 const sampleDashboard = {
   stats: {
-    enrolledCourses: 5,
-    inProgress: 2,
-    completed: 3,
+    enrolledCourses: 3,
+    inProgress: 3,
+    completed: 0,
     currentLevel: 4,
     totalXP: 450
   },
   courses: [
-    { 
-      id: 1,
-      title: "Web Development Fundamentals", 
-      progress: 42, 
+    {
+      id: '1',
+      title: "Web Development Fundamentals",
+      progress: 42,
       lessons: "5/12 lessons completed",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400",
+      image: "https://via.placeholder.com/300x200?text=Web+Dev",
       lastAccessed: "Today",
       category: "Web Development"
     },
-    { 
-      id: 2,
-      title: "Python Programming", 
-      progress: 60, 
+    {
+      id: '2',
+      title: "Python Basics",
+      progress: 60,
       lessons: "9/15 lessons completed",
-      image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=400",
+      image: "https://via.placeholder.com/300x200?text=Python",
       lastAccessed: "2 days ago",
       category: "Python"
     },
-    { 
-      id: 3,
-      title: "Data Science Basics", 
-      progress: 85, 
-      lessons: "11/13 lessons completed",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
-      lastAccessed: "Yesterday",
-      category: "Data Science"
-    },
-    { 
-      id: 4,
-      title: "React Fundamentals", 
-      progress: 30, 
-      lessons: "3/10 lessons completed",
-      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400",
+    {
+      id: '3',
+      title: "React Advanced",
+      progress: 30,
+      lessons: "6/20 lessons completed",
+      image: "https://via.placeholder.com/300x200?text=React",
       lastAccessed: "3 days ago",
-      category: "Web Development"
-    },
-    { 
-      id: 5,
-      title: "JavaScript Advanced", 
-      progress: 100, 
-      lessons: "12/12 lessons completed",
-      image: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400",
-      lastAccessed: "1 week ago",
-      category: "Web Development"
+      category: "React"
     }
   ],
   deadlines: [
@@ -121,6 +103,7 @@ const sampleDashboard = {
 
 const Student = () => {
   const { user } = React.useContext(AuthContext);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [stats] = useState(sampleDashboard.stats);
   const [courses] = useState(sampleDashboard.courses);
@@ -129,8 +112,8 @@ const Student = () => {
   const [recentActivity] = useState(sampleDashboard.recentActivity);
   const [categoryProgress] = useState(sampleDashboard.categoryProgress);
 
-  const handleContinueCourse = (courseId) => {
-    console.log('Continuing course:', courseId);
+  const handleCourseClick = (courseId) => {
+    navigate(`/course/${courseId}/learn`);
   };
 
   const getDeadlineColor = (daysLeft) => {
@@ -327,24 +310,37 @@ const Student = () => {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold flex items-center">
                   <BookOpen className="w-5 h-5 mr-2 text-cyan-400" />
-                  Course Progress
+                  My Enrolled Courses
                 </h2>
-                <Link 
-                  to="/courses"
+                <Link
+                  to="/my-enrolled-courses"
                   className="text-cyan-400 hover:text-cyan-300 flex items-center text-sm"
                 >
-                  View All Courses
+                  View All
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {courses.map((course) => (
-                  <ProgressCard
+                  <div
                     key={course.id}
-                    {...course}
-                    actionText={course.progress === 100 ? 'Review' : 'Continue'}
-                    onAction={() => handleContinueCourse(course.id)}
-                  />
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleCourseClick(course.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleCourseClick(course.id);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <ProgressCard
+                      {...course}
+                      actionText="Continue Learning"
+                      onAction={(e) => {
+                        e?.stopPropagation?.();
+                        handleCourseClick(course.id);
+                      }}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -439,7 +435,12 @@ const Student = () => {
                           </span>
                         </td>
                         <td className="py-3 px-4">
-                          <button className="p-2 text-cyan-400 hover:bg-cyan-900 rounded">
+                          <button
+                            type="button"
+                            onClick={() => handleCourseClick(course.id)}
+                            className="p-2 text-cyan-400 hover:bg-cyan-900 rounded"
+                            aria-label={`Continue learning ${course.title}`}
+                          >
                             <Play className="w-4 h-4" />
                           </button>
                         </td>
