@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { FiBook, FiUser, FiTrash2, FiArrowLeft, FiClock, FiStar, FiZap } from 'react-icons/fi';
@@ -19,45 +18,63 @@ const CourseCardSkeleton = () => (
     </div>
 );
 
+// Sample enrolled courses data
+const sampleEnrolledCourses = [
+    {
+        _id: '1',
+        title: 'Web Development Fundamentals',
+        description: 'Learn the basics of web development with HTML, CSS, and JavaScript',
+        image: 'https://via.placeholder.com/300x200?text=Web+Dev',
+        instructor: { name: 'John Doe', photoURL: 'https://randomuser.me/api/portraits/men/1.jpg' },
+        level: 'Beginner',
+        category: 'Web Development',
+        rating: 4.5,
+        enrollmentCount: 1245,
+        duration: '8 weeks',
+        price: 49.99,
+        discount_price: 29.99,
+        progress: 42,
+        lastAccessed: '2 hours ago'
+    },
+    {
+        _id: '2',
+        title: 'Python for Data Science',
+        description: 'Master Python for data analysis and visualization',
+        image: 'https://via.placeholder.com/300x200?text=Python+Data',
+        instructor: { name: 'Jane Smith', photoURL: 'https://randomuser.me/api/portraits/women/1.jpg' },
+        level: 'Intermediate',
+        category: 'Data Science',
+        rating: 4.8,
+        enrollmentCount: 890,
+        duration: '10 weeks',
+        price: 59.99,
+        progress: 75,
+        lastAccessed: '1 day ago'
+    },
+    {
+        _id: '3',
+        title: 'React Native Mobile Development',
+        description: 'Build cross-platform mobile apps with React Native',
+        image: 'https://via.placeholder.com/300x200?text=React+Native',
+        instructor: { name: 'Mike Johnson', photoURL: 'https://randomuser.me/api/portraits/men/2.jpg' },
+        level: 'Advanced',
+        category: 'Mobile Development',
+        rating: 4.7,
+        enrollmentCount: 567,
+        duration: '12 weeks',
+        price: 69.99,
+        progress: 15,
+        lastAccessed: '3 days ago'
+    }
+];
 
 const MyEnrolledCourses = () => {
-    const { user, loading: authLoading } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [enrolledCourses, setEnrolledCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [enrolledCourses, setEnrolledCourses] = useState(sampleEnrolledCourses);
+    const [loading, setLoading] = useState(false);
 
-    // useEffect এবং handleRemoveEnrollment
-    useEffect(() => {
-        let isMounted = true;
-        const fetchEnrolledCourses = async () => {
-            if (isMounted) setLoading(true);
-            try {
-                const token = localStorage.getItem('access-token');
-                const response = await fetch('https://course-management-system-server-woad.vercel.app/api/my-enrollments', {
-                    headers: { 'authorization': `Bearer ${token}` }
-                });
-                if (!response.ok) throw new Error('Failed to fetch data');
-                const data = await response.json();
-                if (isMounted) setEnrolledCourses(data);
-            } catch (error) {
-                if (isMounted) Swal.fire({ icon: 'error', title: 'Oops...', text: 'Failed to fetch your courses. Please try again later.', background: '#1f2937', color: '#f3f4f6' });
-            } finally {
-                if (isMounted) setLoading(false);
-            }
-        };
-
-        if (!authLoading && user) {
-            fetchEnrolledCourses();
-        } else if (!authLoading && !user) {
-            setEnrolledCourses([]);
-            setLoading(false);
-        }
-
-        return () => { isMounted = false; };
-    }, [user, authLoading]);
-
-    const handleRemoveEnrollment = async (courseId, courseTitle) => {
-        const result = await Swal.fire({
+    const handleRemoveEnrollment = (courseId, courseTitle) => {
+        Swal.fire({
             title: 'Are you sure?',
             text: `You are about to remove your enrollment from "${courseTitle}".`,
             icon: 'warning',
@@ -67,30 +84,23 @@ const MyEnrolledCourses = () => {
             confirmButtonText: 'Yes, remove it!',
             background: '#1f2937',
             color: '#f3f4f6'
-        });
-
-        if (result.isConfirmed) {
-            try {
-                const token = localStorage.getItem('access-token');
-                const response = await fetch(`https://course-management-system-server-woad.vercel.app/api/enrollments/toggle`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ courseId: courseId })
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Removed!',
+                    text: 'Your enrollment has been removed.',
+                    icon: 'success',
+                    background: '#1f2937',
+                    color: '#f3f4f6',
+                    timer: 2000,
+                    showConfirmButton: false
                 });
-
-                const data = await response.json();
-                if (!response.ok || data.enrolled) throw new Error(data.message || 'Failed to remove enrollment.');
-
-                Swal.fire({ title: 'Removed!', text: 'Your enrollment has been successfully removed.', icon: 'success', background: '#1f2937', color: '#f3f4f6', timer: 2000, showConfirmButton: false });
-
                 setEnrolledCourses(prev => prev.filter(course => course._id !== courseId));
-            } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Operation Failed', text: error.message, background: '#1f2937', color: '#f3f4f6' });
             }
-        }
+        });
     };
 
-    if (loading || authLoading) {
+    if (loading) {
         return (
             <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8">
                 <div className="max-w-7xl mx-auto">
@@ -158,7 +168,7 @@ const MyEnrolledCourses = () => {
                     >
                         {enrolledCourses.map((course) => (
                             <motion.div
-                                key={course.enrollmentId}
+                                key={course._id}
                                 variants={itemVariants}
                                 className="relative group bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-1"
                             >

@@ -684,69 +684,7 @@ const Instructor = () => {
                   </table>
                 </div>
               </div>
-            </div>
-
-            {/* At-Risk Students Section */}
-            <div className="bg-gray-800 rounded-lg border border-red-700 shadow-lg shadow-red-900/20">
-              <div className="p-6 border-b border-red-700 bg-red-900/20">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                  At-Risk Students (Need Attention)
-                </h2>
-                <p className="text-gray-400 text-sm mt-1">
-                  Students with grades below 60% or completion below 50%
-                </p>
-              </div>
-              <div className="p-6">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-700">
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Student Name</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Course</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Grade</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sampleAnalytics.atRisk.map((student, index) => (
-                        <tr key={index} className="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
-                          <td className="py-3 px-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-medium">
-                                {student.name.charAt(0)}
-                              </div>
-                              <span className="font-medium">{student.name}</span>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4 text-gray-300">{student.course}</td>
-                          <td className="py-3 px-4">
-                            <span className="font-semibold text-red-400">{student.grade}%</span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit ${
-                              student.status === 'Failing' 
-                                ? 'bg-red-900 text-red-300' 
-                                : 'bg-yellow-900 text-yellow-300'
-                            }`}>
-                              {student.status === 'Failing' ? <XCircle className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
-                              {student.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                              <Mail className="w-4 h-4" />
-                              Contact
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            </div>           
           </div>
         )}
       </div>

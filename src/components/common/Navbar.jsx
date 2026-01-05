@@ -87,8 +87,8 @@ const Navbar = () => {
                   to="/student"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-purple-600 text-white shadow-lg'
-                      : 'text-purple-400 hover:text-white hover:bg-purple-900'
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
@@ -115,8 +115,8 @@ const Navbar = () => {
                   to="/instructor"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-green-600 text-white shadow-lg'
-                      : 'text-green-400 hover:text-white hover:bg-green-900'
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
                 >
@@ -153,8 +153,8 @@ const Navbar = () => {
                 to="/admin"
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-red-600 text-white shadow-lg'
-                    : 'text-red-400 hover:text-white hover:bg-red-900'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
                   }`
                 }
               >
@@ -206,65 +206,57 @@ const Navbar = () => {
                       <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
-                      </button>
+                    </button>
 
-                      {/* Dropdown Menu */}
-                      <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right ${
-                        user?.role === 'admin' 
-                          ? 'bg-red-900/90 border-red-700' 
-                          : user?.role === 'instructor' 
-                          ? 'bg-green-900/90 border-green-700' 
-                          : 'bg-gray-800 border-gray-700'
+                    {/* Dropdown Menu */}
+                    <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right ${'bg-gray-900 border border-gray-700'
                       }`}>
                       <div className="py-2">
-                        <div className={`px-4 py-2 border-b ${
-                          user?.role === 'admin' 
-                            ? 'border-red-700' 
-                            : user?.role === 'instructor' 
-                            ? 'border-green-700' 
-                            : 'border-gray-700'
-                        }`}>
+                        <div className={`px-4 py-2 border-b ${'border-gray-700'
+                          }`}>
                           <p className="text-sm font-medium text-white">
                             {user?.displayName || 'User'}
                           </p>
                           <p className="text-xs text-gray-300">
                             {user?.email}
                           </p>
-                          <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded ${
-                            user?.role === 'admin' 
-                              ? 'bg-red-600 text-white' 
-                              : user?.role === 'instructor' 
-                              ? 'bg-green-600 text-white' 
-                              : 'bg-purple-600 text-white'
-                          }`}>
-                            {user?.role === 'admin' ? '👑 Admin' : user?.role === 'instructor' ? '🎓 Instructor' : '📚 Student'}
+                          <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded ${user?.role === 'student'
+                              ? 'bg-purple-600 text-white flex items-center gap-1'
+                              : user?.role === 'admin'
+                                ? 'bg-red-600 text-white flex items-center gap-1'
+                                : 'bg-green-600 text-white flex items-center gap-1'
+                            }`}>
+                            {user?.role === 'student' && <span className="inline-block align-middle">📚</span>}
+                            {user?.role === 'admin' && <span className="inline-block align-middle">👑</span>}
+                            {user?.role === 'instructor' && <span className="inline-block align-middle">🎓</span>}
+                            {user?.role === 'student' ? 'Student' : user?.role === 'admin' ? 'Admin' : 'Instructor'}
                           </span>
                         </div>
-                        
+
                         {/* Student Menu */}
                         {user?.role === 'student' && (
                           <>
                             <Link
                               to="/dashboard"
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-purple-900 hover:text-white transition-colors duration-200"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
                             >
-                              <span>📊</span> Dashboard
+                              <span className="text-purple-400">📊</span> Dashboard
                             </Link>
                             <Link
                               to="/achievements"
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-purple-900 hover:text-white transition-colors duration-200"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
                             >
-                              <span>🏆</span> Achievements
+                              <span className="text-yellow-400">🏆</span> Achievements
                             </Link>
                             <Link
                               to="/my-enrolled-courses"
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-purple-900 hover:text-white transition-colors duration-200"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
                             >
-                              <span>📖</span> My Courses
+                              <span className="text-blue-300">📖</span> My Courses
                             </Link>
                           </>
                         )}
-                        
+
                         {/* Instructor Menu */}
                         {user?.role === 'instructor' && (
                           <>
@@ -288,7 +280,7 @@ const Navbar = () => {
                             </Link>
                           </>
                         )}
-                        
+
                         {/* Admin Menu */}
                         {user?.role === 'admin' && (
                           <>
@@ -312,16 +304,10 @@ const Navbar = () => {
                             </Link>
                           </>
                         )}
-                        
+
                         <button
                           onClick={handleLogOut}
-                          className={`w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 transition-colors duration-200 ${
-                            user?.role === 'admin' 
-                              ? 'hover:bg-red-800' 
-                              : user?.role === 'instructor' 
-                              ? 'hover:bg-green-800' 
-                              : 'hover:bg-purple-900'
-                          } hover:text-red-300`}
+                          className={`w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 transition-colors duration-200 hover:bg-gray-800 hover:text-red-300`}
                         >
                           <span>🚪</span> Sign Out
                         </button>
