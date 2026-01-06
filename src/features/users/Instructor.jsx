@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import toast from 'react-hot-toast';
 import {
@@ -27,8 +27,98 @@ import {
 import AtRiskStudents from '../../components/instructor/AtRiskStudents';
 import AnalyticsChart from '../../components/instructor/AnalyticsChart';
 
+// Sample data for tabs - ADD THIS
+const sampleInstructorData = {
+  // Overview Tab
+  overview: {
+    stats: {
+      totalStudents: 45,
+      activeCourses: 3,
+      avgGrade: 78,
+      completionRate: 72
+    },
+    recentActivity: [
+      { user: "Ahmed Khan", action: "Enrolled", course: "Web Dev", time: "2 hours ago" },
+      { user: "Fatima Ali", action: "Completed", course: "Python", time: "Yesterday" },
+      { user: "Omar Hassan", action: "Started", course: "React", time: "2 days ago" }
+    ]
+  },
+
+  // Courses Tab
+  courses: [
+    {
+      id: 1,
+      title: "Web Development Bootcamp",
+      students: 45,
+      avgGrade: 85,
+      completion: 90,
+      lastUpdated: "2024-01-15",
+      status: "Active"
+    },
+    {
+      id: 2,
+      title: "Python Basics",
+      students: 32,
+      avgGrade: 72,
+      completion: 80,
+      lastUpdated: "2024-01-12",
+      status: "Active"
+    },
+    {
+      id: 3,
+      title: "React Advanced",
+      students: 28,
+      avgGrade: 78,
+      completion: 75,
+      lastUpdated: "2024-01-10",
+      status: "Active"
+    }
+  ],
+
+  // Students Tab
+  students: [
+    {
+      id: 1,
+      name: "Ahmed Khan",
+      email: "ahmed@email.com",
+      enrolledCourses: 3,
+      avgGrade: 85,
+      completion: 90,
+      status: "Active"
+    },
+    {
+      id: 2,
+      name: "Fatima Ali",
+      email: "fatima@email.com",
+      enrolledCourses: 2,
+      avgGrade: 72,
+      completion: 80,
+      status: "Active"
+    },
+    {
+      id: 3,
+      name: "Omar Hassan",
+      email: "omar@email.com",
+      enrolledCourses: 3,
+      avgGrade: 45,
+      completion: 30,
+      status: "At Risk"
+    },
+    {
+      id: 4,
+      name: "Zainab Ahmed",
+      email: "zainab@email.com",
+      enrolledCourses: 1,
+      avgGrade: 55,
+      completion: 50,
+      status: "At Risk"
+    }
+  ]
+};
+
 const Instructor = () => {
   const { user } = React.useContext(AuthContext);
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalCourses: 0,
     totalStudents: 0,
@@ -172,8 +262,49 @@ const Instructor = () => {
         {activeTab === 'overview' && (
           <div>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Total Students</p>
+                    <p className="text-3xl font-bold">{sampleInstructorData.overview.stats.totalStudents}</p>
+                  </div>
+                  <Users className="w-8 h-8 text-green-400" />
+                </div>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Active Courses</p>
+                    <p className="text-3xl font-bold">{sampleInstructorData.overview.stats.activeCourses}</p>
+                  </div>
+                  <Award className="w-8 h-8 text-teal-400" />
+                </div>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Avg Grade</p>
+                    <p className="text-3xl font-bold">{sampleInstructorData.overview.stats.avgGrade}%</p>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-blue-400" />
+                </div>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-400 text-sm">Completion Rate</p>
+                    <p className="text-3xl font-bold">{sampleInstructorData.overview.stats.completionRate}%</p>
+                  </div>
+                  <CheckCircle className="w-8 h-8 text-purple-400" />
+                </div>
+              </div>
+
+              {/* Keep existing stats but update styling */}
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Courses</p>
@@ -183,17 +314,7 @@ const Instructor = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Total Students</p>
-                    <p className="text-3xl font-bold">{stats.totalStudents}</p>
-                  </div>
-                  <Users className="w-8 h-8 text-green-400" />
-                </div>
-              </div>
-
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Revenue</p>
@@ -203,7 +324,7 @@ const Instructor = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Average Rating</p>
@@ -213,7 +334,7 @@ const Instructor = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Pending Reviews</p>
@@ -222,35 +343,49 @@ const Instructor = () => {
                   <Calendar className="w-8 h-8 text-orange-400" />
                 </div>
               </div>
-
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-400 text-sm">Active Courses</p>
-                    <p className="text-3xl font-bold">{stats.activeCourses}</p>
-                  </div>
-                  <Award className="w-8 h-8 text-teal-400" />
-                </div>
-              </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Quick Actions & Recent Activity */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Recent Activity - NEW */}
+              <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
+                <div className="p-6 border-b border-gray-700">
+                  <h2 className="text-xl font-semibold">Recent Activity</h2>
+                </div>
+                <div className="p-6">
+                  <div className="space-y-4">
+                    {sampleInstructorData.overview.recentActivity.map((activity, index) => (
+                      <div key={index} className="flex items-start space-x-3 border-b border-gray-700 pb-3 last:border-0">
+                        <div className="p-2 bg-gray-700 rounded-full">
+                          <Activity className="w-4 h-4 text-cyan-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">
+                            <span className="text-cyan-400">{activity.user}</span> {activity.action} <span className="text-blue-400">{activity.course}</span>
+                          </p>
+                          <p className="text-xs text-gray-500">{activity.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Recent Courses */}
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="p-6 border-b border-gray-700 flex justify-between items-center">
                   <h2 className="text-xl font-semibold">My Courses</h2>
                   <Link
                     to="/add-course"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                    className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>Add Course</span>
+                    <span>Add</span>
                   </Link>
                 </div>
                 <div className="p-6">
                   <div className="space-y-4">
-                    {courses.slice(0, 5).map((course) => (
+                    {courses.length > 0 ? courses.slice(0, 5).map((course) => (
                       <div key={course._id} className="flex items-center justify-between">
                         <div className="flex-1">
                           <p className="font-medium">{course.title}</p>
@@ -258,32 +393,34 @@ const Instructor = () => {
                         </div>
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => handleCourseAction(course._id, 'view')}
-                            className="p-2 text-blue-400 hover:bg-blue-900 rounded"
+                            onClick={() => navigate(`/course/${course._id}/view`)}
+                            className="p-2 text-cyan-400 hover:bg-gray-700 rounded"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleCourseAction(course._id, 'edit')}
-                            className="p-2 text-yellow-400 hover:bg-yellow-900 rounded"
+                            onClick={() => navigate(`/edit-course/${course._id}`)}
+                            className="p-2 text-yellow-400 hover:bg-gray-700 rounded"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
-                    ))}
+                    )) : (
+                      <p className="text-gray-500 text-center italic">No courses found</p>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Recent Students */}
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="p-6 border-b border-gray-700">
                   <h2 className="text-xl font-semibold">Recent Students</h2>
                 </div>
                 <div className="p-6">
                   <div className="space-y-4">
-                    {students.slice(0, 5).map((student) => (
+                    {students.length > 0 ? students.slice(0, 5).map((student) => (
                       <div key={student._id} className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
@@ -291,14 +428,16 @@ const Instructor = () => {
                           </div>
                           <div>
                             <p className="font-medium">{student.displayName || 'Unknown'}</p>
-                            <p className="text-sm text-gray-400">{student.email}</p>
+                            <p className="text-sm text-gray-400 text-ellipsis overflow-hidden w-24 md:w-auto">{student.email}</p>
                           </div>
                         </div>
                         <div className="text-sm text-gray-400">
                           {student.enrolledCourses || 0} courses
                         </div>
                       </div>
-                    ))}
+                    )) : (
+                      <p className="text-gray-500 text-center italic">No students found</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -308,12 +447,12 @@ const Instructor = () => {
 
         {/* Courses Tab */}
         {activeTab === 'courses' && (
-          <div className="bg-gray-800 rounded-lg border border-gray-700">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
             <div className="p-6 border-b border-gray-700 flex justify-between items-center">
               <h2 className="text-xl font-semibold">Course Management</h2>
               <Link
                 to="/add-course"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add New Course</span>
@@ -321,20 +460,65 @@ const Instructor = () => {
             </div>
             <div className="p-6">
               <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left py-3 px-4">Course</th>
-                      <th className="text-left py-3 px-4">Students</th>
-                      <th className="text-left py-3 px-4">Rating</th>
-                      <th className="text-left py-3 px-4">Revenue</th>
-                      <th className="text-left py-3 px-4">Status</th>
-                      <th className="text-left py-3 px-4">Actions</th>
+                <table className="table table-compact w-full text-white">
+                  <thead className="bg-gray-700 border-b border-gray-600">
+                    <tr>
+                      <th className="text-left text-gray-300">Course</th>
+                      <th className="text-left text-gray-300">Students</th>
+                      <th className="text-left text-gray-300">Avg Grade</th>
+                      <th className="text-left text-gray-300">Completion</th>
+                      <th className="text-left text-gray-300">Status</th>
+                      <th className="text-left text-gray-300">Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="bg-gray-800">
+                    {/* Sample Data Courses */}
+                    {sampleInstructorData.courses.map((course) => (
+                      <tr key={`sample-${course.id}`} className="border-b border-gray-700 hover:bg-gray-750">
+                        <td className="py-3 px-4 font-medium text-cyan-400">{course.title}</td>
+                        <td className="py-3 px-4">{course.students}</td>
+                        <td className="py-3 px-4">{course.avgGrade}%</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-gray-700 rounded-full h-1.5">
+                              <div
+                                className="bg-cyan-500 h-1.5 rounded-full"
+                                style={{ width: `${course.completion}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">{course.completion}%</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-1 rounded text-xs bg-green-900 text-green-300">
+                            {course.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex space-x-2">
+                            <button 
+                              onClick={() => navigate(`/edit-course/${course.id}`)}
+                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                            >
+                              <Edit className="w-3 h-3 mr-1" /> Edit
+                            </button>
+                            <button 
+                              onClick={() => {
+                                if(window.confirm('Are you sure you want to delete this course?')) {
+                                  toast.success('Course deleted (sample)');
+                                }
+                              }}
+                              className="btn btn-xs bg-red-600 hover:bg-red-700 text-white border-none"
+                            >
+                              <Trash2 className="w-3 h-3 mr-1" /> Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {/* Real Data Courses - NO DELETION */}
                     {courses.map((course) => (
-                      <tr key={course._id} className="border-b border-gray-700">
+                      <tr key={course._id} className="border-b border-gray-700 hover:bg-gray-750">
                         <td className="py-3 px-4">{course.title}</td>
                         <td className="py-3 px-4">{course.enrolledStudents || 0}</td>
                         <td className="py-3 px-4">
@@ -352,14 +536,23 @@ const Instructor = () => {
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex space-x-2">
-                            <button className="p-1 text-blue-400 hover:bg-blue-900 rounded">
-                              <Eye className="w-4 h-4" />
+                            <button 
+                              onClick={() => navigate(`/course/${course._id}/view`)}
+                              className="btn btn-xs bg-gray-700 hover:bg-gray-600 text-white border-none"
+                            >
+                              <Eye className="w-3 h-3" />
                             </button>
-                            <button className="p-1 text-yellow-400 hover:bg-yellow-900 rounded">
-                              <Edit className="w-4 h-4" />
+                            <button 
+                              onClick={() => navigate(`/edit-course/${course._id}`)}
+                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                            >
+                              <Edit className="w-3 h-3" />
                             </button>
-                            <button className="p-1 text-red-400 hover:bg-red-900 rounded">
-                              <Trash2 className="w-4 h-4" />
+                            <button 
+                              onClick={() => handleCourseAction(course._id, 'delete')}
+                              className="btn btn-xs bg-red-600 hover:bg-red-700 text-white border-none"
+                            >
+                              <Trash2 className="w-3 h-3" />
                             </button>
                           </div>
                         </td>
@@ -374,28 +567,82 @@ const Instructor = () => {
 
         {/* Students Tab */}
         {activeTab === 'students' && (
-          <div className="bg-gray-800 rounded-lg border border-gray-700">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
             <div className="p-6 border-b border-gray-700">
               <h2 className="text-xl font-semibold">Student Management</h2>
             </div>
             <div className="p-6">
               <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left py-3 px-4">Student</th>
-                      <th className="text-left py-3 px-4">Email</th>
-                      <th className="text-left py-3 px-4">Courses</th>
-                      <th className="text-left py-3 px-4">Progress</th>
-                      <th className="text-left py-3 px-4">Actions</th>
+                <table className="table table-compact w-full text-white">
+                  <thead className="bg-gray-700 border-b border-gray-600">
+                    <tr>
+                      <th className="text-left text-gray-300">Student</th>
+                      <th className="text-left text-gray-300">Email</th>
+                      <th className="text-left text-gray-300">Courses</th>
+                      <th className="text-left text-gray-300">Avg Grade</th>
+                      <th className="text-left text-gray-300">Progress</th>
+                      <th className="text-left text-gray-300">Status</th>
+                      <th className="text-left text-gray-300">Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="bg-gray-800">
+                    {/* Sample Data Students */}
+                    {sampleInstructorData.students.map((student) => (
+                      <tr key={`sample-${student.id}`} className="border-b border-gray-700 hover:bg-gray-750">
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center text-xs">
+                              {student.name.charAt(0)}
+                            </div>
+                            <span className="font-medium">{student.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-gray-400">{student.email}</td>
+                        <td className="py-3 px-4">{student.enrolledCourses}</td>
+                        <td className="py-3 px-4 font-semibold text-cyan-400">{student.avgGrade}%</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-20 bg-gray-700 rounded-full h-1.5">
+                              <div
+                                className="bg-cyan-500 h-1.5 rounded-full"
+                                style={{ width: `${student.completion}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">{student.completion}%</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
+                            student.status === 'Active' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'
+                          }`}>
+                            {student.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex space-x-2">
+                            <button 
+                              onClick={() => toast.success(`Viewing ${student.name}`)}
+                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                            >
+                              <Eye className="w-3 h-3 mr-1" /> View
+                            </button>
+                            <button 
+                              onClick={() => toast.success(`Contacting ${student.name}`)}
+                              className="btn btn-xs bg-gray-700 hover:bg-gray-600 text-white border-none"
+                            >
+                              <Mail className="w-3 h-3 mr-1" /> Contact
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {/* Real Data Students - NO DELETION */}
                     {students.map((student) => (
-                      <tr key={student._id} className="border-b border-gray-700">
+                      <tr key={student._id} className="border-b border-gray-700 hover:bg-gray-750">
                         <td className="py-3 px-4">{student.displayName || 'Unknown'}</td>
                         <td className="py-3 px-4">{student.email}</td>
                         <td className="py-3 px-4">{student.enrolledCourses || 0}</td>
+                        <td className="py-3 px-4">-</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
                             <div className="w-24 bg-gray-700 rounded-full h-2">
@@ -407,6 +654,7 @@ const Instructor = () => {
                             <span className="text-sm">{student.progress || 0}%</span>
                           </div>
                         </td>
+                        <td className="py-3 px-4">-</td>
                         <td className="py-3 px-4">
                           <div className="flex space-x-2">
                             <button className="p-1 text-blue-400 hover:bg-blue-900 rounded">

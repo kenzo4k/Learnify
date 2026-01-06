@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { FiBook, FiUser, FiTrash2, FiArrowLeft, FiClock, FiStar, FiZap } from 'react-icons/fi';
-import { motion } from 'framer-motion';
+import { FiBook, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import CourseCard from '../../components/common/CourseCard';
 
 // --- Skeleton Loader Component 
@@ -71,7 +70,7 @@ const sampleEnrolledCourses = [
 const MyEnrolledCourses = () => {
     const navigate = useNavigate();
     const [enrolledCourses, setEnrolledCourses] = useState(sampleEnrolledCourses);
-    const [loading, setLoading] = useState(false);
+    const loading = false;
 
     const handleRemoveEnrollment = (courseId, courseTitle) => {
         Swal.fire({
@@ -142,7 +141,7 @@ const MyEnrolledCourses = () => {
             >
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-indigo-400 hover:text-indigo-300 mb-8 transition-colors text-sm font-medium"
+                    className="flex items-center text-cyan-400 hover:text-cyan-300 mb-8 transition-colors text-sm font-medium"
                 >
                     <FiArrowLeft className="mr-2" /> Back to Dashboard
                 </button>
@@ -170,14 +169,14 @@ const MyEnrolledCourses = () => {
                             <motion.div
                                 key={course._id}
                                 variants={itemVariants}
-                                className="relative group bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-1"
+                                className="relative group bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden"
                             >
                                 <CourseCard course={course} />
                                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <div className="flex space-x-4">
                                         <button
                                             onClick={(e) => { e.preventDefault(); handleRemoveEnrollment(course._id, course.title); }}
-                                            className="btn btn-error btn-circle text-white hover:bg-red-700 tooltip" data-tip="Remove Enrollment"
+                                            className="btn bg-red-600 hover:bg-red-700 text-white border-none btn-circle" data-tip="Remove Enrollment"
                                         >
                                             <FiTrash2 size={24} />
                                         </button>
@@ -201,7 +200,7 @@ const MyEnrolledCourses = () => {
                             </p>
                             <button
                                 onClick={() => navigate('/courses')}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105"
+                                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-lg px-8"
                             >
                                 Explore All Courses
                             </button>

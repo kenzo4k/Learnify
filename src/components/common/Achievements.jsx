@@ -62,7 +62,7 @@ const Achievements = () => {
   const progress = Math.round((earnedAchievements.length / totalAchievements) * 100);
 
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
+    <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-cyan-600 transition">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Achievements</h2>
         <div className="flex items-center space-x-2">

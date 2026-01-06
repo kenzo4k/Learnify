@@ -17,7 +17,8 @@ import {
   Eye,
   Award,
   Calendar,
-  AlertTriangle
+  AlertTriangle,
+  Plus
 } from 'lucide-react';
 
 // Sample data for when API fails
@@ -55,7 +56,6 @@ const sampleInstructors = [
 ];
 
 const Admin = () => {
-  const { user } = React.useContext(AuthContext);
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalCourses: 0,
@@ -140,7 +140,7 @@ const Admin = () => {
       } else {
         throw new Error('Failed to perform action');
       }
-    } catch (error) {
+    } catch {
       toast.error(`Failed to ${action} user`);
     }
   };
@@ -160,7 +160,7 @@ const Admin = () => {
       } else {
         throw new Error('Failed to perform action');
       }
-    } catch (error) {
+    } catch {
       toast.error(`Failed to ${action} course`);
     }
   };
@@ -180,7 +180,7 @@ const Admin = () => {
       } else {
         throw new Error('Failed to perform action');
       }
-    } catch (error) {
+    } catch {
       toast.error(`Failed to ${action} instructor`);
     }
   };
@@ -222,8 +222,8 @@ const Admin = () => {
         {activeTab === 'overview' && (
           <div>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Users</p>
@@ -233,7 +233,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Courses</p>
@@ -243,7 +243,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Enrollments</p>
@@ -253,7 +253,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Revenue</p>
@@ -263,7 +263,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Active Users</p>
@@ -273,7 +273,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Pending Approvals</p>
@@ -283,7 +283,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Total Instructors</p>

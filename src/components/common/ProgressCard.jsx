@@ -10,7 +10,7 @@ const ProgressCard = ({
   onAction 
 }) => {
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 hover:border-cyan-500 transition-colors group">
+    <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 hover:border-cyan-600 transition group">
       <div className="flex flex-col h-full">
         {image && (
           <div className="flex-shrink-0 mb-4">
@@ -48,7 +48,7 @@ const ProgressCard = ({
         {onAction && (
           <button 
             onClick={onAction}
-            className="mt-4 w-full px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium"
+            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none mt-4 w-full"
           >
             {actionText}
           </button>

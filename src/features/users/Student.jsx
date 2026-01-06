@@ -162,9 +162,18 @@ const Student = () => {
               </h1>
               <p className="text-gray-400">Track your learning progress and achievements</p>
             </div>
-            <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-full">
-              <Flame className="w-5 h-5" />
-              <span className="font-semibold">{stats.currentLevel} Day Streak!</span>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-full shadow-lg">
+                <Flame className="w-5 h-5" />
+                <span className="font-semibold">{stats.currentLevel} Day Streak!</span>
+              </div>
+              <button 
+                onClick={() => navigate('/achievements')}
+                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none shadow-lg"
+              >
+                <Award className="w-4 h-4 mr-2" />
+                View Achievements
+              </button>
             </div>
           </div>
 
@@ -287,7 +296,16 @@ const Student = () => {
                             height="h-2"
                           />
                         </div>
-                        <button className="px-4 py-2 bg-cyan-600 text-white text-sm rounded-lg hover:bg-cyan-700 transition-colors flex items-center group-hover:translate-x-1 transition-transform">
+                        <button 
+                          onClick={() => {
+                            if (item.action === 'Take Quiz') {
+                              navigate(`/course/${item.id}/assessment`);
+                            } else {
+                              navigate(`/course/${item.id}/learn`);
+                            }
+                          }}
+                          className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm flex items-center group-hover:translate-x-1 transition-transform"
+                        >
                           {item.action}
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </button>
