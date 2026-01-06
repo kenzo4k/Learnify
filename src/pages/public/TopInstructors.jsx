@@ -91,7 +91,7 @@ const TopInstructors = () => {
                     {instructors.map((instructor) => (
                         <motion.div
                             key={instructor.id}
-                            className="bg-gray-800 rounded-lg shadow-lg overflow-hidden text-center group transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/20"
+                            className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden text-center group transition-all duration-300 transform hover:scale-105 hover:border-cyan-600 shadow-lg"
                             variants={itemVariants}
                         >
                             <div className="relative">

@@ -121,7 +121,7 @@ const Login = () => {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-indigo-500/25 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 transform hover:scale-105 transition-all duration-200"
+              className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full shadow-lg transition-all duration-200"
             >
               Sign In
             </button>
@@ -139,7 +139,7 @@ const Login = () => {
             {/* Google Login Button */}
             <button
               type="button"
-              className="w-full py-3 px-4 bg-transparent border-2 border-gray-600 hover:border-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-500/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 flex items-center justify-center space-x-3"
+              className="btn bg-gray-700 hover:bg-gray-600 text-white border-none w-full shadow-lg transition-all duration-200 flex items-center justify-center space-x-3"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

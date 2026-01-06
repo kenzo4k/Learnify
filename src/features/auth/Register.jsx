@@ -23,7 +23,7 @@ const Register = () => {
         setIsLoading(true);
         try {
             // Create user with email and password
-            const userCredential = await createUser(data.email, data.password);
+            await createUser(data.email, data.password);
 
             // Update user profile with name and role
             await updateUserProfile({
@@ -193,7 +193,7 @@ const Register = () => {
                             <div className="relative">
                                 <select
                                     {...register("role", { required: "Please select a role" })}
-                                    className="w-full px-4 py-3 bg-gray-700/80 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none"
+                                    className="select select-bordered w-full bg-gray-700/80 text-white border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 appearance-none"
                                 >
                                     <option value="student">Student</option>
                                     <option value="instructor">Instructor</option>
@@ -207,7 +207,7 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-800 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 mt-6"
+                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full shadow-lg transition-all duration-200 flex items-center justify-center gap-2 mt-6"
                         >
                             {isLoading ? (
                                 <>

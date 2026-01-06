@@ -38,12 +38,12 @@ const CourseForm = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-400 mb-1">
             Category
           </label>
           <select
             {...register('category', { required: 'Category is required' })}
-            className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="select select-bordered w-full bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500"
           >
             <option value="">Select a category</option>
             {COURSE_CATEGORIES.map(category => (
@@ -51,7 +51,7 @@ const CourseForm = ({
             ))}
           </select>
           {errors.category && (
-            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.category.message}</p>
           )}
         </div>
 
@@ -67,17 +67,17 @@ const CourseForm = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-400 mb-1">
           Course Description
         </label>
         <textarea
           {...register('description', { required: 'Description is required' })}
           rows={4}
-          className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="textarea textarea-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
           placeholder="Enter course description"
         />
         {errors.description && (
-          <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+          <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
         )}
       </div>
 

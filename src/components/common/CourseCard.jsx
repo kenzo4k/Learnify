@@ -18,7 +18,7 @@ const CourseCard = ({ course }) => {
 
     return (
         <Link to={`/course/${course._id}`} className="block group w-full">
-            <div className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden h-full flex flex-col transition-all duration-300 transform hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-lg md:hover:shadow-xl hover:shadow-purple-500/20">
+            <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden h-full flex flex-col">
 
                 {/* Image Section */}
                 <figure className="relative h-48 overflow-hidden">
@@ -81,7 +81,7 @@ const CourseCard = ({ course }) => {
                     {/* Price and Action */}
                     <div className="flex justify-between items-center mt-auto">
                         {renderPrice(course.price, course.discount_price)}
-                        <button className="btn btn-primary btn-sm">
+                        <button className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm">
                             See More
                         </button>
                     </div>

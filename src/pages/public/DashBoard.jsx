@@ -55,9 +55,9 @@ const Dashboard = () => {
 
                 {/* Stats Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-purple-500 transition-colors">
+                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-cyan-600 transition">
                         <div className="flex items-center">
-                            <div className="p-3 rounded-full bg-purple-900/30 text-purple-400 mr-4">
+                            <div className="p-3 rounded-full bg-cyan-900/30 text-cyan-400 mr-4">
                                 <FiBook className="text-xl" />
                             </div>
                             <div>
@@ -67,7 +67,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     
-                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition-colors">
+                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-cyan-600 transition">
                         <div className="flex items-center">
                             <div className="p-3 rounded-full bg-blue-900/30 text-blue-400 mr-4">
                                 <FiAward className="text-xl" />
@@ -81,7 +81,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     
-                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-green-500 transition-colors">
+                    <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-cyan-600 transition">
                         <div className="flex items-center">
                             <div className="p-3 rounded-full bg-green-900/30 text-green-400 mr-4">
                                 <FiBarChart2 className="text-xl" />
@@ -112,7 +112,7 @@ const Dashboard = () => {
                                 <Link 
                                     key={course.id} 
                                     to={`/course/${course.id}`}
-                                    className="bg-gray-800 border border-gray-700 hover:border-cyan-500 rounded-2xl overflow-hidden group transition-all duration-300 transform hover:-translate-y-1"
+                                    className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden group"
                                 >
                                     <div className="relative h-40 overflow-hidden">
                                         <img
@@ -130,7 +130,7 @@ const Dashboard = () => {
                                         <span className="text-xs font-medium text-purple-400 uppercase tracking-wide">
                                             {course.category}
                                         </span>
-                                        <h3 className="text-lg font-bold text-white mt-1 mb-2 line-clamp-2 group-hover:text-cyan-300 transition-colors">
+                                        <h3 className="text-lg font-bold text-white mt-1 mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors">
                                             {course.title}
                                         </h3>
                                         <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
@@ -139,7 +139,7 @@ const Dashboard = () => {
                                             </span>
                                             <span>{course.enrollmentCount} students</span>
                                         </div>
-                                        <p className="text-xs text-cyan-300 font-medium">
+                                        <p className="text-xs text-cyan-400 font-medium">
                                             {reason}
                                         </p>
                                     </div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
                     <div>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-2xl font-bold">Continue Learning</h2>
-                            <Link to="/my-enrolled-courses" className="text-indigo-400 hover:text-indigo-300 flex items-center text-sm">
+                            <Link to="/my-enrolled-courses" className="text-cyan-400 hover:text-cyan-300 flex items-center text-sm">
                                 View all <FaArrowRight className="ml-1" />
                             </Link>
                         </div>
@@ -169,14 +169,14 @@ const Dashboard = () => {
                         ) : (
                             <div className="bg-gray-800 rounded-lg p-8 text-center border-2 border-dashed border-gray-700">
                                 <div className="max-w-md mx-auto">
-                                    <FiBook className="text-5xl text-purple-400/50 mx-auto mb-4" />
+                                    <FiBook className="text-5xl text-cyan-400/50 mx-auto mb-4" />
                                     <h3 className="text-2xl font-bold mb-2">No Enrolled Courses</h3>
                                     <p className="text-gray-400 mb-6">
                                         You haven't enrolled in any courses yet. Explore our catalog to start learning!
                                     </p>
                                     <Link 
                                         to="/courses"
-                                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-colors inline-block"
+                                        className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none px-8"
                                     >
                                         Browse Courses
                                     </Link>

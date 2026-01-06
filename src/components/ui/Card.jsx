@@ -24,9 +24,9 @@ const Card = ({
     xl: 'shadow-xl'
   };
   
-  const hoverClasses = hover ? 'hover:shadow-lg transition-shadow duration-200' : '';
+  const hoverClasses = hover ? 'hover:border-cyan-600 transition duration-200' : 'transition duration-200';
   
-  const classes = `bg-white rounded-lg border border-gray-200 ${paddings[padding]} ${shadows[shadow]} ${hoverClasses} ${className}`;
+  const classes = `bg-gray-800 rounded-lg border border-gray-700 ${paddings[padding]} ${shadows[shadow]} ${hoverClasses} ${className}`;
 
   return (
     <div className={classes} {...props}>

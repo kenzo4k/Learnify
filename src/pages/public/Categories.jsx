@@ -26,8 +26,8 @@ const Categories = () => {
                     <div className="grid grid-cols-2 gap-6 max-w-md">
                         {     categories.map((category, index) => (
                             <Link to={`/courses/category/${category.name}`} key={index}>
-                                <div className="flex flex-col items-center p-6 bg-gray-700 rounded-lg text-white hover:bg-gray-600 transition-colors duration-300">
-                                    <div className="text-4xl mb-4 text-blue-400">{category.icon}</div>
+                                <div className="flex flex-col items-center p-6 bg-gray-800 rounded-lg border border-gray-700 text-white hover:border-cyan-600 transition">
+                                    <div className="text-4xl mb-4 text-cyan-400">{category.icon}</div>
                                     <h3 className="text-lg font-semibold">{category.name}</h3>
                                 </div>
                             </Link>

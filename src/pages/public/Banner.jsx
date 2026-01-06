@@ -160,7 +160,7 @@ const Banner = () => {
                                     <motion.div variants={textVariants}>
                                         <Link
                                             to="/courses"
-                                            className="btn btn-primary btn-sm md:btn-md lg:btn-lg rounded-full zpx-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105"
+                                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none rounded-full btn-sm md:btn-md lg:btn-lg px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105 shadow-lg"
                                         >
                                             Explore Courses
                                         </Link>
