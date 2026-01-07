@@ -4,16 +4,20 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import useAuth from '../../hooks/useAuth';
 import axiosSecure from '../../services/axiosSecure';
-import { FaSpinner } from 'react-icons/fa';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
 
 
 //add courses section
 const AddCourse = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
+    if (authLoading || isLoading) {
+        return <LoadingSpinner />;
+    }
 
     const onSubmit = async (data) => {
         if (!user) {
@@ -291,17 +295,9 @@ const AddCourse = () => {
                     <div className="mt-10 text-center">
                         <button
                             type="submit"
-                            className="btn btn-primary btn-lg w-full md:w-1/2 disabled:bg-gray-500 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
-                            disabled={isLoading}
+                            className="btn btn-primary btn-lg w-full md:w-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
                         >
-                            {isLoading ? (
-                                <span className="flex items-center justify-center">
-                                    <FaSpinner className="animate-spin mr-2" />
-                                    Processing...
-                                </span>
-                            ) : (
-                                'Add Course to Platform now'
-                            )}
+                            Add Course to Platform now
                         </button>
                     </div>
                 </form>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const CourseDetails = () => {
     // Hooks
@@ -106,11 +107,7 @@ const CourseDetails = () => {
     };
 
     if (loading || authLoading) {
-        return (
-            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <div className="loading loading-spinner loading-lg text-primary"></div>
-            </div>
-        );
+        return <LoadingSpinner />;
     }
 
     if (error) {
@@ -355,7 +352,7 @@ const CourseDetails = () => {
                                         disabled={enrollLoading || isEnrollmentLimitReached}
                                     >
                                         {enrollLoading ? (
-                                            <span className="loading loading-spinner loading-sm"></span>
+                                            <LoadingSpinner fullScreen={false} size="sm" />
                                         ) : isEnrolled ? (
                                             '✓ Enrolled (Click to Un-enroll)'
                                         ) : isEnrollmentLimitReached ? (
