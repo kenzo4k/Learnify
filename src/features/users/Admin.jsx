@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import {
   Users,
   BookOpen,
@@ -56,6 +57,7 @@ const sampleInstructors = [
 ];
 
 const Admin = () => {
+  const { loading: authLoading } = React.useContext(AuthContext);
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalCourses: 0,
@@ -185,10 +187,10 @@ const Admin = () => {
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+        <LoadingSpinner fullScreen={false} />
       </div>
     );
   }

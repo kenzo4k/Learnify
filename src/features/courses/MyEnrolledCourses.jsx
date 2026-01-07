@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { motion as Motion } from 'framer-motion';
 import { BookOpen, Trash2, ArrowLeft } from 'lucide-react';
 import ProgressCard from '../../components/common/ProgressCard';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 // --- Skeleton Loader Component 
 const CourseCardSkeleton = () => (
@@ -108,22 +109,7 @@ const MyEnrolledCourses = () => {
     };
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="h-8 w-24 bg-slate-700 rounded-lg mb-6 animate-pulse"></div>
-                    <div className="flex items-center justify-between mb-8">
-                        <div className="h-10 w-1/2 bg-slate-700 rounded-lg animate-pulse"></div>
-                        <div className="h-8 w-28 bg-slate-700 rounded-lg animate-pulse"></div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <CourseCardSkeleton />
-                        <CourseCardSkeleton />
-                        <CourseCardSkeleton />
-                    </div>
-                </div>
-            </div>
-        );
+        return <LoadingSpinner />;
     }
 
     const containerVariants = {

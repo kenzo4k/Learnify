@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaArrowRight } from 'react-icons/fa';
 import { FiBook, FiAward, FiBarChart2 } from 'react-icons/fi';
 import CourseCard from '../../components/common/CourseCard';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import recommendationService from '../../services/recommendationService';
 
 const Dashboard = () => {
@@ -37,7 +38,7 @@ const Dashboard = () => {
     if (authLoading || loading) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+                <LoadingSpinner fullScreen={false} />
             </div>
         );
     }
