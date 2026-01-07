@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { instructorService } from '../../services/instructorService';
 
 const AtRiskStudents = () => {
-    const [atRiskStudents, setAtRiskStudents] = useState([
+    const [atRiskStudents, _setAtRiskStudents] = useState([
         // Sample data - replace with actual API call
         {
             id: 1,
@@ -26,14 +26,14 @@ const AtRiskStudents = () => {
             email: 'jane@example.com'
         }
     ]);
-    const [loading, setLoading] = useState(false);
-    const [selectedStudents, setSelectedStudents] = useState([]);
+    const [loading, _setLoading] = useState(false);
+    const [selectedStudents, _setSelectedStudents] = useState([]);
 
     const handleSendReminder = async (studentId) => {
         try {
             await instructorService.sendReminder(studentId);
             toast.success('Reminder sent successfully');
-        } catch (error) {
+        } catch {
             toast.error('Failed to send reminder');
         }
     };
@@ -99,7 +99,7 @@ const AtRiskStudents = () => {
                                         <td className="py-3 px-4">
                                             <button
                                                 onClick={() => handleSendReminder(student.id)}
-                                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                                             >
                                                 <Mail className="w-4 h-4" />
                                                 Contact

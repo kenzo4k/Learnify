@@ -264,7 +264,7 @@ const QuizEditor = ({ quiz, onChange }) => {
         </div>
       ))}
       <button 
-        className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none" 
+        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none" 
         onClick={addQuestion}
       >
         Add Question

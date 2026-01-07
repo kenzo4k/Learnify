@@ -377,7 +377,7 @@ const Instructor = () => {
                   <h2 className="text-xl font-semibold">My Courses</h2>
                   <Link
                     to="/add-course"
-                    className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm"
+                    className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-sm"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add</span>
@@ -452,7 +452,7 @@ const Instructor = () => {
               <h2 className="text-xl font-semibold">Course Management</h2>
               <Link
                 to="/add-course"
-                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add New Course</span>
@@ -498,7 +498,7 @@ const Instructor = () => {
                           <div className="flex space-x-2">
                             <button 
                               onClick={() => navigate(`/edit-course/${course.id}`)}
-                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                              className="btn btn-xs bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                             >
                               <Edit className="w-3 h-3 mr-1" /> Edit
                             </button>
@@ -544,7 +544,7 @@ const Instructor = () => {
                             </button>
                             <button 
                               onClick={() => navigate(`/edit-course/${course._id}`)}
-                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                              className="btn btn-xs bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                             >
                               <Edit className="w-3 h-3" />
                             </button>
@@ -622,7 +622,7 @@ const Instructor = () => {
                           <div className="flex space-x-2">
                             <button 
                               onClick={() => toast.success(`Viewing ${student.name}`)}
-                              className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                              className="btn btn-xs bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                             >
                               <Eye className="w-3 h-3 mr-1" /> View
                             </button>
@@ -802,7 +802,7 @@ const Instructor = () => {
                       <div className="pt-2 border-t border-gray-600">
                         <p className="text-xs text-gray-400">Last updated: {course.lastUpdated}</p>
                       </div>
-                      <button className="w-full mt-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                      <button className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
                         <Eye className="w-4 h-4" />
                         View Analytics
                       </button>

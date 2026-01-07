@@ -14,7 +14,7 @@ const Button = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variants = {
-    primary: 'bg-cyan-600 text-white hover:bg-cyan-700 border-none shadow-md',
+    primary: 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none shadow-md',
     secondary: 'bg-gray-700 text-white hover:bg-gray-600 border-none shadow-md',
     danger: 'bg-red-600 text-white hover:bg-red-700 border-none shadow-md',
     success: 'bg-green-600 text-white hover:bg-green-700 border-none shadow-md',

@@ -169,7 +169,7 @@ const Student = () => {
               </div>
               <button 
                 onClick={() => navigate('/achievements')}
-                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none shadow-lg"
+                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none shadow-lg"
               >
                 <Award className="w-4 h-4 mr-2" />
                 View Achievements
@@ -304,7 +304,7 @@ const Student = () => {
                               navigate(`/course/${item.id}/learn`);
                             }
                           }}
-                          className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm flex items-center group-hover:translate-x-1 transition-transform"
+                          className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-sm flex items-center group-hover:translate-x-1 transition-transform"
                         >
                           {item.action}
                           <ArrowRight className="w-4 h-4 ml-2" />

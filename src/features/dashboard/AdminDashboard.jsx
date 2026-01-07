@@ -446,7 +446,7 @@ const Dashboard = () => {
                 </div>
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                  className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Course
@@ -510,7 +510,7 @@ const Dashboard = () => {
                             <div className="flex items-center space-x-2">
                               <button 
                                 onClick={() => navigate(`/edit-course/${course._id}`)}
-                                className="btn btn-xs bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                                className="btn btn-xs bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>

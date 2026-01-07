@@ -200,7 +200,7 @@ const MyEnrolledCourses = () => {
                             </p>
                             <button
                                 onClick={() => navigate('/courses')}
-                                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-lg px-8"
+                                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-lg px-8"
                             >
                                 Explore All Courses
                             </button>

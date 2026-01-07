@@ -22,7 +22,7 @@ const Newsletter = () => {
                             placeholder="Enter your email"
                             className="input input-bordered bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 w-full md:w-2/3"
                         />
-                        <button type="submit" className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full md:w-1/3 shadow-lg">
+                        <button type="submit" className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full md:w-1/3 shadow-lg">
                             Subscribe
                         </button>
                     </form>

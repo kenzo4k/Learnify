@@ -176,7 +176,7 @@ const Dashboard = () => {
                                     </p>
                                     <Link 
                                         to="/courses"
-                                        className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none px-8"
+                                        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none px-8"
                                     >
                                         Browse Courses
                                     </Link>

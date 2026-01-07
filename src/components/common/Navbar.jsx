@@ -34,7 +34,7 @@ const Navbar = () => {
           {/* Logo and Brand */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200">
                 <img
                   src="/src/assets/logo/Course_logo.png"
                   alt="Learnify"
@@ -46,7 +46,7 @@ const Navbar = () => {
                 />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   Learnify
                 </h1>
                 <p className="text-xs text-gray-400 -mt-1">Course Management</p>
@@ -60,7 +60,7 @@ const Navbar = () => {
               to="/"
               className={({ isActive }) =>
                 `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                  ? 'bg-cyan-600 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                   : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`
               }
@@ -72,7 +72,7 @@ const Navbar = () => {
               to="/courses"
               className={({ isActive }) =>
                 `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                  ? 'bg-cyan-600 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                   : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`
               }
@@ -87,7 +87,7 @@ const Navbar = () => {
                   to="/student"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-cyan-600 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
@@ -98,7 +98,7 @@ const Navbar = () => {
                   to="/my-enrolled-courses"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-cyan-600 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
@@ -115,7 +115,7 @@ const Navbar = () => {
                   to="/instructor"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-cyan-600 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
@@ -126,7 +126,7 @@ const Navbar = () => {
                   to="/add-course"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-cyan-600 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
@@ -137,7 +137,7 @@ const Navbar = () => {
                   to="/manage-courses"
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-cyan-600 text-white shadow-lg'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`
                   }
@@ -153,7 +153,7 @@ const Navbar = () => {
                 to="/admin"
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                    ? 'bg-cyan-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                   }`
                 }
@@ -326,7 +326,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/Auth/register"
-                  className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 border-none"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 border-none"
                 >
                   Get Started
                 </Link>
@@ -369,7 +369,7 @@ const Navbar = () => {
             onClick={closeMobileMenu}
             className={({ isActive }) =>
               `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                ? 'bg-blue-600 text-white'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                 : 'text-gray-300 hover:text-white hover:bg-gray-700'
               }`
             }
@@ -382,7 +382,7 @@ const Navbar = () => {
             onClick={closeMobileMenu}
             className={({ isActive }) =>
               `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                ? 'bg-blue-600 text-white'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                 : 'text-gray-300 hover:text-white hover:bg-gray-700'
               }`
             }
@@ -397,7 +397,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
@@ -410,7 +410,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
@@ -423,7 +423,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }
@@ -436,7 +436,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 ${isActive
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700'
                   }`
                 }

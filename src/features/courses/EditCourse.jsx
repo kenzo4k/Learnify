@@ -253,7 +253,7 @@ const EditCourse = () => {
                                     />
                                     <label
                                         htmlFor="course-image"
-                                        className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        className="cursor-pointer px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors"
                                     >
                                         Upload Image
                                     </label>
@@ -403,7 +403,7 @@ const EditCourse = () => {
                                 </button>
                                 <button
                                     type="button"
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                    className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors"
                                     onClick={() => {
                                         setCourseData(prev => ({
                                             ...prev,
