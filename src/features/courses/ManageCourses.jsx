@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import toast from 'react-hot-toast';
 import CourseCard from '../../components/common/CourseCard';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const ManageCourses = () => {
-    const { user: _user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [courses, setCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [courseToDelete, setCourseToDelete] = useState(null);
@@ -88,7 +87,7 @@ const ManageCourses = () => {
             localStorage.setItem('deletedCourses', JSON.stringify(deletedCourseIds));
 
             // Simulate successful response
-            const _data = { deleted: true, message: 'Course deleted successfully' };
+            const data = { deleted: true, message: 'Course deleted successfully' };
 
             // Only update UI if backend deletion was successful
             setCourses(prevCourses =>
@@ -137,7 +136,7 @@ const ManageCourses = () => {
         return `badge ${statusColors[status] || 'badge-neutral'} badge-lg`;
     };
 
-    const _getLevelColor = (level) => {
+    const getLevelColor = (level) => {
         const levelColors = {
             'Beginner': 'text-success',
             'Intermediate': 'text-warning',
@@ -150,7 +149,7 @@ const ManageCourses = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-900">
                 <div className="text-center">
-                    <LoadingSpinner fullScreen={false} />
+                    <span className="loading loading-spinner loading-lg text-primary"></span>
                     <p className="mt-4 text-gray-300">Loading your courses...</p>
                 </div>
             </div>
@@ -461,7 +460,7 @@ const ManageCourses = () => {
                         >
                             {isDeleting ? (
                                 <>
-                                    <LoadingSpinner fullScreen={false} size="sm" className="mr-2" />
+                                    <span className="loading loading-spinner loading-sm"></span>
                                     Deleting...
                                 </>
                             ) : (

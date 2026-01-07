@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import CourseContentEditor from './CourseContentEditor';
 import { FileText, Video, List, Code, BookOpen, Settings } from 'lucide-react';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const EditCourse = () => {
     const { id } = useParams();
@@ -68,7 +67,7 @@ const EditCourse = () => {
                     tags: data.tags?.length > 0 ? data.tags : [''],
                     status: data.status || 'draft'
                 }));
-            } catch {
+            } catch (error) {
                 toast.error("Failed to load course data.");
             } finally {
                 setLoading(false);
@@ -85,7 +84,7 @@ const EditCourse = () => {
         }));
     };
 
-    const _handleInstructorChange = (e) => {
+    const handleInstructorChange = (e) => {
         const { name, value } = e.target;
         setCourseData(prev => ({
             ...prev,
@@ -93,21 +92,21 @@ const EditCourse = () => {
         }));
     };
 
-    const _handleArrayChange = (index, value, arrayName) => {
+    const handleArrayChange = (index, value, arrayName) => {
         setCourseData(prev => ({
             ...prev,
             [arrayName]: prev[arrayName].map((item, i) => i === index ? value : item)
         }));
     };
 
-    const _addArrayItem = (arrayName) => {
+    const addArrayItem = (arrayName) => {
         setCourseData(prev => ({
             ...prev,
             [arrayName]: [...prev[arrayName], '']
         }));
     };
 
-    const _removeArrayItem = (index, arrayName) => {
+    const removeArrayItem = (index, arrayName) => {
         if (courseData[arrayName].length > 1) {
             setCourseData(prev => ({
                 ...prev,
@@ -332,7 +331,7 @@ const EditCourse = () => {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
                 <div className="text-center">
-                    <LoadingSpinner fullScreen={false} />
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-500 mx-auto"></div>
                     <p className="mt-4 text-gray-300">Loading course data...</p>
                 </div>
             </div>

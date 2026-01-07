@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Clock, Users, Star, Award, BookOpen, User, ArrowRight, Filter, Search, Grid, List } from 'lucide-react';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+
+// LoadingSpinner component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-900">
+    <div className="relative">
+      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <BookOpen className="w-6 h-6 text-blue-500 animate-pulse" />
+      </div>
+    </div>
+  </div>
+);
 
 const AllCourses = () => {
   const { category } = useParams();

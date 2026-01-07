@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthProvider";
 import toast from 'react-hot-toast';
@@ -26,7 +26,6 @@ import {
 } from 'lucide-react';
 import AtRiskStudents from '../../components/instructor/AtRiskStudents';
 import AnalyticsChart from '../../components/instructor/AnalyticsChart';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 // Sample data for tabs - ADD THIS
 const sampleInstructorData = {
@@ -118,7 +117,7 @@ const sampleInstructorData = {
 };
 
 const Instructor = () => {
-  const { user, loading: authLoading } = React.useContext(AuthContext);
+  const { user } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalCourses: 0,
@@ -174,45 +173,37 @@ const Instructor = () => {
     ]
   };
 
-  const fetchInstructorData = useCallback(async () => {
-    if (!user?.email) return;
+  useEffect(() => {
+    fetchInstructorData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const fetchInstructorData = async () => {
     try {
       setLoading(true);
 
       // Fetch instructor statistics
-      const statsResponse = await fetch(
-        `https://course-management-system-server-woad.vercel.app/api/instructor/stats?email=${user.email}`
-      );
+      const statsResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/instructor/stats?email=${user.email}`);
       const statsData = await statsResponse.json();
       setStats(statsData);
 
       // Fetch instructor courses
-      const coursesResponse = await fetch(
-        `https://course-management-system-server-woad.vercel.app/api/instructor/courses?email=${user.email}`
-      );
+      const coursesResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/instructor/courses?email=${user.email}`);
       const coursesData = await coursesResponse.json();
       setCourses(coursesData);
 
       // Fetch instructor students
-      const studentsResponse = await fetch(
-        `https://course-management-system-server-woad.vercel.app/api/instructor/students?email=${user.email}`
-      );
+      const studentsResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/instructor/students?email=${user.email}`);
       const studentsData = await studentsResponse.json();
       setStudents(studentsData);
+
     } catch (error) {
       console.error('Error fetching instructor data:', error);
       toast.error('Failed to load instructor data');
     } finally {
       setLoading(false);
     }
-  }, [user?.email]);
-
-  useEffect(() => {
-    if (!authLoading) {
-      fetchInstructorData();
-    }
-  }, [authLoading, fetchInstructorData]);
+  };
 
   const handleCourseAction = async (courseId, action) => {
     try {
@@ -234,10 +225,10 @@ const Instructor = () => {
     }
   };
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <LoadingSpinner fullScreen={false} />
+        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }

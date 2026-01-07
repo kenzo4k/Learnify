@@ -13,7 +13,6 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import QuizEditor from '../../components/forms/QuizEditor';
 import ProgressBar from '../../components/common/ProgressBar';
 import XPCounter from '../../components/common/XPCounter';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -829,7 +828,7 @@ run();`
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <LoadingSpinner fullScreen={false} />
+                <div className="loading loading-spinner loading-lg text-primary"></div>
             </div>
         );
     }
