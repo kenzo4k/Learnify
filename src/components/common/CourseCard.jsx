@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { FaUsers, FaClock, FaStar, FaLevelUpAlt } from 'react-icons/fa';
 
 const CourseCard = ({ course }) => {
+    const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80';
+
+    const handleImageError = (e) => {
+        e.target.src = FALLBACK_IMAGE;
+    };
+
     // Price rendering helper function
     const renderPrice = (price, discountPrice) => {
         if (discountPrice && discountPrice < price) {
@@ -23,8 +29,9 @@ const CourseCard = ({ course }) => {
                 {/* Image Section */}
                 <figure className="relative h-48 overflow-hidden">
                     <img
-                        src={course.image || 'https://via.placeholder.com/400x225?text=No+Image'}
+                        src={course.image || FALLBACK_IMAGE}
                         alt={course.title}
+                        onError={handleImageError}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute top-3 left-3 md:top-4 md:left-4">
