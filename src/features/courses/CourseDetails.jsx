@@ -344,14 +344,14 @@ const CourseDetails = () => {
                                 ) : !user ? (
                                     <button
                                         onClick={() => navigate('/login', { state: { from: location }, replace: true })}
-                                        className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-wide w-full"
+                                        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-wide w-full"
                                     >
                                         Login to Enroll
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleEnrollmentToggle}
-                                        className={`btn btn-wide w-full border-none ${isEnrolled ? 'bg-orange-600 hover:bg-orange-700 text-white' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-cyan-600 hover:bg-cyan-700 text-white')}`}
+                                        className={`btn btn-wide w-full border-none ${isEnrolled ? 'bg-orange-600 hover:bg-orange-700 text-white' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white')}`}
                                         disabled={enrollLoading || isEnrollmentLimitReached}
                                     >
                                         {enrollLoading ? (

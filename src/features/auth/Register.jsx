@@ -207,7 +207,7 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full shadow-lg transition-all duration-200 flex items-center justify-center gap-2 mt-6"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full shadow-lg transition-all duration-200 flex items-center justify-center gap-2 mt-6"
                         >
                             {isLoading ? (
                                 <>

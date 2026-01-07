@@ -186,7 +186,7 @@ const CourseAssessment = () => {
                         <div className="flex gap-4">
                             <button
                                 onClick={handleRestart}
-                                className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                             >
                                 Restart Assessment
                             </button>
@@ -241,7 +241,7 @@ const CourseAssessment = () => {
 
                         <button
                             onClick={handleContinueToNextTopic}
-                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full"
                         >
                             {currentTopicIndex === assessmentConfig.numberOfTopics - 1 ? 'View Results' : 'Next Topic'}
                         </button>
@@ -401,7 +401,7 @@ const CourseAssessment = () => {
                         <button
                             onClick={handleNextQuestion}
                             disabled={selectedAnswers[currentQuestion.id] === undefined || selectedAnswers[currentQuestion.id] === ''}
-                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {currentQuestionIndex === currentTopicQuestions.length - 1 ? 'Complete Topic' : 'Next Question'}
                         </button>

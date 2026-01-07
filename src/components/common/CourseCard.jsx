@@ -81,7 +81,7 @@ const CourseCard = ({ course }) => {
                     {/* Price and Action */}
                     <div className="flex justify-between items-center mt-auto">
                         {renderPrice(course.price, course.discount_price)}
-                        <button className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none btn-sm">
+                        <button className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-sm">
                             See More
                         </button>
                     </div>

@@ -773,7 +773,7 @@ run();`
                                         onClick={() => {
                                             setCurrentQuestionIndex(Math.min(activeLesson.questions.length - 1, currentQuestionIndex + 1));
                                         }}
-                                        className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                                         disabled={currentQuestionIndex === activeLesson.questions.length - 1}
                                     >
                                         Next →
@@ -858,7 +858,7 @@ run();`
                         <h1 className="text-2xl font-bold">{course?.title || 'Course Content'}</h1>
                         <button 
                             onClick={() => navigate(`/course/${courseId}/assessment`)}
-                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                         >
                             <RiQuestionAnswerFill className="mr-2" />
                             Take Assessment Quiz
@@ -967,7 +967,7 @@ run();`
                                     Previous Lesson
                                 </button>
                                 <button
-                                    className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none"
+                                    className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                                     onClick={() => {
                                         // Find next lesson logic would go here
                                         toast('Next lesson');

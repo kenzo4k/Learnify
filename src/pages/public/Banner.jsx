@@ -160,7 +160,7 @@ const Banner = () => {
                                     <motion.div variants={textVariants}>
                                         <Link
                                             to="/courses"
-                                            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none rounded-full btn-sm md:btn-md lg:btn-lg px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105 shadow-lg"
+                                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none rounded-full btn-sm md:btn-md lg:btn-lg px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105 shadow-lg"
                                         >
                                             Explore Courses
                                         </Link>

@@ -1,6 +1,7 @@
 // src/features/courses/CourseContentEditor.jsx
 import React, { useState } from 'react';
 import { Plus, X, FileText, Video, FileCode, ListChecks } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const ContentItem = ({ type, content, onUpdate, onRemove }) => {
   const renderContentInput = () => {
@@ -94,11 +95,6 @@ const ContentItem = ({ type, content, onUpdate, onRemove }) => {
               </button>
             </div>
           </div>
-        );
-      case 'code':
-        return (
-          <CodeExerciseEditor content={content} onUpdate={onUpdate} />
-        );
 // محرر كود بسيط يدعم JavaScript وPython
 const CodeExerciseEditor = ({ content, onUpdate }) => {
   const [output, setOutput] = React.useState('');
@@ -109,7 +105,7 @@ const CodeExerciseEditor = ({ content, onUpdate }) => {
 
   React.useEffect(() => {
     onUpdate({ ...content, language, starterCode: code });
-  }, [language, code]);
+  }, [language, code, onUpdate, content]);
 
   // تحميل pyodide عند اختيار بايثون
   React.useEffect(() => {
@@ -118,6 +114,133 @@ const CodeExerciseEditor = ({ content, onUpdate }) => {
         if (!window.loadPyodide) {
           const script = document.createElement('script');
           script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js';
+          script.onload = async () => {
+            const pyodide = await window.loadPyodide();
+            pyodideRef.current = pyodide;
+            setPyodideReady(true);
+          };
+          document.head.appendChild(script);
+        } else {
+          const pyodide = await window.loadPyodide();
+          pyodideRef.current = pyodide;
+          setPyodideReady(true);
+        }
+      };
+      loadPyodide();
+    }
+  }, [language, pyodideReady]);
+
+  const runCode = async () => {
+    try {
+      if (language === 'javascript') {
+        const result = eval(code);
+        setOutput(String(result));
+      } else if (language === 'python' && pyodideReady && pyodideRef.current) {
+        const result = await pyodideRef.current.runPythonAsync(code);
+        setOutput(String(result));
+      }
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-center">
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+        >
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+        </select>
+        <button
+          onClick={runCode}
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:from-blue-600 hover:to-purple-700 flex items-center space-x-1"
+        >
+          <Play className="w-4 h-4" />
+          <span>تشغيل الكود</span>
+        </button>
+      </div>
+      <textarea
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        className="w-full h-40 bg-gray-900 border border-gray-600 rounded p-4 text-green-400 font-mono text-sm"
+        placeholder="اكتب الكود هنا..."
+      />
+      {output && (
+        <div className="bg-gray-900 border border-gray-600 rounded p-4">
+          <h4 className="text-white font-semibold mb-2">النتيجة:</h4>
+          <pre className="text-blue-400 font-mono text-sm">{output}</pre>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// محتوى قابل للتعديل
+const EditableContent = ({ content, onUpdate }) => {
+  switch (content.type) {
+    case 'text':
+      return (
+        <textarea
+          value={content.text || ''}
+          onChange={(e) => onUpdate({ ...content, text: e.target.value })}
+          className="w-full h-32 bg-gray-900 border border-gray-600 rounded p-3 text-white"
+          placeholder="اكتب النص هنا..."
+        />
+      );
+    case 'video':
+      return (
+        <div className="space-y-4">
+          <input
+            type="url"
+            value={content.url || ''}
+            onChange={(e) => onUpdate({ ...content, url: e.target.value })}
+            className="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white"
+            placeholder="رابط الفيديو..."
+          />
+          <video controls className="w-full rounded">
+            {content.url && <source src={content.url} />}
+          </video>
+        </div>
+      );
+    case 'quiz':
+      return (
+        <div className="space-y-4">
+          <input
+            type="text"
+            value={content.question || ''}
+            onChange={(e) => onUpdate({ ...content, question: e.target.value })}
+            className="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white"
+            placeholder="السؤال..."
+          />
+          <div className="space-y-2">
+            {content.options?.map((option, index) => (
+              <input
+                key={index}
+                type="text"
+                value={option}
+                onChange={(e) => {
+                  const newOptions = [...content.options];
+                  newOptions[index] = e.target.value;
+                  onUpdate({ ...content, options: newOptions });
+                }}
+                className="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white"
+                placeholder={`الخيار ${index + 1}...`}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    case 'code':
+      return (
+        <CodeExerciseEditor content={content} onUpdate={onUpdate} />
+      );
+    default:
+      return null;
+  }
           script.onload = async () => {
             window.pyodide = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/' });
             pyodideRef.current = window.pyodide;
@@ -235,7 +358,7 @@ const CodeExerciseEditor = ({ content, onUpdate }) => {
 
 const Section = ({ section, onUpdate, onRemove }) => {
   const [isAddingContent, setIsAddingContent] = useState(false);
-  const [newContentType, setNewContentType] = useState('text');
+  const [_newContentType, _setNewContentType] = useState('text');
 
   const addContent = (type) => {
     const newContent = { type, id: Date.now() };
@@ -428,7 +551,7 @@ const CourseContentEditor = ({ content = [], onChange }) => {
         <h3 className="text-lg font-medium text-gray-200">Course Content</h3>
         <button
           onClick={addSection}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center space-x-1"
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:from-blue-600 hover:to-purple-700 flex items-center space-x-1"
         >
           <Plus size={18} />
           <span>Add Section</span>

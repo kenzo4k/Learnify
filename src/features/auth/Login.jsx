@@ -121,7 +121,7 @@ const Login = () => {
             {/* Login Button */}
             <button
               type="submit"
-              className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none w-full shadow-lg transition-all duration-200"
+              className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full shadow-lg transition-all duration-200"
             >
               Sign In
             </button>

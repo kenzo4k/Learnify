@@ -48,7 +48,7 @@ const ProgressCard = ({
         {onAction && (
           <button 
             onClick={onAction}
-            className="btn bg-cyan-600 hover:bg-cyan-700 text-white border-none mt-4 w-full"
+            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none mt-4 w-full"
           >
             {actionText}
           </button>
