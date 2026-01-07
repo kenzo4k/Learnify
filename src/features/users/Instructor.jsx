@@ -235,7 +235,11 @@ const Instructor = () => {
   };
 
   if (authLoading || loading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <LoadingSpinner fullScreen={false} />
+      </div>
+    );
   }
 
   return (

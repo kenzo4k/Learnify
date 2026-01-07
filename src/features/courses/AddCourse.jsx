@@ -15,7 +15,7 @@ const AddCourse = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    if (authLoading || isLoading) {
+    if (authLoading) {
         return <LoadingSpinner />;
     }
 
@@ -295,9 +295,17 @@ const AddCourse = () => {
                     <div className="mt-10 text-center">
                         <button
                             type="submit"
-                            className="btn btn-primary btn-lg w-full md:w-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
+                            className="btn btn-primary btn-lg w-full md:w-1/2 disabled:bg-gray-500 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white"
+                            disabled={isLoading}
                         >
-                            Add Course to Platform now
+                            {isLoading ? (
+                                <span className="flex items-center justify-center">
+                                    <LoadingSpinner fullScreen={false} size="sm" className="mr-2" />
+                                    Processing...
+                                </span>
+                            ) : (
+                                'Add Course to Platform now'
+                            )}
                         </button>
                     </div>
                 </form>

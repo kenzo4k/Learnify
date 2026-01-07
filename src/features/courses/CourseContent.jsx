@@ -827,7 +827,11 @@ run();`
     // }
 
     if (loading) {
-        return <LoadingSpinner />;
+        return (
+            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+                <LoadingSpinner fullScreen={false} />
+            </div>
+        );
     }
 
     if (error) {

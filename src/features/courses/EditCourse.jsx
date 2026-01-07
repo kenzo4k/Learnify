@@ -329,7 +329,14 @@ const EditCourse = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner />;
+        return (
+            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+                <div className="text-center">
+                    <LoadingSpinner fullScreen={false} />
+                    <p className="mt-4 text-gray-300">Loading course data...</p>
+                </div>
+            </div>
+        );
     }
 
     return (

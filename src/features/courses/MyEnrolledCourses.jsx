@@ -6,6 +6,19 @@ import { BookOpen, Trash2, ArrowLeft } from 'lucide-react';
 import ProgressCard from '../../components/common/ProgressCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+// --- Skeleton Loader Component 
+const CourseCardSkeleton = () => (
+    <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 p-4 animate-pulse">
+        <div className="h-48 bg-slate-700 rounded-lg mb-4"></div>
+        <div className="h-6 bg-slate-700 rounded w-3/4 mb-3"></div>
+        <div className="h-4 bg-slate-700 rounded w-1/2 mb-4"></div>
+        <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-700">
+            <div className="h-8 bg-slate-700 rounded w-1/4"></div>
+            <div className="h-10 bg-slate-700 rounded-lg w-1/3"></div>
+        </div>
+    </div>
+);
+
 // Sample enrolled courses data
 const sampleEnrolledCourses = [
     {
