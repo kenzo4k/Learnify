@@ -31,7 +31,7 @@ const recommendationService = {
       category: 'Web Development',
       level: 'Beginner',
       instructor: 'John Doe',
-      image: 'https://via.placeholder.com/400x225?text=React',
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80',
       price: 49.99,
       rating: 4.8,
       enrollmentCount: 1250
@@ -42,7 +42,7 @@ const recommendationService = {
       category: 'Web Development',
       level: 'Intermediate',
       instructor: 'Jane Smith',
-      image: 'https://via.placeholder.com/400x225?text=NodeJS',
+      image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=600&q=80',
       price: 59.99,
       rating: 4.7,
       enrollmentCount: 980
@@ -53,7 +53,7 @@ const recommendationService = {
       category: 'Web Development',
       level: 'Intermediate',
       instructor: 'Mike Johnson',
-      image: 'https://via.placeholder.com/400x225?text=Database',
+      image: 'https://images.unsplash.com/photo-1544383023-53fafa435504?auto=format&fit=crop&w=600&q=80',
       price: 44.99,
       rating: 4.6,
       enrollmentCount: 850
@@ -64,7 +64,7 @@ const recommendationService = {
       category: 'Data Science',
       level: 'Intermediate',
       instructor: 'Sarah Wilson',
-      image: 'https://via.placeholder.com/400x225?text=Data+Science',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
       price: 69.99,
       rating: 4.9,
       enrollmentCount: 2100
@@ -75,7 +75,7 @@ const recommendationService = {
       category: 'Programming',
       level: 'Intermediate',
       instructor: 'Tom Brown',
-      image: 'https://via.placeholder.com/400x225?text=Python+Automation',
+      image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
       price: 39.99,
       rating: 4.5,
       enrollmentCount: 750
@@ -86,7 +86,7 @@ const recommendationService = {
       category: 'Web Development',
       level: 'Advanced',
       instructor: 'Emily Davis',
-      image: 'https://via.placeholder.com/400x225?text=Django',
+      image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=600&q=80',
       price: 79.99,
       rating: 4.8,
       enrollmentCount: 620
@@ -97,7 +97,7 @@ const recommendationService = {
       category: 'Web Development',
       level: 'Advanced',
       instructor: 'Chris Lee',
-      image: 'https://via.placeholder.com/400x225?text=Advanced+React',
+      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
       price: 89.99,
       rating: 4.9,
       enrollmentCount: 480
@@ -108,7 +108,7 @@ const recommendationService = {
       category: 'Data Science',
       level: 'Advanced',
       instructor: 'David Chen',
-      image: 'https://via.placeholder.com/400x225?text=ML',
+      image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80',
       price: 99.99,
       rating: 4.7,
       enrollmentCount: 920

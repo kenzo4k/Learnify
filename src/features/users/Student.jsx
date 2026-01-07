@@ -35,7 +35,7 @@ const sampleDashboard = {
       title: "Web Development Fundamentals",
       progress: 42,
       lessons: "5/12 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=Web+Dev",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "Today",
       category: "Web Development"
     },
@@ -44,7 +44,7 @@ const sampleDashboard = {
       title: "Python Basics",
       progress: 60,
       lessons: "9/15 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=Python",
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "2 days ago",
       category: "Python"
     },
@@ -53,7 +53,7 @@ const sampleDashboard = {
       title: "React Advanced",
       progress: 30,
       lessons: "6/20 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=React",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "3 days ago",
       category: "React"
     },
