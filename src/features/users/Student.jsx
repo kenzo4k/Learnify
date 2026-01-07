@@ -35,7 +35,7 @@ const sampleDashboard = {
       title: "Web Development Fundamentals",
       progress: 42,
       lessons: "5/12 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=Web+Dev",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "Today",
       category: "Web Development"
     },
@@ -44,7 +44,7 @@ const sampleDashboard = {
       title: "Python Basics",
       progress: 60,
       lessons: "9/15 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=Python",
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "2 days ago",
       category: "Python"
     },
@@ -53,7 +53,7 @@ const sampleDashboard = {
       title: "React Advanced",
       progress: 30,
       lessons: "6/20 lessons completed",
-      image: "https://via.placeholder.com/300x200?text=React",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80",
       lastAccessed: "3 days ago",
       category: "React"
     },
@@ -162,9 +162,18 @@ const Student = () => {
               </h1>
               <p className="text-gray-400">Track your learning progress and achievements</p>
             </div>
-            <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-full">
-              <Flame className="w-5 h-5" />
-              <span className="font-semibold">{stats.currentLevel} Day Streak!</span>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-full shadow-lg">
+                <Flame className="w-5 h-5" />
+                <span className="font-semibold">{stats.currentLevel} Day Streak!</span>
+              </div>
+              <button 
+                onClick={() => navigate('/achievements')}
+                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none shadow-lg"
+              >
+                <Award className="w-4 h-4 mr-2" />
+                View Achievements
+              </button>
             </div>
           </div>
 
@@ -287,7 +296,16 @@ const Student = () => {
                             height="h-2"
                           />
                         </div>
-                        <button className="px-4 py-2 bg-cyan-600 text-white text-sm rounded-lg hover:bg-cyan-700 transition-colors flex items-center group-hover:translate-x-1 transition-transform">
+                        <button 
+                          onClick={() => {
+                            if (item.action === 'Take Quiz') {
+                              navigate(`/course/${item.id}/assessment`);
+                            } else {
+                              navigate(`/course/${item.id}/learn`);
+                            }
+                          }}
+                          className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-sm flex items-center group-hover:translate-x-1 transition-transform"
+                        >
                           {item.action}
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </button>
@@ -336,7 +354,7 @@ const Student = () => {
                   My Enrolled Courses
                 </h2>
                 <Link
-                  to="/my-enrolled-courses"
+                  to="/my-courses"
                   className="text-cyan-400 hover:text-cyan-300 flex items-center text-sm"
                 >
                   View All
@@ -411,7 +429,7 @@ const Student = () => {
               <h2 className="text-xl font-semibold">My Courses</h2>
             </div>
             <div className="p-6">
-              {/* عرض الدورات المسجلة للطالب */}
+              {/* Display the student's enrolled courses */}
               <MyEnrolledCourses />
             </div>
           </div>

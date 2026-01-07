@@ -82,7 +82,7 @@ const Testimonials = () => {
                     {testimonialsData.map((testimonial) => (
                         <motion.div 
                             key={testimonial.id} 
-                            className="bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg p-6 flex flex-col"
+                            className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-cyan-600 transition flex flex-col shadow-lg"
                             variants={itemVariants}
                         >
                             <div className="flex-grow">

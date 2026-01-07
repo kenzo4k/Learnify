@@ -186,13 +186,13 @@ const CourseAssessment = () => {
                         <div className="flex gap-4">
                             <button
                                 onClick={handleRestart}
-                                className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white"
+                                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                             >
                                 Restart Assessment
                             </button>
                             <button
                                 onClick={handleBackToCourse}
-                                className="btn btn-secondary"
+                                className="btn bg-gray-700 hover:bg-gray-600 text-white border-none"
                             >
                                 Back to Course
                             </button>
@@ -241,7 +241,7 @@ const CourseAssessment = () => {
 
                         <button
                             onClick={handleContinueToNextTopic}
-                            className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white w-full"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none w-full"
                         >
                             {currentTopicIndex === assessmentConfig.numberOfTopics - 1 ? 'View Results' : 'Next Topic'}
                         </button>
@@ -270,7 +270,7 @@ const CourseAssessment = () => {
                         </h1>
                         <button
                             onClick={handleBackToCourse}
-                            className="btn btn-ghost btn-sm"
+                            className="btn bg-gray-700 hover:bg-gray-600 text-white border-none btn-sm"
                         >
                             Back to Course
                         </button>
@@ -331,7 +331,7 @@ const CourseAssessment = () => {
                         <div className="space-y-4">
                             <input
                                 type="text"
-                                className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                                className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
                                 placeholder="Type your answer here..."
                                 value={selectedAnswers[currentQuestion.id] || ''}
                                 onChange={(e) => handleAnswerSelect(currentQuestion.id, e.target.value)}
@@ -344,12 +344,12 @@ const CourseAssessment = () => {
                         <div className="space-y-4">
                             {currentQuestion.pairs.map((pair, idx) => (
                                 <div key={idx} className="flex items-center gap-4">
-                                    <div className="flex-1 p-3 bg-gray-700 rounded-lg text-white font-medium">
+                                    <div className="flex-1 p-3 bg-gray-700 rounded-lg text-white font-medium border border-gray-600">
                                         {pair.left}
                                     </div>
                                     <span className="text-gray-400">→</span>
                                     <select
-                                        className="select select-bordered flex-1 bg-gray-700 text-white border-gray-600"
+                                        className="select select-bordered flex-1 bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500"
                                         value={selectedAnswers[currentQuestion.id]?.[idx] || ''}
                                         onChange={(e) => {
                                             const currentAnswers = selectedAnswers[currentQuestion.id] || {};
@@ -401,7 +401,7 @@ const CourseAssessment = () => {
                         <button
                             onClick={handleNextQuestion}
                             disabled={selectedAnswers[currentQuestion.id] === undefined || selectedAnswers[currentQuestion.id] === ''}
-                            className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {currentQuestionIndex === currentTopicQuestions.length - 1 ? 'Complete Topic' : 'Next Question'}
                         </button>

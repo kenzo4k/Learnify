@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import { FaPlay, FaCheckCircle, FaLock, FaFilePdf, FaBook } from 'react-icons/fa';
 import { BsFileText } from 'react-icons/bs';
@@ -19,6 +19,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 const CourseContent = () => {
     const { id: courseId } = useParams();
+    const navigate = useNavigate();
     // eslint-disable-next-line no-unused-vars
     const { user } = useContext(AuthContext);
 
@@ -494,7 +495,7 @@ run();`
     // Fetch course data and check enrollment status
     useEffect(() => {
         setLoading(true);
-        document.title = "تفاصيل الدورة | Learnify";
+        document.title = "Course Details | Learnify";
 
         try {
             // Use sample data for testing
@@ -507,8 +508,8 @@ run();`
             }
 
             } catch {
-            setError('حدث خطأ في تحميل محتوى الدورة');
-            toast.error('فشل تحميل محتوى الدورة');
+            setError('An error occurred while loading the course content');
+            toast.error('Failed to load course content');
             } finally {
             setLoading(false);
             }
@@ -560,7 +561,7 @@ run();`
     const renderLessonContent = () => {
         if (!activeLesson) return null;
 
-        // عرض فقط التمارين (exercises) أو المحتوى بدون أي محرر أو تشغيل كود
+        // Display only exercises or content without any editor or code execution
         switch (activeLesson.type) {
             case 'video':
                 return (
@@ -581,7 +582,7 @@ run();`
                         <div dangerouslySetInnerHTML={{ __html: activeLesson.content }} />
                         <button
                             onClick={() => markLessonComplete(activeLesson.id)}
-                            className="mt-4 btn btn-primary"
+                            className="btn bg-green-600 hover:bg-green-700 text-white border-none mt-4"
                         >
                             Mark as Complete
                         </button>
@@ -603,7 +604,7 @@ run();`
                             <button
                                 onClick={() => setPageNumber(prev => Math.max(prev - 1, 1))}
                                 disabled={pageNumber <= 1}
-                                className="btn btn-sm"
+                                className="btn bg-gray-700 hover:bg-gray-600 text-white border-none btn-sm"
                             >
                                 Previous
                             </button>
@@ -611,7 +612,7 @@ run();`
                             <button
                                 onClick={() => setPageNumber(prev => Math.min(prev + 1, numPages))}
                                 disabled={pageNumber >= (numPages || 1)}
-                                className="btn btn-sm"
+                                className="btn bg-gray-700 hover:bg-gray-600 text-white border-none btn-sm"
                             >
                                 Next
                             </button>
@@ -620,7 +621,7 @@ run();`
                             href={activeLesson.content}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-4 btn btn-outline w-full"
+                            className="btn bg-gray-700 hover:bg-gray-600 text-white border-none mt-4 w-full"
                         >
                             <FaFilePdf className="mr-2" /> Download PDF
                         </a>
@@ -751,7 +752,7 @@ run();`
                                     onClick={() => {
                                         setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1));
                                     }}
-                                    className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="btn bg-gray-700 hover:bg-gray-600 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     disabled={currentQuestionIndex === 0}
                                 >
                                     ← Previous
@@ -763,7 +764,7 @@ run();`
                                             markLessonComplete(activeLesson.id);
                                             toast.success('Quiz completed!');
                                         }}
-                                        className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded text-white font-semibold transition-colors"
+                                        className="btn bg-green-600 hover:bg-green-700 text-white border-none"
                                     >
                                         Finish Quiz
                                     </button>
@@ -772,7 +773,7 @@ run();`
                                         onClick={() => {
                                             setCurrentQuestionIndex(Math.min(activeLesson.questions.length - 1, currentQuestionIndex + 1));
                                         }}
-                                        className="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                                         disabled={currentQuestionIndex === activeLesson.questions.length - 1}
                                     >
                                         Next →
@@ -784,7 +785,7 @@ run();`
                 );
             }
             case 'coding':
-                // عرض نص التمرين فقط بدون محرر أو تشغيل كود
+                // Display exercise text only without editor or code execution
                 return (
                     <div className="py-8">
                         <h2 className="text-2xl font-bold mb-4">{activeLesson.title}</h2>
@@ -794,7 +795,7 @@ run();`
                         </div>
                         <button
                             onClick={() => markLessonComplete(activeLesson.id)}
-                            className="btn btn-success"
+                            className="btn bg-green-600 hover:bg-green-700 text-white border-none"
                         >
                             Mark Coding Exercise as Complete
                         </button>
@@ -853,7 +854,16 @@ run();`
             {/* Header */}
             <header className="bg-gray-800 border-b border-gray-700">
                 <div className="container mx-auto px-4 py-4">
-                    <h1 className="text-2xl font-bold">{course?.title || 'Course Content'}</h1>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <h1 className="text-2xl font-bold">{course?.title || 'Course Content'}</h1>
+                        <button 
+                            onClick={() => navigate(`/course/${courseId}/assessment`)}
+                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
+                        >
+                            <RiQuestionAnswerFill className="mr-2" />
+                            Take Assessment Quiz
+                        </button>
+                    </div>
                     <div className="mt-4 space-y-3">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -948,7 +958,7 @@ run();`
                             </div>
                             <div className="mt-6 flex justify-between">
                                 <button
-                                    className="btn btn-outline"
+                                    className="btn bg-gray-700 hover:bg-gray-600 text-white border-none"
                                     onClick={() => {
                                         // Find previous lesson logic would go here
                                         toast('Previous lesson');
@@ -957,13 +967,13 @@ run();`
                                     Previous Lesson
                                 </button>
                                 <button
-                                    className="btn btn-primary"
+                                    className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none"
                                     onClick={() => {
                                         // Find next lesson logic would go here
                                         toast('Next lesson');
                                     }}
                                 >
-                                    Next Lesson
+                                    Continue to Next
                                 </button>
                             </div>
                         </div>

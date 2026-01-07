@@ -1,6 +1,101 @@
-// src/features/courses/CourseContentEditor.jsx
-import React, { useState } from 'react';
-import { Plus, X, FileText, Video, FileCode, ListChecks } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Plus, X, FileText, Video, FileCode, ListChecks, Play } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+// Simple code editor supporting JavaScript and Python
+const CodeExerciseEditor = ({ content, onUpdate }) => {
+  const [output, setOutput] = useState('');
+  const [language, setLanguage] = useState(content.language || 'javascript');
+  const [code, setCode] = useState(content.starterCode || '');
+  const [pyodideReady, setPyodideReady] = useState(false);
+  const pyodideRef = useRef(null);
+
+  useEffect(() => {
+    onUpdate({ ...content, language, starterCode: code });
+  }, [language, code, content, onUpdate]);
+
+  // Load pyodide when Python is selected
+  useEffect(() => {
+    if (language === 'python' && !pyodideReady) {
+      const loadPyodide = async () => {
+        if (!window.loadPyodide) {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js';
+          script.onload = async () => {
+            const pyodide = await window.loadPyodide();
+            pyodideRef.current = pyodide;
+            setPyodideReady(true);
+          };
+          document.head.appendChild(script);
+        } else {
+          try {
+            const pyodide = await window.loadPyodide();
+            pyodideRef.current = pyodide;
+            setPyodideReady(true);
+          } catch (err) {
+            console.error("Failed to load pyodide", err);
+          }
+        }
+      };
+      loadPyodide();
+    }
+  }, [language, pyodideReady]);
+
+  const runCode = async () => {
+    setOutput('');
+    try {
+      if (language === 'javascript') {
+        // Execute code in a simple sandbox
+        // Avoid using eval directly in production
+        const result = new Function(code)();
+        setOutput(String(result));
+      } else if (language === 'python') {
+        if (!pyodideReady || !pyodideRef.current) {
+          setOutput('Loading Python interpreter...');
+          return;
+        }
+        const result = await pyodideRef.current.runPythonAsync(code);
+        setOutput(String(result));
+      }
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-center">
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+        >
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+        </select>
+        <button
+          onClick={runCode}
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:from-blue-600 hover:to-purple-700 flex items-center space-x-1"
+        >
+          <Play className="w-4 h-4" />
+          <span>Run Code</span>
+        </button>
+      </div>
+      <textarea
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        className="w-full h-40 bg-gray-900 border border-gray-600 rounded p-4 text-green-400 font-mono text-sm"
+        placeholder="Write code here..."
+      />
+      {output && (
+        <div className="bg-gray-900 border border-gray-600 rounded p-4">
+          <h4 className="text-white font-semibold mb-2">Output:</h4>
+          <pre className="text-blue-400 font-mono text-sm">{output}</pre>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ContentItem = ({ type, content, onUpdate, onRemove }) => {
   const renderContentInput = () => {
@@ -96,102 +191,7 @@ const ContentItem = ({ type, content, onUpdate, onRemove }) => {
           </div>
         );
       case 'code':
-        return (
-          <CodeExerciseEditor content={content} onUpdate={onUpdate} />
-        );
-// محرر كود بسيط يدعم JavaScript وPython
-const CodeExerciseEditor = ({ content, onUpdate }) => {
-  const [output, setOutput] = React.useState('');
-  const [language, setLanguage] = React.useState(content.language || 'javascript');
-  const [code, setCode] = React.useState(content.starterCode || '');
-  const [pyodideReady, setPyodideReady] = React.useState(false);
-  const pyodideRef = React.useRef(null);
-
-  React.useEffect(() => {
-    onUpdate({ ...content, language, starterCode: code });
-  }, [language, code]);
-
-  // تحميل pyodide عند اختيار بايثون
-  React.useEffect(() => {
-    if (language === 'python' && !pyodideReady) {
-      const loadPyodide = async () => {
-        if (!window.loadPyodide) {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js';
-          script.onload = async () => {
-            window.pyodide = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/' });
-            pyodideRef.current = window.pyodide;
-            setPyodideReady(true);
-          };
-          document.body.appendChild(script);
-        } else {
-          window.pyodide = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/' });
-          pyodideRef.current = window.pyodide;
-          setPyodideReady(true);
-        }
-      };
-      loadPyodide();
-    }
-  }, [language, pyodideReady]);
-
-  const runCode = async () => {
-    setOutput('');
-    if (language === 'javascript') {
-      try {
-        // تنفيذ الكود في sandbox بسيط
-        // لا تستخدم eval مباشرة في الإنتاج
-        // eslint-disable-next-line no-new-func
-        const result = Function(code)();
-        setOutput(String(result));
-      } catch (err) {
-        setOutput(err.message);
-      }
-    } else if (language === 'python') {
-      if (!pyodideReady || !pyodideRef.current) {
-        setOutput('جارٍ تحميل مترجم بايثون...');
-        return;
-      }
-      try {
-        const result = await pyodideRef.current.runPythonAsync(code);
-        setOutput(String(result));
-      } catch (err) {
-        setOutput(err.message);
-      }
-    }
-  };
-
-  return (
-    <div className="space-y-2">
-      <div className="flex space-x-2 mb-2">
-        <select
-          value={language}
-          onChange={e => setLanguage(e.target.value)}
-          className="p-2 rounded bg-gray-900 text-white border border-gray-700"
-        >
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-        </select>
-        <button
-          onClick={runCode}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          تشغيل
-        </button>
-      </div>
-      <textarea
-        value={code}
-        onChange={e => setCode(e.target.value)}
-        className="w-full p-2 font-mono text-sm border rounded bg-gray-900 text-white"
-        rows={8}
-        placeholder={language === 'python' ? '# اكتب كود بايثون هنا' : '// اكتب كود جافاسكريبت هنا'}
-      />
-      <div className="mt-2 p-2 bg-gray-800 rounded text-white border border-gray-700">
-        <strong>الناتج:</strong>
-        <pre className="whitespace-pre-wrap">{output}</pre>
-      </div>
-    </div>
-  );
-};
+        return <CodeExerciseEditor content={content} onUpdate={onUpdate} />;
       default:
         return null;
     }
@@ -235,7 +235,7 @@ const CodeExerciseEditor = ({ content, onUpdate }) => {
 
 const Section = ({ section, onUpdate, onRemove }) => {
   const [isAddingContent, setIsAddingContent] = useState(false);
-  const [newContentType, setNewContentType] = useState('text');
+  const [_newContentType, _setNewContentType] = useState('text');
 
   const addContent = (type) => {
     const newContent = { type, id: Date.now() };
@@ -428,7 +428,7 @@ const CourseContentEditor = ({ content = [], onChange }) => {
         <h3 className="text-lg font-medium text-gray-200">Course Content</h3>
         <button
           onClick={addSection}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center space-x-1"
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:from-blue-600 hover:to-purple-700 flex items-center space-x-1"
         >
           <Plus size={18} />
           <span>Add Section</span>

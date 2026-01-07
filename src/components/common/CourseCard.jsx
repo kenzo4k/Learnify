@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { FaUsers, FaClock, FaStar, FaLevelUpAlt } from 'react-icons/fa';
 
 const CourseCard = ({ course }) => {
+    const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80';
+
+    const handleImageError = (e) => {
+        e.target.src = FALLBACK_IMAGE;
+    };
+
     // Price rendering helper function
     const renderPrice = (price, discountPrice) => {
         if (discountPrice && discountPrice < price) {
@@ -18,13 +24,14 @@ const CourseCard = ({ course }) => {
 
     return (
         <Link to={`/course/${course._id}`} className="block group w-full">
-            <div className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden h-full flex flex-col transition-all duration-300 transform hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-lg md:hover:shadow-xl hover:shadow-purple-500/20">
+            <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden h-full flex flex-col">
 
                 {/* Image Section */}
                 <figure className="relative h-48 overflow-hidden">
                     <img
-                        src={course.image || 'https://via.placeholder.com/400x225?text=No+Image'}
+                        src={course.image || FALLBACK_IMAGE}
                         alt={course.title}
+                        onError={handleImageError}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute top-3 left-3 md:top-4 md:left-4">
@@ -81,7 +88,7 @@ const CourseCard = ({ course }) => {
                     {/* Price and Action */}
                     <div className="flex justify-between items-center mt-auto">
                         {renderPrice(course.price, course.discount_price)}
-                        <button className="btn btn-primary btn-sm">
+                        <button className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-sm">
                             See More
                         </button>
                     </div>

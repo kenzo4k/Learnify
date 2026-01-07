@@ -132,19 +132,19 @@ const AddCourse = () => {
                             {/* Course Title */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Course Title</span></label>
-                                <input type="text" placeholder="e.g., Ultimate Web Development Bootcamp" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("title", { required: "Title is required" })} />
+                                <input type="text" placeholder="e.g., Ultimate Web Development Bootcamp" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("title", { required: "Title is required" })} />
                                 {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>}
                             </div>
                             {/* Short Description */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Short Description</span></label>
-                                <textarea className="textarea textarea-bordered h-24 w-full bg-gray-700 border-gray-600" placeholder="A brief, catchy overview of the course." {...register("short_description", { required: "Short description is required" })}></textarea>
+                                <textarea className="textarea textarea-bordered h-24 w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" placeholder="A brief, catchy overview of the course." {...register("short_description", { required: "Short description is required" })}></textarea>
                                 {errors.short_description && <p className="text-red-400 text-sm mt-1">{errors.short_description.message}</p>}
                             </div>
                             {/* Detailed Description */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Detailed Description</span></label>
-                                <textarea className="textarea textarea-bordered h-32 w-full bg-gray-700 border-gray-600" placeholder="Provide a comprehensive description of the course content, goals, and target audience." {...register("detailed_description", { required: "Detailed description is required" })}></textarea>
+                                <textarea className="textarea textarea-bordered h-32 w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" placeholder="Provide a comprehensive description of the course content, goals, and target audience." {...register("detailed_description", { required: "Detailed description is required" })}></textarea>
                                 {errors.detailed_description && <p className="text-red-400 text-sm mt-1">{errors.detailed_description.message}</p>}
                             </div>
                         </div>
@@ -157,13 +157,13 @@ const AddCourse = () => {
                             {/* Category */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Category</span></label>
-                                <input type="text" placeholder="e.g., Development, Design" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("category", { required: "Category is required" })} />
+                                <input type="text" placeholder="e.g., Development, Design" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("category", { required: "Category is required" })} />
                                 {errors.category && <p className="text-red-400 text-sm mt-1">{errors.category.message}</p>}
                             </div>
                             {/* Level */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Level</span></label>
-                                <select className="select select-bordered w-full bg-gray-700 border-gray-600" defaultValue="" {...register("level", { required: "Level is required" })}>
+                                <select className="select select-bordered w-full bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500" defaultValue="" {...register("level", { required: "Level is required" })}>
                                     <option disabled value="">Select Level</option>
                                     <option>Beginner</option>
                                     <option>Intermediate</option>
@@ -175,31 +175,31 @@ const AddCourse = () => {
                             {/* Language */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Language</span></label>
-                                <input type="text" placeholder="e.g., English" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("language", { required: "Language is required" })} />
+                                <input type="text" placeholder="e.g., English" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("language", { required: "Language is required" })} />
                                 {errors.language && <p className="text-red-400 text-sm mt-1">{errors.language.message}</p>}
                             </div>
                             {/* Duration */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Duration</span></label>
-                                <input type="text" placeholder="e.g., 12 Weeks" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("duration", { required: "Duration is required" })} />
+                                <input type="text" placeholder="e.g., 12 Weeks" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("duration", { required: "Duration is required" })} />
                                 {errors.duration && <p className="text-red-400 text-sm mt-1">{errors.duration.message}</p>}
                             </div>
                             {/* Price */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Price ($)</span></label>
-                                <input type="number" step="0.01" placeholder="e.g., 99.99" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("price", { required: "Price is required", valueAsNumber: true, min: { value: 0, message: "Price cannot be negative" } })} />
+                                <input type="number" step="0.01" placeholder="e.g., 99.99" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("price", { required: "Price is required", valueAsNumber: true, min: { value: 0, message: "Price cannot be negative" } })} />
                                 {errors.price && <p className="text-red-400 text-sm mt-1">{errors.price.message}</p>}
                             </div>
                             {/* Discount Price */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Discount Price ($) (Optional)</span></label>
-                                <input type="number" step="0.01" placeholder="e.g., 49.99" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("discount_price", { valueAsNumber: true, min: { value: 0, message: "Price cannot be negative" } })} />
+                                <input type="number" step="0.01" placeholder="e.g., 49.99" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("discount_price", { valueAsNumber: true, min: { value: 0, message: "Price cannot be negative" } })} />
                                 {errors.discount_price && <p className="text-red-400 text-sm mt-1">{errors.discount_price.message}</p>}
                             </div>
                             {/* Total Seats */}
                             <div>
                                 <label className="label"><span className="label-text font-semibold text-gray-300">Total Seats</span></label>
-                                <input type="number" placeholder="e.g., 50" className="input input-bordered w-full bg-gray-700 border-gray-600" {...register("seats", { required: "Total seats are required", valueAsNumber: true, min: { value: 1, message: "Seats must be at least 1" } })} />
+                                <input type="number" placeholder="e.g., 50" className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500" {...register("seats", { required: "Total seats are required", valueAsNumber: true, min: { value: 1, message: "Seats must be at least 1" } })} />
                                 {errors.seats && <p className="text-red-400 text-sm mt-1">{errors.seats.message}</p>}
                             </div>
                         </div>

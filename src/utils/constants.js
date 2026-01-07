@@ -27,7 +27,7 @@ export const ROUTES = {
   ADD_COURSE: '/add-course',
   EDIT_COURSE: '/edit-course/:id',
   COURSE_DETAILS: '/course/:id',
-  MY_ENROLLED_COURSES: '/my-enrolled-courses',
+  MY_COURSES: '/my-courses',
   MANAGE_COURSES: '/manage-courses',
   ADMIN: '/admin',
   INSTRUCTOR: '/instructor',

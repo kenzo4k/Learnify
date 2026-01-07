@@ -17,10 +17,10 @@ const AchievementsPage = () => {
           <div className="lg:col-span-1">
             <XPCounter xp={xp} />
           </div>
-          <div className="lg:col-span-2 bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
+          <div className="lg:col-span-2 bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-cyan-600 transition">
             <h2 className="text-2xl font-bold text-white mb-4">Recent Activity</h2>
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">📚</span>
                   <div>

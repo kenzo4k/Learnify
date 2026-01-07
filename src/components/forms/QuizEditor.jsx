@@ -99,11 +99,11 @@ const QuizEditor = ({ quiz, onChange }) => {
   return (
     <div className="space-y-8">
       {questions.map((q, idx) => (
-        <div key={idx} className="bg-gray-800 p-6 rounded-lg shadow border border-gray-700">
+        <div key={idx} className="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-cyan-600 transition">
           <div className="flex justify-between items-center mb-4">
             <div className="font-bold text-white text-lg">Question {idx + 1}</div>
             <button
-              className="btn btn-error btn-sm"
+              className="btn bg-red-600 hover:bg-red-700 text-white border-none btn-sm"
               onClick={() => removeQuestion(idx)}
             >
               Remove Question
@@ -114,7 +114,7 @@ const QuizEditor = ({ quiz, onChange }) => {
           <div className="mb-4">
             <label className="block text-gray-300 mb-2">Question Type:</label>
             <select
-              className="select select-bordered w-full bg-gray-700 text-white border-gray-600"
+              className="select select-bordered w-full bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500"
               value={q.type || "mcq"}
               onChange={(e) => changeQuestionType(idx, e.target.value)}
             >
@@ -129,7 +129,7 @@ const QuizEditor = ({ quiz, onChange }) => {
           <div className="mb-4">
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+              className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
               placeholder="Question text"
               value={q.question}
               onChange={(e) => handleQuestionChange(idx, "question", e.target.value)}
@@ -145,7 +145,7 @@ const QuizEditor = ({ quiz, onChange }) => {
                   <input
                     key={oidx}
                     type="text"
-                    className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                    className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
                     placeholder={`Option ${oidx + 1}`}
                     value={opt}
                     onChange={(e) => handleOptionChange(idx, oidx, e.target.value)}
@@ -155,7 +155,7 @@ const QuizEditor = ({ quiz, onChange }) => {
               <div className="flex items-center gap-4 mt-4">
                 <label className="text-gray-300">Correct Answer:</label>
                 <select
-                  className="select select-bordered bg-gray-700 text-white border-gray-600"
+                  className="select select-bordered bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500"
                   value={q.answer}
                   onChange={(e) => handleQuestionChange(idx, "answer", Number(e.target.value))}
                 >
@@ -173,7 +173,7 @@ const QuizEditor = ({ quiz, onChange }) => {
               <label className="block text-gray-300 mb-2">Correct Answer:</label>
               <input
                 type="text"
-                className="input input-bordered w-full bg-gray-700 text-white border-gray-600"
+                className="input input-bordered w-full bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
                 placeholder="Enter the correct answer"
                 value={q.answer || ""}
                 onChange={(e) => handleQuestionChange(idx, "answer", e.target.value)}
@@ -190,7 +190,7 @@ const QuizEditor = ({ quiz, onChange }) => {
                   <div key={pairIdx} className="flex gap-2 items-center">
                     <input
                       type="text"
-                      className="input input-bordered flex-1 bg-gray-700 text-white border-gray-600"
+                      className="input input-bordered flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
                       placeholder="Left item"
                       value={pair.left}
                       onChange={(e) => handleMatchingPairChange(idx, pairIdx, "left", e.target.value)}
@@ -198,13 +198,13 @@ const QuizEditor = ({ quiz, onChange }) => {
                     <span className="text-gray-400">↔</span>
                     <input
                       type="text"
-                      className="input input-bordered flex-1 bg-gray-700 text-white border-gray-600"
+                      className="input input-bordered flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500"
                       placeholder="Right item"
                       value={pair.right}
                       onChange={(e) => handleMatchingPairChange(idx, pairIdx, "right", e.target.value)}
                     />
                     <button
-                      className="btn btn-error btn-sm"
+                      className="btn bg-red-600 hover:bg-red-700 text-white border-none btn-sm"
                       onClick={() => removeMatchingPair(idx, pairIdx)}
                     >
                       ×
@@ -213,7 +213,7 @@ const QuizEditor = ({ quiz, onChange }) => {
                 ))}
               </div>
               <button
-                className="btn btn-secondary btn-sm mt-3"
+                className="btn bg-gray-700 hover:bg-gray-600 text-white border-none btn-sm mt-3"
                 onClick={() => addMatchingPair(idx)}
               >
                 + Add Pair
@@ -256,14 +256,17 @@ const QuizEditor = ({ quiz, onChange }) => {
             <input
               type="number"
               min={1}
-              className="input input-bordered w-24 bg-gray-700 text-white border-gray-600"
+              className="input input-bordered w-24 bg-gray-700 border-gray-600 text-white focus:outline-none focus:border-cyan-500"
               value={q.score}
               onChange={(e) => handleQuestionChange(idx, "score", Number(e.target.value))}
             />
           </div>
         </div>
       ))}
-      <button className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white" onClick={addQuestion}>
+      <button 
+        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none" 
+        onClick={addQuestion}
+      >
         Add Question
       </button>
     </div>

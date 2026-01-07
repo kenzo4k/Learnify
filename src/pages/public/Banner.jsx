@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 // react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -72,7 +72,7 @@ const Banner = () => {
                         transform: scale(1.2);
                     }
                     
-                    /* স্লাইডার এরো স্টাইলিং */
+                    /* Slider Arrow Styling */
                     .slick-prev, .slick-next {
                         z-index: 10;
                         width: 50px;
@@ -107,8 +107,8 @@ const Banner = () => {
                             right: 10px;
                         }
                     }
-
-                    /* স্মুথ ট্রানজিশন */
+                    
+                    /* Smooth Transition */
                     .slick-slide {
                         transition: all 0.5s ease;
                     }
@@ -135,7 +135,7 @@ const Banner = () => {
                             { }
                             <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 py-6">
                                 { }
-                                <motion.div
+                                <Motion.div
                                     key={index}
                                     className="max-w-4xl w-full"
                                     initial="hidden"
@@ -144,28 +144,28 @@ const Banner = () => {
                                         visible: { transition: { staggerChildren: 0.15 } }
                                     }}
                                 >
-                                    <motion.h1
+                                    <Motion.h1
                                         className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 md:mb-4 leading-tight"
                                         variants={textVariants}
                                     >
                                         {slide.title}
-                                    </motion.h1>
-                                    <motion.p
+                                    </Motion.h1>
+                                    <Motion.p
                                         className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 mb-4 md:mb-6 px-2"
                                         variants={textVariants}
                                     >
                                         {slide.subtitle}
-                                    </motion.p>
+                                    </Motion.p>
 
-                                    <motion.div variants={textVariants}>
+                                    <Motion.div variants={textVariants}>
                                         <Link
                                             to="/courses"
-                                            className="btn btn-primary btn-sm md:btn-md lg:btn-lg rounded-full zpx-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105"
+                                            className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none rounded-full btn-sm md:btn-md lg:btn-lg px-4 md:px-6 lg:px-8 text-sm md:text-base transform transition-transform duration-300 hover:scale-105 shadow-lg"
                                         >
                                             Explore Courses
                                         </Link>
-                                    </motion.div>
-                                </motion.div>
+                                    </Motion.div>
+                                </Motion.div>
                             </div>
                         </div>
                     ))}

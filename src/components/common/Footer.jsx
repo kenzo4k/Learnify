@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-gray-300">
       {/* Gradient Top Border */}
-      <div className="h-1 bg-gradient-to-r from-purple-500 to-blue-600"></div>
+      <div className="h-1 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
@@ -28,11 +28,11 @@ const Footer = () => {
               type="email"
               placeholder="Your email address"
               required
-              className="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white placeholder-gray-400"
+              className="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white placeholder-gray-400"
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg font-medium text-white transition-all duration-300"
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-medium text-white transition-all duration-300"
             >
               Subscribe
             </button>
@@ -75,10 +75,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Explore</h3>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-400 hover:text-purple-400 transition-colors">Home</Link></li>
-              <li><Link to="/instructors" className="text-gray-400 hover:text-purple-400 transition-colors">Instructors</Link></li>
-              <li><Link to="/blog" className="text-gray-400 hover:text-purple-400 transition-colors">Blog</Link></li>
-              <li><Link to="/events" className="text-gray-400 hover:text-purple-400 transition-colors">Events</Link></li>
+              <li><Link to="/" className="text-gray-400 hover:text-cyan-400 transition-colors">Home</Link></li>
+              <li><Link to="/instructors" className="text-gray-400 hover:text-cyan-400 transition-colors">Instructors</Link></li>
+              <li><Link to="/blog" className="text-gray-400 hover:text-cyan-400 transition-colors">Blog</Link></li>
+              <li><Link to="/events" className="text-gray-400 hover:text-cyan-400 transition-colors">Events</Link></li>
             </ul>
           </div>
 
@@ -86,10 +86,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Courses</h3>
             <ul className="space-y-3">
-              <li><Link to="/courses" className="text-gray-400 hover:text-purple-400 transition-colors">All Courses</Link></li>
-              <li><Link to="/add-course" className="text-gray-400 hover:text-purple-400 transition-colors">Add Course</Link></li>
-              <li><Link to="/manage-courses" className="text-gray-400 hover:text-purple-400 transition-colors">Manage Courses</Link></li>
-              <li><Link to="/my-enrolled-courses" className="text-gray-400 hover:text-purple-400 transition-colors">My Enrolled Courses</Link></li>
+              <li><Link to="/courses" className="text-gray-400 hover:text-cyan-400 transition-colors">All Courses</Link></li>
+              <li><Link to="/add-course" className="text-gray-400 hover:text-cyan-400 transition-colors">Add Course</Link></li>
+              <li><Link to="/manage-courses" className="text-gray-400 hover:text-cyan-400 transition-colors">Manage Courses</Link></li>
+              <li><Link to="/my-courses" className="text-gray-400 hover:text-cyan-400 transition-colors">My Enrolled Courses</Link></li>
             </ul>
           </div>
 
@@ -98,30 +98,30 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Contact Us</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <IoLocationSharp className="text-purple-400 mt-1 mr-3 flex-shrink-0" />
+                <IoLocationSharp className="text-cyan-400 mt-1 mr-3 flex-shrink-0" />
                 <span className="text-gray-400">
                   610 cairo-street, sidi besh, alexandria
                 </span>
               </li>
               <li className="flex items-center">
-                <IoCall className="text-purple-400 mr-3" />
-                <a href="tel:+201121193709" className="text-gray-400 hover:text-purple-400 transition-colors">
+                <IoCall className="text-cyan-400 mr-3" />
+                <a href="tel:+201121193709" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   +20 1121193709
                 </a>
               </li>
               <li className="flex items-center">
-                <IoMail className="text-purple-400 mr-3" />
-                <a href="mailto:support@learnify.com" className="text-gray-400 hover:text-purple-400 transition-colors">
+                <IoMail className="text-cyan-400 mr-3" />
+                <a href="mailto:support@learnify.com" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   support@learnify.com
                 </a>
               </li>
               <li className="flex items-center">
-                <MdOutlineSupportAgent className="text-purple-400 mr-3" />
+                <MdOutlineSupportAgent className="text-cyan-400 mr-3" />
                 <span className="text-gray-400">24/7 Support Center</span>
               </li>
               <li className="flex items-center">
-                <IoLogoWhatsapp className="text-purple-400 mr-3" />
-                <a href="https://wa.me/8801234567890" className="text-gray-400 hover:text-purple-400 transition-colors">
+                <IoLogoWhatsapp className="text-cyan-400 mr-3" />
+                <a href="https://wa.me/8801234567890" className="text-gray-400 hover:text-cyan-400 transition-colors">
                   Chat on WhatsApp
                 </a>
               </li>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { FiBook, FiUser, FiTrash2, FiArrowLeft, FiClock, FiStar, FiZap } from 'react-icons/fi';
-import { motion } from 'framer-motion';
-import CourseCard from '../../components/common/CourseCard';
+import { motion as Motion } from 'framer-motion';
+import { BookOpen, Trash2, ArrowLeft } from 'lucide-react';
+import ProgressCard from '../../components/common/ProgressCard';
 
 // --- Skeleton Loader Component 
 const CourseCardSkeleton = () => (
@@ -24,7 +24,7 @@ const sampleEnrolledCourses = [
         _id: '1',
         title: 'Web Development Fundamentals',
         description: 'Learn the basics of web development with HTML, CSS, and JavaScript',
-        image: 'https://via.placeholder.com/300x200?text=Web+Dev',
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
         instructor: { name: 'John Doe', photoURL: 'https://randomuser.me/api/portraits/men/1.jpg' },
         level: 'Beginner',
         category: 'Web Development',
@@ -34,13 +34,14 @@ const sampleEnrolledCourses = [
         price: 49.99,
         discount_price: 29.99,
         progress: 42,
+        lessons: "5/12 lessons completed",
         lastAccessed: '2 hours ago'
     },
     {
         _id: '2',
         title: 'Python for Data Science',
         description: 'Master Python for data analysis and visualization',
-        image: 'https://via.placeholder.com/300x200?text=Python+Data',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
         instructor: { name: 'Jane Smith', photoURL: 'https://randomuser.me/api/portraits/women/1.jpg' },
         level: 'Intermediate',
         category: 'Data Science',
@@ -49,13 +50,14 @@ const sampleEnrolledCourses = [
         duration: '10 weeks',
         price: 59.99,
         progress: 75,
+        lessons: "12/16 lessons completed",
         lastAccessed: '1 day ago'
     },
     {
         _id: '3',
         title: 'React Native Mobile Development',
         description: 'Build cross-platform mobile apps with React Native',
-        image: 'https://via.placeholder.com/300x200?text=React+Native',
+        image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=600&q=80',
         instructor: { name: 'Mike Johnson', photoURL: 'https://randomuser.me/api/portraits/men/2.jpg' },
         level: 'Advanced',
         category: 'Mobile Development',
@@ -64,6 +66,7 @@ const sampleEnrolledCourses = [
         duration: '12 weeks',
         price: 69.99,
         progress: 15,
+        lessons: "3/20 lessons completed",
         lastAccessed: '3 days ago'
     }
 ];
@@ -71,7 +74,7 @@ const sampleEnrolledCourses = [
 const MyEnrolledCourses = () => {
     const navigate = useNavigate();
     const [enrolledCourses, setEnrolledCourses] = useState(sampleEnrolledCourses);
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
 
     const handleRemoveEnrollment = (courseId, courseTitle) => {
         Swal.fire({
@@ -98,6 +101,10 @@ const MyEnrolledCourses = () => {
                 setEnrolledCourses(prev => prev.filter(course => course._id !== courseId));
             }
         });
+    };
+
+    const handleContinueCourse = (courseId) => {
+        navigate(`/course/${courseId}/learn`);
     };
 
     if (loading) {
@@ -134,7 +141,7 @@ const MyEnrolledCourses = () => {
 
     return (
         <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8">
-            <motion.div
+            <Motion.div
                 className="max-w-7xl mx-auto"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -142,17 +149,20 @@ const MyEnrolledCourses = () => {
             >
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-indigo-400 hover:text-indigo-300 mb-8 transition-colors text-sm font-medium"
+                    className="flex items-center text-cyan-400 hover:text-cyan-300 mb-8 transition-colors text-sm font-medium"
                 >
-                    <FiArrowLeft className="mr-2" /> Back to Dashboard
+                    <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
                 </button>
 
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                        My Learning Path
-                    </h1>
+                    <div className="flex items-center space-x-3">
+                        <BookOpen className="w-8 h-8 text-cyan-400" />
+                        <h1 className="text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                            My Learning Path
+                        </h1>
+                    </div>
                     <div className="bg-slate-800 border border-slate-700 rounded-full px-4 py-2 flex items-center space-x-2 text-sm font-semibold">
-                        <FiBook className="text-indigo-400" />
+                        <span className="text-indigo-400">●</span>
                         <span>
                             {enrolledCourses.length} Enrolled
                         </span>
@@ -160,55 +170,60 @@ const MyEnrolledCourses = () => {
                 </div>
 
                 {enrolledCourses.length > 0 ? (
-                    <motion.div
+                    <Motion.div
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
                     >
                         {enrolledCourses.map((course) => (
-                            <motion.div
+                            <Motion.div
                                 key={course._id}
                                 variants={itemVariants}
-                                className="relative group bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:-translate-y-1"
+                                className="relative group"
                             >
-                                <CourseCard course={course} />
-                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="flex space-x-4">
-                                        <button
-                                            onClick={(e) => { e.preventDefault(); handleRemoveEnrollment(course._id, course.title); }}
-                                            className="btn btn-error btn-circle text-white hover:bg-red-700 tooltip" data-tip="Remove Enrollment"
-                                        >
-                                            <FiTrash2 size={24} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
+                                <ProgressCard
+                                    {...course}
+                                    actionText="Continue Learning"
+                                    onAction={() => handleContinueCourse(course._id)}
+                                />
+                                <button
+                                    onClick={(e) => { 
+                                        e.preventDefault(); 
+                                        e.stopPropagation();
+                                        handleRemoveEnrollment(course._id, course.title); 
+                                    }}
+                                    className="absolute top-2 right-2 p-2 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 z-10"
+                                    title="Remove Enrollment"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            </Motion.div>
                         ))}
-                    </motion.div>
+                    </Motion.div>
                 ) : (
-                    <motion.div
+                    <Motion.div
                         className="bg-slate-800 rounded-lg p-8 text-center border-2 border-dashed border-slate-700 mt-10"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
                     >
                         <div className="max-w-md mx-auto">
-                            <FiBook className="text-7xl text-slate-600 mx-auto mb-4" />
+                            <BookOpen className="w-16 h-16 text-slate-600 mx-auto mb-4" />
                             <h3 className="text-2xl font-bold text-white mb-2">Your Learning Journey is Empty</h3>
                             <p className="text-slate-400 mb-6">
                                 The best time to start was yesterday. The second best time is now. Enroll in a course!
                             </p>
                             <button
                                 onClick={() => navigate('/courses')}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105"
+                                className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-lg px-8"
                             >
                                 Explore All Courses
                             </button>
                         </div>
-                    </motion.div>
+                    </Motion.div>
                 )}
-            </motion.div>
+            </Motion.div>
         </div>
     );
 };

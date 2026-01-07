@@ -15,7 +15,6 @@ const CourseDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEnrolled, setIsEnrolled] = useState(false);
-    const [enrollmentId, setEnrollmentId] = useState(null);
     const [enrollLoading, setEnrollLoading] = useState(false);
     const [userEnrollmentCount, setUserEnrollmentCount] = useState(0);
 
@@ -41,7 +40,6 @@ const CourseDetails = () => {
                     if (statusResponse.ok) {
                         const statusData = await statusResponse.json();
                         setIsEnrolled(statusData.enrolled);
-                        setEnrollmentId(statusData.enrollmentId);
                     }
 
                     const countResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/my-enrollment-count`, {
@@ -97,7 +95,6 @@ const CourseDetails = () => {
             } else {
                 toast.success("Successfully un-enrolled!");
                 setIsEnrolled(false);
-                setEnrollmentId(null);
                 setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount - 1 }));
             }
 
@@ -337,24 +334,24 @@ const CourseDetails = () => {
                             {/* Enrollment Button */}
                             <div className="space-y-3">
                                 {seatsLeft <= 0 ? (
-                                    <button className="btn btn-error btn-wide w-full" disabled>
+                                    <button className="btn btn-error btn-wide w-full border-none" disabled>
                                         No Seats Left
                                     </button>
                                 ) : user?.email === course?.author?.email ? (
-                                    <button className="btn btn-info btn-wide w-full" disabled>
+                                    <button className="btn btn-info btn-wide w-full border-none" disabled>
                                         This is Your Course
                                     </button>
                                 ) : !user ? (
                                     <button
                                         onClick={() => navigate('/login', { state: { from: location }, replace: true })}
-                                        className="btn btn-primary btn-wide w-full bg-indigo-600 hover:bg-indigo-700"
+                                        className="btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-none btn-wide w-full"
                                     >
                                         Login to Enroll
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleEnrollmentToggle}
-                                        className={`btn btn-wide w-full ${isEnrolled ? 'btn-warning' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-indigo-600 hover:bg-indigo-700 text-white')}`}
+                                        className={`btn btn-wide w-full border-none ${isEnrolled ? 'bg-orange-600 hover:bg-orange-700 text-white' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white')}`}
                                         disabled={enrollLoading || isEnrollmentLimitReached}
                                     >
                                         {enrollLoading ? (
@@ -374,7 +371,7 @@ const CourseDetails = () => {
                             <div className="mt-4">
                                 <button
                                     onClick={() => navigate(`/course/${id}/assessment`)}
-                                    className="btn btn-success btn-wide w-full bg-green-600 hover:bg-green-700 text-white"
+                                    className="btn bg-green-600 hover:bg-green-700 text-white border-none btn-wide w-full"
                                 >
                                     Take Assessment
                                 </button>
