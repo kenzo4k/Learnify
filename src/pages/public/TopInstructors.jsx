@@ -1,7 +1,7 @@
 // src/pages/Home/TopInstructors.jsx
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Linkedin, Twitter, Github } from 'lucide-react';
 
 // Updated data structure for better management and more details
@@ -90,17 +90,17 @@ const TopInstructors = () => {
                 >
                     {instructors.map((instructor) => (
                         <motion.div
-                            key={instructor.id}
-                            className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden text-center group transition-all duration-300 transform hover:scale-105 hover:border-cyan-600 shadow-lg"
-                            variants={itemVariants}
-                        >
+                                key={instructor.id}
+                                className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden text-center group transition-all duration-300 transform hover:scale-105 hover:border-purple-600 shadow-lg"
+                                variants={itemVariants}
+                            >
                             <div className="relative">
                                 <img src={instructor.image} alt={instructor.name} className="w-full h-64 object-cover" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             </div>
                             <div className="p-6 -mt-16 relative z-10">
                                 <h3 className="text-xl font-bold text-white">{instructor.name}</h3>
-                                <p className="text-sm text-indigo-400 font-semibold mt-1">{instructor.expertise}</p>
+                                <p className="text-sm text-purple-400 font-semibold mt-1">{instructor.expertise}</p>
                                 <div className="mt-4 flex justify-center space-x-4">
                                     {instructor.socials.map((social, index) => (
                                         <span key={index} className="text-gray-400">

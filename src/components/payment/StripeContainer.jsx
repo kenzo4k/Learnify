@@ -34,7 +34,7 @@ export default function StripeContainer({ amount, courseId }) {
     }
   }, [amount, courseId]);
 
-  // Dark mode UI configuration to match Learnify homepage
+  // Dark mode UI configuration to match Stride homepage
   const appearance = {
     theme: "night",
     variables: {

@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthProvider';
+// import { AuthContext } from '../context/AuthProvider';
 
 const AdminRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
 
   // Check if user is admin - temporarily disabled for testing
-  // const isAdmin = user?.email === 'admin@learnify.com' || user?.email === 'emad@gmail.com';
+  // const isAdmin = user?.email === 'admin@stride.com' || user?.email === 'emad@gmail.com';
   const isAdmin = true; // Temporary bypass
 
   if (!isAdmin) {

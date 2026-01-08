@@ -7,11 +7,12 @@ const StudentRoute = ({ children }) => {
   // Temporary bypass for testing - remove this in production
   return children;
 
+  // eslint-disable-next-line no-unreachable
   const { user } = useContext(AuthContext);
 
   // Check if user is logged in and is a student (not admin or instructor)
   const isStudent = user &&
-    user.email !== 'admin@learnify.com' &&
+    user.email !== 'admin@stride.com' &&
     user.email !== 'emad@gmail.com' &&
     user.role !== 'admin' &&
     user.role !== 'instructor';
