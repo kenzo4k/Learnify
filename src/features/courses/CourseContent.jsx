@@ -534,7 +534,7 @@ run();`
     // Fetch course data and check enrollment status
     useEffect(() => {
         setLoading(true);
-        document.title = "Course Details | Learnify";
+        document.title = "Course Details | Stride";
 
         try {
             // Use sample data for testing

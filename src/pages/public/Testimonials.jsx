@@ -1,7 +1,7 @@
 // src/pages/Home/Testimonials.jsx
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Quote } from 'lucide-react';
 
 // Data is now separated from the component for easier management
@@ -65,7 +65,7 @@ const Testimonials = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                        What Our <span className="text-indigo-400">Students</span> Say
+                        What Our <span className="text-purple-400">Students</span> Say
                     </h2>
                     <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
                         Real stories from learners who have transformed their skills and careers with us.
@@ -80,24 +80,24 @@ const Testimonials = () => {
                     viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% of the section is in view
                 >
                     {testimonialsData.map((testimonial) => (
-                        <motion.div 
-                            key={testimonial.id} 
-                            className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-cyan-600 transition flex flex-col shadow-lg"
-                            variants={itemVariants}
+                        <motion.div
+                        key={testimonial.id}
+                        className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-purple-600 transition flex flex-col shadow-lg"
+                        variants={itemVariants}
                         >
                             <div className="flex-grow">
-                                <Quote className="w-10 h-10 text-indigo-500 mb-4" />
+                                <Quote className="w-10 h-10 text-purple-500 mb-4" />
                                 <p className="text-gray-300 italic">"{testimonial.quote}"</p>
                             </div>
                             <div className="mt-6 flex items-center">
                                 <img 
                                     src={testimonial.image} 
                                     alt={testimonial.name} 
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500"
+                                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-500"
                                 />
                                 <div className="ml-4">
                                     <div className="font-bold text-lg text-white">{testimonial.name}</div>
-                                    <div className="text-sm text-indigo-400">{testimonial.role}</div>
+                                    <div className="text-sm text-purple-400">{testimonial.role}</div>
                                 </div>
                             </div>
                         </motion.div>

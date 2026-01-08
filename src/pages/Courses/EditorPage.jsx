@@ -47,8 +47,8 @@ const EditorPage = () => {
     <div className="pt-24 min-h-screen bg-[#0d1117] text-white p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold italic text-blue-400">
-            Learnify IDE
+          <h1 className="text-3xl font-bold italic text-purple-400">
+            Stride IDE
           </h1>
           <p className="text-gray-400">Powered by Piston Engine</p>
         </div>
