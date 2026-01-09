@@ -43,9 +43,9 @@ const Footer = () => {
           {/* Column 1: Brand Info */}
           <div className="space-y-6">
             <div className="flex items-center">
-              <img src={logo} alt="Learnify Logo" className="w-12 h-12 mr-3" />
+              <img src={logo} alt="Stride Logo" className="w-12 h-12 mr-3" />
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
-                Learnify
+                Stride
               </span>
             </div>
             <p className="text-gray-400">
@@ -111,8 +111,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <IoMail className="text-cyan-400 mr-3" />
-                <a href="mailto:support@learnify.com" className="text-gray-400 hover:text-cyan-400 transition-colors">
-                  support@learnify.com
+                <a href="mailto:support@stride.com" className="text-gray-400 hover:text-cyan-400 transition-colors">
+                  support@stride.com
                 </a>
               </li>
               <li className="flex items-center">
@@ -133,7 +133,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Learnify. All rights reserved.
+              &copy; {new Date().getFullYear()} Stride. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link to="/privacy-policy" className="text-gray-500 hover:text-purple-400 text-sm transition-colors">Privacy Policy</Link>
