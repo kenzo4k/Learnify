@@ -37,17 +37,17 @@ const Navbar = () => {
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200">
                 <img
                   src="/src/assets/logo/Course_logo.png"
-                  alt="Learnify"
+                  alt="Stride"
                   className="w-6 h-6 object-contain"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<span class="text-white font-bold text-lg">L</span>';
+                    e.target.parentElement.innerHTML = '<span class="text-white font-bold text-lg">S</span>';
                   }}
                 />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Learnify
+                  Stride
                 </h1>
                 <p className="text-xs text-gray-400 -mt-1">Course Management</p>
               </div>

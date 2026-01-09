@@ -177,7 +177,7 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 border-r border-gray-700 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-700">
-          <h1 className="text-xl font-bold text-cyan-400">Learnify Admin</h1>
+          <h1 className="text-xl font-bold text-cyan-400">Stride Admin</h1>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-400 hover:text-white"

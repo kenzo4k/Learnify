@@ -12,10 +12,7 @@ import Newsletter from './Newsletter';
 
 const Home = () => {
   useEffect(() => {
-    document.title = "Home | Learnify";
-  }, []);
-  useEffect(() => {
-    document.title = 'Learnify | Home';
+    document.title = 'Stride | Home';
   }, []);
 
   return (
@@ -24,19 +21,30 @@ const Home = () => {
       {/* 1. Banner Section */}
       <Banner />
 
-      {/* 2. Latest Courses Section */}
+      {/* 2. Motto Section */}
+      <div className="bg-gray-900 py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto">
+            <p className="text-2xl md:text-3xl lg:text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600 leading-relaxed">
+              "the journey of a thousand miles begins with a single, personalized Stride."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Latest Courses Section */}
       <LatestCourses />
 
-      {/* 3. Popular Courses Section */}
+      {/* 4. Popular Courses Section */}
       <PopularCourses />
 
-      {/* 4. Categories Section */}
+      {/* 5. Categories Section */}
       <Categories />
 
-      {/* 5. Extra Section 1: Top Instructors */}
+      {/* 6. Extra Section 1: Top Instructors */}
       <TopInstructors />
 
-      {/* 6. Extra Section 2: Testimonials */}
+      {/* 7. Extra Section 2: Testimonials */}
       <Testimonials />
 
     </div>
