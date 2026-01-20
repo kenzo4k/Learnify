@@ -1,49 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Editor from "@monaco-editor/react";
-import axios from "axios";
+import { Play, RotateCcw, ChevronLeft } from "lucide-react";
 
-// Piston requires specific runtime versions
-const LANGUAGE_CONFIG = {
-  javascript: { version: "18.15.0", label: "JavaScript", monaco: "javascript" },
-  python: { version: "3.10.0", label: "Python 3", monaco: "python" },
-  cpp: { version: "10.2.0", label: "C++ (GCC)", monaco: "cpp" },
-  java: { version: "15.0.2", label: "Java", monaco: "java" },
-};
-
-const EditorPage = () => {
-  const [code, setCode] = useState("// Write your solution here...");
-  const [language, setLanguage] = useState("javascript");
+const CodingWorkspace = () => {
+  const { courseId, exerciseId } = useParams();
+  const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const runCode = async () => {
-    setIsLoading(true);
-    setOutput("Executing...");
+  // Mock fetching data based on the route params
+  useEffect(() => {
+    // In a real app, fetch from Firebase using courseId/exerciseId
+    const starterCode = "console.log('Hello, Student!');";
+    setCode(starterCode);
+  }, [exerciseId]);
 
+  const executeCode = async () => {
+    setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/execute", {
-        code,
-        language: language,
-        version: LANGUAGE_CONFIG[language].version,
+      const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+        method: "POST",
+        body: JSON.stringify({
+          language: "javascript",
+          version: "18.15.0",
+          files: [{ content: code }],
+        }),
       });
-
-      // Piston returns { stdout, stderr, output, code, signal } in response.data
-      const { stdout, stderr } = response.data;
-
-      if (stderr) {
-        setOutput(stderr); // Show errors in red or terminal
-      } else {
-        setOutput(stdout || "Code executed successfully (no output).");
-      }
+      const data = await response.json();
+      setOutput(data.run.output || data.run.stderr);
     } catch (err) {
-      console.error(err);
-      setOutput("Error: Unable to reach the execution server.");
+      setOutput("Error executing code.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
+<<<<<<< HEAD
     <div className="pt-24 min-h-screen bg-[#0d1117] text-white p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -73,37 +67,52 @@ const EditorPage = () => {
           </button>
         </div>
       </div>
+=======
+    <div className="h-screen bg-[#1e1e1e] flex flex-col text-white">
+      {/* Top Navigation */}
+      <header className="h-14 border-b border-gray-700 flex items-center px-4 justify-between bg-gray-800">
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center text-gray-400 hover:text-white"
+        >
+          <ChevronLeft className="w-5 h-5" /> Back to Course
+        </button>
+        <button
+          onClick={executeCode}
+          disabled={loading}
+          className="bg-green-600 hover:bg-green-500 px-6 py-1.5 rounded flex items-center gap-2 font-bold"
+        >
+          {loading ? (
+            "Running..."
+          ) : (
+            <>
+              <Play className="w-4 h-4 fill-current" /> Run Code
+            </>
+          )}
+        </button>
+      </header>
+>>>>>>> e73cd45 (finally Karim's Push)
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[70vh]">
-        <div className="lg:col-span-2 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+      {/* Workspace Split */}
+      <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 border-r border-gray-700">
           <Editor
-            height="100%"
             theme="vs-dark"
-            language={LANGUAGE_CONFIG[language].monaco}
+            language="javascript"
             value={code}
-            onChange={(value) => setCode(value)}
-            options={{
-              fontSize: 16,
-              minimap: { enabled: false },
-              automaticLayout: true,
-            }}
+            onChange={(val) => setCode(val)}
+            options={{ fontSize: 16, minimap: { enabled: false } }}
           />
         </div>
-        <div className="bg-[#161b22] border border-gray-800 rounded-2xl p-6 font-mono text-sm overflow-auto shadow-2xl">
-          <h3 className="text-indigo-400 mb-4 uppercase tracking-widest font-bold border-b border-gray-700 pb-2">
-            Terminal Output
-          </h3>
-          <pre
-            className={`whitespace-pre-wrap leading-relaxed ${
-              output.includes("Error") ? "text-red-400" : "text-gray-300"
-            }`}
-          >
-            {output || "Click 'Run Code' to see results."}
-          </pre>
+        <div className="w-1/3 bg-black p-4 font-mono text-sm">
+          <h4 className="text-gray-500 mb-2 uppercase text-xs">
+            Console Output
+          </h4>
+          <pre className="text-green-400 whitespace-pre-wrap">{output}</pre>
         </div>
       </div>
     </div>
   );
 };
 
-export default EditorPage;
+export default CodingWorkspace;
