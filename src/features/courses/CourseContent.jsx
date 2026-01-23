@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import QuizEditor from '../../components/forms/QuizEditor';
+import CodingExerciseEditor from '../../components/forms/CodingExerciseEditor';
 import ProgressBar from '../../components/common/ProgressBar';
 import XPCounter from '../../components/common/XPCounter';
 
@@ -978,27 +979,13 @@ run();`
                             <p className="text-gray-300 leading-relaxed">{activeLesson.exercise?.description}</p>
                         </div>
                         
-                        <div className="bg-gray-950 rounded-2xl overflow-hidden border border-gray-800 shadow-2xl">
-                            <div className="bg-gray-900 px-4 py-2 border-b border-gray-800 flex items-center justify-between">
-                                <div className="flex items-center space-x-2">
-                                    <div className="flex space-x-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                                        <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-                                    </div>
-                                    <span className="text-xs text-gray-500 font-mono ml-4">solution.js</span>
-                                </div>
-                                <span className="text-[10px] text-gray-600 font-mono uppercase tracking-widest">Read Only</span>
-                            </div>
-                            <div className="p-6">
-                                <pre className="font-mono text-sm text-purple-300 overflow-x-auto">
-                                    <code>{activeLesson.exercise?.starterCode}</code>
-                                </pre>
-                            </div>
-                        </div>
+                        <CodingExerciseEditor
+                            exercise={activeLesson.exercise}
+                            lesson={activeLesson}
+                        />
 
                         <div className="flex flex-col items-center justify-center p-8 bg-gray-800/30 rounded-2xl border-2 border-dashed border-gray-700">
-                            <p className="text-gray-400 mb-4 text-center">In the full version, you'll be able to run your code against test cases.</p>
+                            <p className="text-gray-400 mb-4 text-center">Run your code to verify the output, then submit when you're ready.</p>
                             <button
                                 onClick={() => {
                                     markLessonComplete(activeLesson.id);
