@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, X, FileText, Video, FileCode, ListChecks, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -196,213 +197,343 @@ const ContentItem = ({ type, content, onUpdate, onRemove }) => {
         return null;
     }
   };
+=======
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider';
+import { FaPlay, FaCheckCircle, FaLock, FaFilePdf, FaBook, FaCode, FaTerminal } from 'react-icons/fa';
+import { BsFileText } from 'react-icons/bs';
+import { RiQuestionAnswerFill } from 'react-icons/ri';
+import ReactPlayer from 'react-player';
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
+import toast from 'react-hot-toast';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
-  const getIcon = () => {
-    switch (type) {
-      case 'text':
-        return <FileText size={16} className="text-blue-400" />;
-      case 'video':
-        return <Video size={16} className="text-red-400" />;
-      case 'quiz':
-        return <ListChecks size={16} className="text-yellow-400" />;
-      case 'code':
-        return <FileCode size={16} className="text-green-400" />;
-      default:
-        return null;
-    }
-  };
+// --- NEW IMPORTS ---
+import Editor from "@monaco-editor/react";
+import { VscRunAll } from "react-icons/vsc";
+// -------------------
 
-  return (
-    <div className="p-4 mb-4 border rounded-lg bg-gray-800 border-gray-700">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center space-x-2">
-          {getIcon()}
-          <span className="font-medium text-gray-200">
-            {type.charAt(0).toUpperCase() + type.slice(1)} Content
-          </span>
-        </div>
-        <button
-          onClick={onRemove}
-          className="text-gray-400 hover:text-red-400"
-        >
-          <X size={18} />
-        </button>
-      </div>
-      {renderContentInput()}
-    </div>
-  );
-};
+import QuizEditor from '../../components/forms/QuizEditor';
+import ProgressBar from '../../components/common/ProgressBar';
+import XPCounter from '../../components/common/XPCounter';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+const CourseContent = () => {
+    const { id: courseId } = useParams();
+    const { user } = useContext(AuthContext);
+
+    // State
+    const [course, setCourse] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [activeLesson, setActiveLesson] = useState(null);
+    const [completedLessons, setCompletedLessons] = useState(new Set());
+    const [, setIsEnrolled] = useState(false);
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [earnedXP, setEarnedXP] = useState(0);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState({});
+
+    // --- NEW CODING STATES ---
+    const [userCode, setUserCode] = useState("");
+    const [executionOutput, setExecutionOutput] = useState("");
+    const [isExecuting, setIsExecuting] = useState(false);
+    // -------------------------
+
+    // (Keeping your sampleCourse data exactly as provided...)
+    const sampleCourse = {
+        // ... all your existing sections and lessons ...
+        id: courseId,
+        title: "Complete Web Development Bootcamp",
+        sections: [
+            {
+                id: 1,
+                title: "Web Development Fundamentals",
+                lessons: [
+                    { id: '1-1', title: "Introduction to HTML", type: "article", content: "<h2>HTML...</h2>", xp: 10 },
+                    { id: '1-2', title: "CSS Styling Basics", type: "video", content: "https://www.youtube.com/watch?v=1Rs2ND1ryYc", xp: 15 },
+                    { id: '1-3', title: "JavaScript Fundamentals", type: "pdf", content: "https://www.tutorialspoint.com/javascript/javascript_tutorial.pdf", xp: 20 }
+                ]
+            },
+            {
+                id: 2,
+                title: "Frontend Frameworks",
+                lessons: [
+                    { id: '2-1', title: "Introduction to React", type: "article", content: "<h2>React...</h2>", xp: 10 },
+                    { id: '2-2', title: "React Quiz", type: "quiz", questions: [{ id: 1, type: 'mcq', question: 'Test?', options: ['A','B'], correctAnswer: 0 }], xp: 25 },
+                    {
+                        id: '2-3',
+                        title: "React Coding Exercise",
+                        type: "coding",
+                        exercise: {
+                            description: "Create a JavaScript function that returns 'Hello World'.",
+                            starterCode: `function main() {\n  console.log("Hello World");\n}\n\nmain();`,
+                            language: "javascript" // Piston needs this
+                        },
+                        xp: 30
+                    }
+                ]
+            }
+        ]
+    };
+
+    useEffect(() => {
+        setLoading(true);
+        try {
+            setCourse(sampleCourse);
+            setIsEnrolled(true);
+            if (sampleCourse?.sections?.[0]?.lessons?.[0]) {
+                setActiveLesson(sampleCourse.sections[0].lessons[0]);
+            }
+        } catch {
+            setError('Error loading data');
+        } finally {
+            setLoading(false);
+        }
+    }, [courseId]);
+
+    // Update editor content when lesson changes
+    useEffect(() => {
+        if (activeLesson?.type === 'coding') {
+            setUserCode(activeLesson.exercise?.starterCode || "");
+            setExecutionOutput("");
+        }
+        setCurrentQuestionIndex(0);
+        setAnswers({});
+    }, [activeLesson?.id]);
+
+    // --- NEW PISTON API FUNCTION ---
+    const handleRunCode = async () => {
+        setIsExecuting(true);
+        setExecutionOutput("Running code...");
+        try {
+            const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    language: "javascript",
+                    version: "18.15.0",
+                    files: [{ content: userCode }],
+                }),
+            });
+            const data = await response.json();
+            if (data.run) {
+                setExecutionOutput(data.run.output || data.run.stderr || "Success (No Output)");
+            } else {
+                setExecutionOutput("Execution failed.");
+            }
+        } catch (err) {
+            setExecutionOutput("Error: Connection to Piston API failed.");
+        } finally {
+            setIsExecuting(false);
+        }
+    };
+    // -------------------------------
+>>>>>>> e73cd45 (finally Karim's Push)
+
+    const markLessonComplete = (lessonId) => {
+        setCompletedLessons(prev => {
+            const newSet = new Set(prev);
+            newSet.add(lessonId);
+            return newSet;
+        });
+        const lesson = course?.sections?.flatMap(s => s.lessons)?.find(l => l.id === lessonId);
+        if (lesson && lesson.xp) {
+            setEarnedXP(prevXP => prevXP + lesson.xp);
+            toast.success(`+${lesson.xp} XP Earned!`);
+        }
+    };
+
+    const handleAnswer = (questionId, answer) => {
+        setAnswers(prev => ({ ...prev, [questionId]: answer }));
+    };
+
+<<<<<<< HEAD
 const Section = ({ section, onUpdate, onRemove }) => {
   const [isAddingContent, setIsAddingContent] = useState(false);
   const [_newContentType, _setNewContentType] = useState('text');
+=======
+    const calculateProgress = () => {
+        if (!course || !course.sections) return 0;
+        const totalLessons = course.sections.reduce((total, section) => total + (section.lessons?.length || 0), 0);
+        if (totalLessons === 0) return 0;
+        return Math.round((completedLessons.size / totalLessons) * 100);
+    };
+>>>>>>> e73cd45 (finally Karim's Push)
 
-  const addContent = (type) => {
-    const newContent = { type, id: Date.now() };
-    if (type === 'quiz') {
-      newContent.question = '';
-      newContent.options = [''];
-      newContent.correctAnswers = [];
-    } else if (type === 'code') {
-      newContent.title = '';
-      newContent.description = '';
-      newContent.starterCode = '';
-      newContent.solutionCode = '';
-    } else if (type === 'video') {
-      newContent.title = '';
-      newContent.url = '';
-    } else {
-      newContent.content = '';
-    }
-    onUpdate({
-      ...section,
-      contents: [...(section.contents || []), newContent]
-    });
-    setIsAddingContent(false);
-  };
+    const renderLessonContent = () => {
+        if (!activeLesson) return null;
 
-  const updateContent = (contentId, updatedContent) => {
-    onUpdate({
-      ...section,
-      contents: section.contents.map(content => 
-        content.id === contentId ? { ...content, ...updatedContent } : content
-      )
-    });
-  };
+        switch (activeLesson.type) {
+            case 'video':
+                return (
+                    <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                        <ReactPlayer url={activeLesson.content} width="100%" height="100%" controls onEnded={() => markLessonComplete(activeLesson.id)} />
+                    </div>
+                );
+            case 'article':
+                return (
+                    <div className="prose prose-invert max-w-none">
+                        <div dangerouslySetInnerHTML={{ __html: activeLesson.content }} />
+                        <button onClick={() => markLessonComplete(activeLesson.id)} className="mt-4 btn btn-primary">Mark as Complete</button>
+                    </div>
+                );
+            case 'pdf':
+                return (
+                    <div className="h-[500px] flex flex-col">
+                        <div className="flex-1 bg-gray-800 rounded-lg overflow-auto">
+                            <Document file={activeLesson.content} onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
+                                <Page pageNumber={pageNumber} width={600} />
+                            </Document>
+                        </div>
+                        <div className="flex justify-between items-center mt-4">
+                            <button onClick={() => setPageNumber(prev => Math.max(prev - 1, 1))} disabled={pageNumber <= 1} className="btn btn-sm">Prev</button>
+                            <span>{pageNumber} / {numPages}</span>
+                            <button onClick={() => setPageNumber(prev => Math.min(prev + 1, numPages))} disabled={pageNumber >= numPages} className="btn btn-sm">Next</button>
+                        </div>
+                    </div>
+                );
+            case 'quiz': {
+                const currentQuestion = activeLesson.questions?.[currentQuestionIndex];
+                if (!currentQuestion) return null;
+                return (
+                    <div className="py-4">
+                        <p className="mb-4 text-lg">{currentQuestion.question}</p>
+                        {/* (Simplified for brevity, keep your original quiz UI logic here) */}
+                        <button onClick={() => markLessonComplete(activeLesson.id)} className="btn btn-primary mt-4">Submit Quiz</button>
+                    </div>
+                );
+            }
 
-  const removeContent = (contentId) => {
-    onUpdate({
-      ...section,
-      contents: section.contents.filter(content => content.id !== contentId)
-    });
-  };
+            // --- UPDATED CODING CASE ---
+            case 'coding':
+                return (
+                    <div className="flex flex-col gap-4">
+                        <div className="flex justify-between items-center bg-gray-700 p-4 rounded-t-lg">
+                            <div>
+                                <h3 className="text-xl font-bold flex items-center gap-2">
+                                    <FaCode className="text-cyan-400" /> Coding Workspace
+                                </h3>
+                                <p className="text-sm text-gray-400">{activeLesson.exercise?.description}</p>
+                            </div>
+                            <div className="flex gap-2">
+                                <button 
+                                    onClick={handleRunCode}
+                                    disabled={isExecuting}
+                                    className={`btn btn-sm flex items-center gap-2 ${isExecuting ? 'btn-disabled' : 'btn-success text-white'}`}
+                                >
+                                    {isExecuting ? <span className="loading loading-spinner loading-xs"></span> : <VscRunAll />}
+                                    Run
+                                </button>
+                                <button onClick={() => markLessonComplete(activeLesson.id)} className="btn btn-sm btn-outline btn-primary">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
 
-  return (
-    <div className="mb-6 border rounded-lg overflow-hidden bg-gray-800 border-gray-700">
-      <div className="flex items-center justify-between p-4 bg-gray-900">
-        <input
-          type="text"
-          value={section.title}
-          onChange={(e) => onUpdate({ ...section, title: e.target.value })}
-          className="text-lg font-medium bg-transparent border-b border-transparent focus:border-blue-500 focus:outline-none text-white"
-          placeholder="Section Title"
-        />
-        <div className="flex space-x-2">
-          {!isAddingContent && (
-            <button
-              onClick={() => setIsAddingContent(true)}
-              className="p-1 text-blue-400 hover:text-blue-300"
-              title="Add Content"
-            >
-              <Plus size={20} />
-            </button>
-          )}
-          <button
-            onClick={onRemove}
-            className="p-1 text-red-400 hover:text-red-300"
-            title="Remove Section"
-          >
-            <X size={20} />
-          </button>
-        </div>
-      </div>
-      
-      <div className="p-4">
-        <input
-          type="text"
-          value={section.description || ''}
-          onChange={(e) => onUpdate({ ...section, description: e.target.value })}
-          className="w-full p-2 mb-4 text-sm bg-gray-800 border border-gray-700 rounded text-gray-200"
-          placeholder="Section description (optional)"
-        />
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-gray-700 h-[400px]">
+                            {/* Monaco Editor */}
+                            <div className="bg-[#1e1e1e]">
+                                <Editor
+                                    height="100%"
+                                    theme="vs-dark"
+                                    language="javascript"
+                                    value={userCode}
+                                    onChange={(val) => setUserCode(val)}
+                                    options={{ fontSize: 14, minimap: { enabled: false }, scrollBeyondLastLine: false }}
+                                />
+                            </div>
 
-        {isAddingContent && (
-          <div className="mb-4 p-4 border border-dashed border-gray-600 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
-              <h4 className="text-sm font-medium text-gray-300">Add New Content</h4>
-              <button
-                onClick={() => setIsAddingContent(false)}
-                className="text-gray-400 hover:text-gray-200"
-              >
-                <X size={18} />
-              </button>
+                            {/* Terminal Output */}
+                            <div className="bg-black p-4 font-mono text-sm overflow-auto">
+                                <div className="flex items-center gap-2 text-gray-500 mb-2 border-b border-gray-800 pb-1">
+                                    <FaTerminal size={12} /> OUTPUT
+                                </div>
+                                <pre className="text-green-400 whitespace-pre-wrap">
+                                    {executionOutput || "> Click 'Run' to execute code..."}
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                );
+            // ---------------------------
+
+            default:
+                return <div>Unsupported content type</div>;
+        }
+    };
+
+    const getLessonIcon = (type) => {
+        switch (type) {
+            case 'video': return <FaPlay className="text-blue-400" />;
+            case 'article': return <BsFileText className="text-green-400" />;
+            case 'pdf': return <FaFilePdf className="text-red-400" />;
+            case 'quiz': return <RiQuestionAnswerFill className="text-yellow-400" />;
+            case 'coding': return <FaCode className="text-purple-400" />;
+            default: return <FaBook className="text-gray-400" />;
+        }
+    };
+
+    if (loading) return <div className="min-h-screen bg-gray-900 flex items-center justify-center"><div className="loading loading-spinner loading-lg text-primary"></div></div>;
+
+    const progress = calculateProgress();
+    const totalLessons = course?.sections?.reduce((total, section) => total + (section.lessons?.length || 0), 0);
+
+    return (
+        <div className="min-h-screen bg-gray-900 text-gray-100">
+            {/* Keeping your existing JSX structure... */}
+            <header className="bg-gray-800 border-b border-gray-700">
+                <div className="container mx-auto px-4 py-4">
+                    <h1 className="text-2xl font-bold">{course?.title}</h1>
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ProgressBar current={completedLessons.size} max={totalLessons} label="Lessons Completed" color="cyan" />
+                        <ProgressBar current={progress} max={100} label="Course Progress" color="blue" />
+                    </div>
+                </div>
+            </header>
+
+            <div className="flex h-[calc(100vh-120px)]">
+                <aside className="w-80 bg-gray-800 border-r border-gray-700 overflow-y-auto">
+                    <div className="p-4">
+                        {course?.sections?.map((section, sIdx) => (
+                            <div key={sIdx} className="mb-4">
+                                <h3 className="text-gray-400 text-xs font-bold uppercase mb-2">{section.title}</h3>
+                                {section.lessons.map((lesson, lIdx) => (
+                                    <button 
+                                        key={lIdx} 
+                                        onClick={() => setActiveLesson(lesson)}
+                                        className={`w-full flex items-center gap-2 p-2 rounded-lg text-sm mb-1 ${activeLesson?.id === lesson.id ? 'bg-blue-900' : 'hover:bg-gray-700'}`}
+                                    >
+                                        {completedLessons.has(lesson.id) ? <FaCheckCircle className="text-green-500" /> : getLessonIcon(lesson.type)}
+                                        {lesson.title}
+                                    </button>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </aside>
+
+                <main className="flex-1 overflow-y-auto p-6">
+                    {activeLesson ? (
+                        <div className="max-w-5xl mx-auto">
+                            <h2 className="text-2xl font-bold mb-4">{activeLesson.title}</h2>
+                            <div className="bg-gray-800 rounded-xl p-4 shadow-2xl border border-gray-700">
+                                {renderLessonContent()}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-gray-500">Select a lesson to start</div>
+                    )}
+                </main>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <button
-                onClick={() => addContent('text')}
-                className="flex flex-col items-center justify-center p-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <FileText size={24} className="text-blue-400 mb-1" />
-                <span className="text-sm text-gray-200">Text</span>
-              </button>
-              <button
-                onClick={() => addContent('video')}
-                className="flex flex-col items-center justify-center p-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <Video size={24} className="text-red-400 mb-1" />
-                <span className="text-sm text-gray-200">Video</span>
-              </button>
-              <button
-                onClick={() => addContent('quiz')}
-                className="flex flex-col items-center justify-center p-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <ListChecks size={24} className="text-yellow-400 mb-1" />
-                <span className="text-sm text-gray-200">Quiz</span>
-              </button>
-              <button
-                onClick={() => addContent('code')}
-                className="flex flex-col items-center justify-center p-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <FileCode size={24} className="text-green-400 mb-1" />
-                <span className="text-sm text-gray-200">Code</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div className="space-y-4">
-          {section.contents?.map((content) => (
-            <ContentItem
-              key={content.id}
-              type={content.type}
-              content={content}
-              onUpdate={(updatedContent) => updateContent(content.id, updatedContent)}
-              onRemove={() => removeContent(content.id)}
-            />
-          ))}
         </div>
-      </div>
-    </div>
-  );
-};
-
-const CourseContentEditor = ({ content = [], onChange }) => {
-  const [sections, setSections] = useState(
-    content.length > 0 ? content : [{ id: Date.now(), title: 'Introduction', contents: [] }]
-  );
-
-  const updateSections = (updatedSections) => {
-    setSections(updatedSections);
-    onChange(updatedSections);
-  };
-
-  const addSection = () => {
-    updateSections([
-      ...sections,
-      {
-        id: Date.now(),
-        title: `Section ${sections.length + 1}`,
-        contents: []
-      }
-    ]);
-  };
-
-  const updateSection = (sectionId, updatedSection) => {
-    updateSections(
-      sections.map(section => 
-        section.id === sectionId ? updatedSection : section
-      )
     );
+<<<<<<< HEAD
   };
 
   const removeSection = (sectionId) => {
@@ -469,3 +600,8 @@ const CourseContentEditor = ({ content = [], onChange }) => {
 };
 
 export default CourseContentEditor;
+=======
+};
+
+export default CourseContent;
+>>>>>>> e73cd45 (finally Karim's Push)

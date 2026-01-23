@@ -72,34 +72,63 @@ const router = createBrowserRouter([
         element: <Achievements />,
       },
 
-      // --- Private Routes 
+      // --- Private Routes
       {
         path: "/add-course",
         element: <AddCourse />,
       },
       {
         path: "/edit-course/:id",
-        element: <PrivateRoute><EditCourse /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <EditCourse />
+          </PrivateRoute>
+        ),
       },
       {
+<<<<<<< HEAD
         path: "/my-courses",
         element: <PrivateRoute><MyEnrolledCourses /></PrivateRoute>,
+=======
+        path: "/my-enrolled-courses",
+        element: (
+          <PrivateRoute>
+            <MyEnrolledCourses />
+          </PrivateRoute>
+        ),
+>>>>>>> e73cd45 (finally Karim's Push)
       },
       {
         path: "dashboard",
-        element: <PrivateRoute><Dashboard /></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        ),
       },
       {
         path: "admin",
-        element: <AdminRoute><Admin /></AdminRoute>,
+        element: (
+          <AdminRoute>
+            <Admin />
+          </AdminRoute>
+        ),
       },
       {
         path: "instructor",
-        element: <InstructorRoute><Instructor /></InstructorRoute>,
+        element: (
+          <InstructorRoute>
+            <Instructor />
+          </InstructorRoute>
+        ),
       },
       {
         path: "student",
-        element: <StudentRoute><Student /></StudentRoute>,
+        element: (
+          <StudentRoute>
+            <Student />
+          </StudentRoute>
+        ),
       },
     ],
   },
