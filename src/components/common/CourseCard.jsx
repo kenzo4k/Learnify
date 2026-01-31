@@ -23,7 +23,7 @@ const CourseCard = ({ course }) => {
     };
 
     return (
-        <Link to={`/course/${course._id}`} className="block group w-full">
+        <Link to={`/course/${course._id || course.id}`} className="block group w-full">
             <div className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden h-full flex flex-col">
 
                 {/* Image Section */}
@@ -64,12 +64,12 @@ const CourseCard = ({ course }) => {
                     {/* Instructor */}
                     <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
                         <img 
-                            src={course.instructor?.photoURL || `https://ui-avatars.com/api/?name=${course.instructor?.name || 'A'}&background=random`} 
-                            alt={course.instructor?.name}
+                            src={course.instructor?.photoURL || `https://ui-avatars.com/api/?name=${typeof course.instructor === 'string' ? course.instructor : (course.instructor?.name || 'A')}&background=random`} 
+                            alt={typeof course.instructor === 'string' ? course.instructor : course.instructor?.name}
                             className="w-6 h-6 md:w-8 md:h-8 rounded-full object-cover"
                         />
                         <span className="text-xs md:text-sm text-gray-400 truncate">
-                            {course.instructor?.name || 'Anonymous Instructor'}
+                            {typeof course.instructor === 'string' ? course.instructor : (course.instructor?.name || 'Anonymous Instructor')}
                         </span>
                     </div>
                     

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Clock, Users, Star, Award, BookOpen, User, ArrowRight, Filter, Search, Grid, List } from 'lucide-react';
+import { RecommendedCourses } from '../../components/common';
 
 // LoadingSpinner component
 const LoadingSpinner = () => (
@@ -350,6 +351,15 @@ const AllCourses = () => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Recommended Courses Section */}
+      <div className="border-t border-gray-800 mt-8">
+        <RecommendedCourses 
+          scenario="python" 
+          title="Related To Your Interests" 
+          description="Based on what other students are learning in this category" 
+        />
       </div>
     </div>
   );
