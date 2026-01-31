@@ -1,4 +1,3 @@
-// src/routes/Router.jsx
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
@@ -7,6 +6,7 @@ import Login from "../features/auth/Login";
 import Register from "../features/auth/Register";
 import AddCourse from "../features/courses/AddCourse";
 import CourseDetails from "../features/courses/CourseDetails";
+import Payment from "../features/courses/Payment";
 import ManageCourses from "../features/courses/ManageCourses";
 import MyEnrolledCourses from "../features/courses/MyEnrolledCourses";
 import EditCourse from "../features/courses/EditCourse";
@@ -54,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/course/:id",
         element: <CourseDetails />,
+      },
+      {
+        path: "/course/:id/payment",
+        element: <Payment />,
       },
       {
         path: "/course/:id/learn",
