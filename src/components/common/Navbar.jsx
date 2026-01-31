@@ -233,6 +233,13 @@ const Navbar = () => {
                           </span>
                         </div>
 
+                        <Link
+                          to="/settings"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200"
+                        >
+                          <span className="text-blue-300">⚙️</span> Settings
+                        </Link>
+
                         {/* Student Menu */}
                         {user?.role === 'student' && (
                           <>

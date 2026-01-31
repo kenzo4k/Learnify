@@ -23,6 +23,7 @@ import PrivateRoute from "./PrivateRoute";
 import CourseAssessment from "../features/assessment/CourseAssessment";
 import CourseContent from "../features/courses/CourseContent";
 import Achievements from "../pages/Achievements";
+import Settings from "../pages/Settings";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: "/achievements",
         element: <Achievements />,
+      },
+      {
+        path: "/settings",
+        element: <PrivateRoute><Settings /></PrivateRoute>,
       },
 
       // --- Private Routes 
