@@ -16,7 +16,6 @@ const CourseDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEnrolled, setIsEnrolled] = useState(false);
-    const [enrollLoading, setEnrollLoading] = useState(false);
     const [userEnrollmentCount, setUserEnrollmentCount] = useState(0);
 
     // Data fetching Dynamic Title useEffect
@@ -62,60 +61,6 @@ const CourseDetails = () => {
 
         fetchCourseAndStatus();
     }, [id, user]);
-
-
-    const handleEnrollmentToggle = async () => {
-        if (!user) {
-            toast.error("Please login first.");
-            return navigate('/login', { state: { from: location }, replace: true });
-        }
-
-        setEnrollLoading(true);
-
-        try {
-            // Get current enrollments from localStorage
-            const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
-            const userEnrollments = JSON.parse(localStorage.getItem('userEnrollments') || '[]');
-
-            if (isEnrolled) {
-                // Un-enroll
-                const updatedEnrolledCourses = enrolledCourses.filter(courseId => courseId !== id);
-                const updatedUserEnrollments = userEnrollments.filter(enrollment => enrollment.courseId !== id);
-                
-                localStorage.setItem('enrolledCourses', JSON.stringify(updatedEnrolledCourses));
-                localStorage.setItem('userEnrollments', JSON.stringify(updatedUserEnrollments));
-                
-                toast.success("Successfully un-enrolled!");
-                setIsEnrolled(false);
-                setUserEnrollmentCount(updatedUserEnrollments.length);
-                setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount - 1 }));
-            } else {
-                // Enroll
-                if (!enrolledCourses.includes(id)) {
-                    enrolledCourses.push(id);
-                }
-                
-                const newEnrollment = {
-                    courseId: id,
-                    enrolledAt: new Date().toISOString(),
-                    userEmail: user.email
-                };
-                userEnrollments.push(newEnrollment);
-                
-                localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
-                localStorage.setItem('userEnrollments', JSON.stringify(userEnrollments));
-                
-                toast.success("Successfully enrolled!");
-                setIsEnrolled(true);
-                setUserEnrollmentCount(userEnrollments.length);
-                setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount + 1 }));
-            }
-        } catch (err) {
-            toast.error(err.message || 'Enrollment operation failed.');
-        }
-
-        setEnrollLoading(false);
-    };
 
     if (loading || authLoading) {
         return (
@@ -362,13 +307,11 @@ const CourseDetails = () => {
                                     </button>
                                 ) : (
                                     <button
-                                        onClick={handleEnrollmentToggle}
+                                        onClick={() => navigate(`/course/${id}/payment`)}
                                         className={`btn btn-wide w-full border-none ${isEnrolled ? 'bg-orange-600 hover:bg-orange-700 text-white' : (isEnrollmentLimitReached ? 'btn-disabled' : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white')}`}
-                                        disabled={enrollLoading || isEnrollmentLimitReached}
+                                        disabled={isEnrollmentLimitReached}
                                     >
-                                        {enrollLoading ? (
-                                            <span className="loading loading-spinner loading-sm"></span>
-                                        ) : isEnrolled ? (
+                                        {isEnrolled ? (
                                             '✓ Enrolled (Click to Un-enroll)'
                                         ) : isEnrollmentLimitReached ? (
                                             'Enrollment Limit Reached'
