@@ -1,7 +1,6 @@
 // src/pages/Home/PopularCourses.jsx
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CourseCard from '../../components/common/CourseCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
@@ -11,20 +10,37 @@ const PopularCourses = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://course-management-system-server-woad.vercel.app/api/courses/popular')
-            .then(res => {
-                // Filter out courses that were "deleted" in this session
-                const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
-                const filteredData = res.data.filter(course => !deletedCourseIds.includes(course._id));
+        try {
+            // Import the local JSON file
+            import('../../../public/courses.json')
+                .then(data => {
+                    // Filter out courses that were "deleted" in this session
+                    const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
+                    const filteredData = data.default.filter(course => !deletedCourseIds.includes(course._id));
+                    
+                    // Sort by rating and enrollment count to get popular courses
+                    const sortedData = filteredData.sort((a, b) => {
+                        // First by rating (descending)
+                        if ((b.rating || 0) !== (a.rating || 0)) {
+                            return (b.rating || 0) - (a.rating || 0);
+                        }
+                        // Then by enrollment count (descending)
+                        return b.enrollmentCount - a.enrollmentCount;
+                    }).slice(0, 6); // Show top 6 popular courses
 
-                setCourses(filteredData);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error fetching popular courses:", err);
-                setError("Could not load popular courses. Please try again later.");
-                setLoading(false);
-            });
+                    setCourses(sortedData);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error("Error loading courses data:", err);
+                    setError("Could not load popular courses. Please try again later.");
+                    setLoading(false);
+                });
+        } catch (err) {
+            console.error("Error loading courses data:", err);
+            setError("Could not load popular courses. Please try again later.");
+            setLoading(false);
+        }
     }, []);
 
     if (loading) return (

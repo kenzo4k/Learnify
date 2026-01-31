@@ -1,7 +1,6 @@
 // src/pages/Home/LatestCourses.jsx
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CourseCard from '../../components/common/CourseCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
@@ -11,20 +10,32 @@ const LatestCourses = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://course-management-system-server-woad.vercel.app/api/courses/latest')
-            .then(res => {
-                // Filter out courses that were "deleted" in this session
-                const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
-                const filteredData = res.data.filter(course => !deletedCourseIds.includes(course._id));
+        try {
+            // Import the local JSON file
+            import('../../../public/courses.json')
+                .then(data => {
+                    // Filter out courses that were "deleted" in this session
+                    const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
+                    const filteredData = data.default.filter(course => !deletedCourseIds.includes(course._id));
+                    
+                    // Sort by createdAt to get latest courses (newest first)
+                    const sortedData = filteredData.sort((a, b) => 
+                        new Date(b.createdAt) - new Date(a.createdAt)
+                    ).slice(0, 8); // Show top 8 latest courses
 
-                setCourses(filteredData);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error fetching latest courses:", err);
-                setError("Could not load the latest courses. Please try again later.");
-                setLoading(false);
-            });
+                    setCourses(sortedData);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error("Error loading courses data:", err);
+                    setError("Could not load the latest courses. Please try again later.");
+                    setLoading(false);
+                });
+        } catch (err) {
+            console.error("Error loading courses data:", err);
+            setError("Could not load the latest courses. Please try again later.");
+            setLoading(false);
+        }
     }, []);
 
 

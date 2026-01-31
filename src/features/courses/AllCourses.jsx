@@ -30,24 +30,17 @@ const AllCourses = () => {
       setLoading(true);
       setError(null);
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('https://course-management-system-server-woad.vercel.app/api/courses', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Could not fetch courses. Server might be down.');
-        }
-        const data = await response.json();
+        // Import the local JSON file
+        const data = await import('../../../public/courses.json');
 
         // Filter out courses that were "deleted" in this session
         const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
-        const filteredData = data.filter(course => !deletedCourseIds.includes(course._id));
+        const filteredData = data.default.filter(course => !deletedCourseIds.includes(course._id));
 
         setCourses(filteredData);
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        console.error('Error loading courses data:', error);
+        setError('Could not load courses data.');
       } finally {
         setLoading(false);
       }
