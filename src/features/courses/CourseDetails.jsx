@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import toast from 'react-hot-toast';
 import coursesData from '../../../public/courses.json';
+import { RecommendedCourses } from '../../components/common';
 
 const CourseDetails = () => {
     // Hooks
@@ -363,6 +364,15 @@ const CourseDetails = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Similar Courses Section */}
+            <div className="border-t border-gray-800 pt-8">
+                <RecommendedCourses 
+                    scenario={course?.category?.toLowerCase().includes('python') || course?.category?.toLowerCase().includes('programming') ? 'python' : 'web-dev'}
+                    title="Similar Courses"
+                    description="Explore more courses in this category and level"
+                />
             </div>
         </div>
     );

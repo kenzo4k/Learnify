@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowRight } from 'react-icons/fa';
 import { FiBook, FiAward, FiBarChart2 } from 'react-icons/fi';
-import CourseCard from '../../components/common/CourseCard';
-import recommendationService from '../../services/recommendationService';
+import { CourseCard, RecommendedCourses } from '../../components/common';
 
 const Dashboard = () => {
     const { user, loading: authLoading } = useContext(AuthContext);
@@ -96,57 +95,12 @@ const Dashboard = () => {
 
                 {/* Personalized Recommendations Section - Only for logged-in users */}
                 {user && (
-                    <div className="mb-8">
-                        <div className="flex justify-between items-center mb-6">
-                            <div>
-                                <h2 className="text-2xl font-bold text-cyan-400">Recommended For You</h2>
-                                <p className="text-gray-400 mt-1">Based on your learning journey</p>
-                            </div>
-                            <Link to="/courses" className="text-cyan-400 hover:text-cyan-300 flex items-center text-sm">
-                                View all <FaArrowRight className="ml-1" />
-                            </Link>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {recommendationService.getSampleRecommendations('mixed').recommendations.slice(0, 4).map(({ course, reason }) => (
-                                <Link 
-                                    key={course.id} 
-                                    to={`/course/${course.id}`}
-                                    className="bg-gray-800 rounded-lg border border-gray-700 hover:border-cyan-600 transition overflow-hidden group"
-                                >
-                                    <div className="relative h-40 overflow-hidden">
-                                        <img
-                                            src={course.image}
-                                            alt={course.title}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                        />
-                                        <div className="absolute top-3 right-3">
-                                            <span className="bg-cyan-600 text-white px-2 py-1 text-xs font-semibold rounded-full">
-                                                {course.level}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="p-4">
-                                        <span className="text-xs font-medium text-purple-400 uppercase tracking-wide">
-                                            {course.category}
-                                        </span>
-                                        <h3 className="text-lg font-bold text-white mt-1 mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors">
-                                            {course.title}
-                                        </h3>
-                                        <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
-                                            <span className="flex items-center">
-                                                ★ {course.rating}
-                                            </span>
-                                            <span>{course.enrollmentCount} students</span>
-                                        </div>
-                                        <p className="text-xs text-cyan-400 font-medium">
-                                            {reason}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
+                    <RecommendedCourses 
+                        scenario="mixed"
+                        title="Personalized Recommendations"
+                        description="Based on your learning journey and interests"
+                        compact={true}
+                    />
                 )}
 
                 {/* Main Content Area */}

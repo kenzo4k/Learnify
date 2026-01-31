@@ -1,46 +1,56 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import recommendationService from '../../services/recommendationService';
+import CourseCard from './CourseCard';
 
-const RecommendedCourses = ({ scenario = 'web-dev', maxCourses = 4 }) => {
-  const { recommendations } = recommendationService.getSampleRecommendations(scenario);
+const RecommendedCourses = ({ 
+  scenario = 'web-dev', 
+  maxCourses = 4, 
+  title = "Recommended For You",
+  description = "Based on your learning history and interests",
+  customCourses = null,
+  compact = false
+}) => {
+  const recommendations = customCourses || recommendationService.getSampleRecommendations(scenario).recommendations;
 
-  if (!recommendations.length) return null;
+  if (!recommendations || !recommendations.length) return null;
+
+  const content = (
+    <>
+      <div className="mb-8">
+        <h2 className={`text-2xl font-bold mb-2 ${compact ? 'text-cyan-400' : 'text-white'}`}>{title}</h2>
+        {description && <p className="text-gray-400">{description}</p>}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {recommendations.slice(0, maxCourses).map((item) => {
+          // Support both {course, reason} and just course
+          const course = item.course || item;
+          const reason = item.reason;
+
+          return (
+            <div key={course.id || course._id} className="relative group">
+              <CourseCard course={course} />
+              {reason && (
+                <div className="mt-2 text-xs text-cyan-400 font-medium px-1">
+                  {reason}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+
+  if (compact) {
+    return <div className="mb-12">{content}</div>;
+  }
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 mt-8">
-      <h2 className="text-lg font-semibold mb-4 text-cyan-400">Recommended For You</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {recommendations.slice(0, maxCourses).map(({ course, reason }) => (
-          <Link 
-            key={course.id} 
-            to={`/course/${course.id}`}
-            className="bg-gray-700 rounded-lg p-4 flex flex-col hover:bg-gray-600 transition-colors border border-gray-600 hover:border-cyan-500"
-          >
-            <div className="flex-shrink-0 mb-3">
-              <img 
-                src={course.image} 
-                alt={course.title}
-                className="w-full h-32 object-cover rounded"
-              />
-            </div>
-            <span className="text-xs font-medium text-purple-400 uppercase tracking-wide mb-1">
-              {course.category}
-            </span>
-            <h3 className="font-semibold text-white mb-2 line-clamp-2">{course.title}</h3>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-blue-900/50 text-blue-300 text-xs rounded-full">
-                {course.level}
-              </span>
-              <span className="text-xs text-gray-400">{course.rating} ★</span>
-            </div>
-            <p className="text-xs text-cyan-300 mt-auto">
-              {reason}
-            </p>
-          </Link>
-        ))}
+    <section className="py-12">
+      <div className="container mx-auto px-4">
+        {content}
       </div>
-    </div>
+    </section>
   );
 };
 

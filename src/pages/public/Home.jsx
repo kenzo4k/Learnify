@@ -8,6 +8,7 @@ import TopInstructors from './TopInstructors';
 import Testimonials from './Testimonials';
 import Categories from './Categories';
 import Newsletter from './Newsletter';
+import { RecommendedCourses } from '../../components/common';
 
 
 const Home = () => {
@@ -37,6 +38,15 @@ const Home = () => {
 
       {/* 4. Popular Courses Section */}
       <PopularCourses />
+
+      {/* Recommended Courses Section */}
+      <div className="bg-gray-950">
+        <RecommendedCourses 
+          scenario="mixed" 
+          title="Recommended For You" 
+          description="Personalized course suggestions based on current trends and your interests" 
+        />
+      </div>
 
       {/* 5. Categories Section */}
       <Categories />
