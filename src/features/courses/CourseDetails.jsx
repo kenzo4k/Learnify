@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import toast from 'react-hot-toast';
+import coursesData from '/public/courses.json';
 
 const CourseDetails = () => {
     // Hooks
@@ -25,31 +26,24 @@ const CourseDetails = () => {
             document.title = "Course Details | Stride";
 
             try {
-                const courseResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/courses/${id}`);
-                if (!courseResponse.ok) throw new Error('Failed to fetch course details.');
+                // Load course from local JSON data
+                const courseData = coursesData.find(c => c._id === id);
+                
+                if (!courseData) {
+                    throw new Error('Course not found.');
+                }
 
-                const courseData = await courseResponse.json();
                 setCourse(courseData);
                 document.title = `${courseData.title} | Stride`;
 
-                const token = localStorage.getItem('access-token');
-                if (user && token) {
-                    const statusResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/enrollment-status?courseId=${id}`, {
-                        headers: { 'authorization': `Bearer ${token}` }
-                    });
-                    if (statusResponse.ok) {
-                        const statusData = await statusResponse.json();
-                        setIsEnrolled(statusData.enrolled);
-                    }
-
-                    const countResponse = await fetch(`https://course-management-system-server-woad.vercel.app/api/my-enrollment-count`, {
-                        headers: { 'authorization': `Bearer ${token}` }
-                    });
-                    if (countResponse.ok) {
-                        const countData = await countResponse.json();
-                        setUserEnrollmentCount(countData.count);
-                    }
-                }
+                // Handle enrollment status from localStorage
+                const enrollmentsKey = `enrollments_${user?.email || 'guest'}`;
+                const enrollments = JSON.parse(localStorage.getItem(enrollmentsKey) || '[]');
+                const enrolled = enrollments.includes(id);
+                setIsEnrolled(enrolled);
+                
+                // Track user enrollment count
+                setUserEnrollmentCount(enrollments.length);
             } catch (err) {
                 setError(err.message);
                 toast.error("Could not load course data.");
@@ -71,35 +65,33 @@ const CourseDetails = () => {
         setEnrollLoading(true);
 
         try {
-            const token = localStorage.getItem('access-token');
-            const response = await fetch('https://course-management-system-server-woad.vercel.app/api/enrollments/toggle', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ courseId: id })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Enrollment operation failed.');
-            }
-
-            const result = await response.json();
-
-            if (result.enrolled) {
-                toast.success("Successfully enrolled!");
-                setIsEnrolled(true);
-                setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount + 1 }));
-            } else {
+            const enrollmentsKey = `enrollments_${user.email}`;
+            const enrollments = JSON.parse(localStorage.getItem(enrollmentsKey) || '[]');
+            
+            const isCurrentlyEnrolled = enrollments.includes(id);
+            
+            if (isCurrentlyEnrolled) {
+                // Un-enroll: remove from enrollments
+                const updatedEnrollments = enrollments.filter(courseId => courseId !== id);
+                localStorage.setItem(enrollmentsKey, JSON.stringify(updatedEnrollments));
+                
                 toast.success("Successfully un-enrolled!");
                 setIsEnrolled(false);
-                setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount - 1 }));
+                setUserEnrollmentCount(updatedEnrollments.length);
+                setCourse(prev => ({ ...prev, enrollmentCount: Math.max(0, prev.enrollmentCount - 1) }));
+            } else {
+                // Enroll: add to enrollments
+                const updatedEnrollments = [...enrollments, id];
+                localStorage.setItem(enrollmentsKey, JSON.stringify(updatedEnrollments));
+                
+                toast.success("Successfully enrolled!");
+                setIsEnrolled(true);
+                setUserEnrollmentCount(updatedEnrollments.length);
+                setCourse(prev => ({ ...prev, enrollmentCount: prev.enrollmentCount + 1 }));
             }
 
         } catch (err) {
-            toast.error(err.message);
+            toast.error(err.message || 'Enrollment operation failed.');
         }
 
         setEnrollLoading(false);
