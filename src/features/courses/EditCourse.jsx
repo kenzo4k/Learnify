@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import CourseContentEditor from './CourseContentEditor';
-import { FileText, Video, List, Code, BookOpen, Settings } from 'lucide-react';
+import { FileText, Video, List, BookOpen, Settings } from 'lucide-react';
+import coursesData from '../../../public/courses.json';
 
 const EditCourse = () => {
     const { id } = useParams();
@@ -41,39 +42,43 @@ const EditCourse = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCourse = async () => {
-            try {
-                const token = localStorage.getItem('access-token');
-                const response = await fetch(`https://course-management-system-server-woad.vercel.app/api/courses/${id}`, {
-                    headers: { 'authorization': `Bearer ${token}` }
-                });
-                const data = await response.json();
-                
-                setCourseData(prev => ({
-                    ...prev,
-                    ...data,
-                    prerequisites: data.prerequisites?.length > 0 ? data.prerequisites : [''],
-                    learning_outcomes: data.learning_outcomes?.length > 0 ? data.learning_outcomes : [''],
-                    content: data.content?.length > 0 ? data.content : [{
-                        id: Date.now(),
-                        title: 'Introduction',
-                        description: '',
-                        contents: []
-                    }],
-                    instructor: {
-                        ...prev.instructor,
-                        ...data.instructor
-                    },
-                    tags: data.tags?.length > 0 ? data.tags : [''],
-                    status: data.status || 'draft'
-                }));
-            } catch (error) {
-                toast.error("Failed to load course data.");
-            } finally {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const data = coursesData.find(course => course._id === id);
+
+            if (!data) {
+                toast.error('Course not found.');
                 setLoading(false);
+                return;
             }
-        };
-        if (id) fetchCourse();
+
+            setCourseData(prev => ({
+                ...prev,
+                ...data,
+                prerequisites: data.prerequisites?.length > 0 ? data.prerequisites : [''],
+                learning_outcomes: data.learning_outcomes?.length > 0 ? data.learning_outcomes : [''],
+                content: data.content?.length > 0 ? data.content : [{
+                    id: Date.now(),
+                    title: 'Introduction',
+                    description: '',
+                    contents: []
+                }],
+                instructor: {
+                    ...prev.instructor,
+                    ...data.instructor
+                },
+                tags: data.tags?.length > 0 ? data.tags : [''],
+                status: data.status || 'draft'
+            }));
+        } catch {
+            toast.error('Failed to load course data.');
+        } finally {
+            setLoading(false);
+        }
     }, [id]);
 
     const handleInputChange = (e) => {
@@ -84,36 +89,6 @@ const EditCourse = () => {
         }));
     };
 
-    const handleInstructorChange = (e) => {
-        const { name, value } = e.target;
-        setCourseData(prev => ({
-            ...prev,
-            instructor: { ...prev.instructor, [name]: value }
-        }));
-    };
-
-    const handleArrayChange = (index, value, arrayName) => {
-        setCourseData(prev => ({
-            ...prev,
-            [arrayName]: prev[arrayName].map((item, i) => i === index ? value : item)
-        }));
-    };
-
-    const addArrayItem = (arrayName) => {
-        setCourseData(prev => ({
-            ...prev,
-            [arrayName]: [...prev[arrayName], '']
-        }));
-    };
-
-    const removeArrayItem = (index, arrayName) => {
-        if (courseData[arrayName].length > 1) {
-            setCourseData(prev => ({
-                ...prev,
-                [arrayName]: prev[arrayName].filter((_, i) => i !== index)
-            }));
-        }
-    };
 
     const handleContentChange = (updatedContent) => {
         setCourseData(prev => ({
@@ -181,6 +156,29 @@ const EditCourse = () => {
                                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                                     placeholder="Category"
                                     required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Duration</label>
+                                <input
+                                    type="text"
+                                    name="duration"
+                                    value={courseData.duration}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    placeholder="e.g., 8 weeks"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Seats</label>
+                                <input
+                                    type="number"
+                                    name="seats"
+                                    value={courseData.seats}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    placeholder="Available seats"
+                                    min="0"
                                 />
                             </div>
                         </div>
@@ -289,6 +287,32 @@ const EditCourse = () => {
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                                     placeholder="e.g., English"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Price ($)</label>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={courseData.price}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    placeholder="e.g., 199.99"
+                                    step="0.01"
+                                    min="0"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Discount Price ($)</label>
+                                <input
+                                    type="number"
+                                    name="discount_price"
+                                    value={courseData.discount_price}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                                    placeholder="e.g., 149.99"
+                                    step="0.01"
+                                    min="0"
                                 />
                             </div>
                         </div>
