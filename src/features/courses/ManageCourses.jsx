@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import toast from 'react-hot-toast';
 import CourseCard from '../../components/common/CourseCard';
+import coursesData from '../../../public/courses.json';
 
 const ManageCourses = () => {
-    const { user } = useContext(AuthContext);
+    const { user: _user } = useContext(AuthContext);
     const [courses, setCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [courseToDelete, setCourseToDelete] = useState(null);
@@ -13,33 +14,24 @@ const ManageCourses = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
 
     useEffect(() => {
-        fetchUserCourses();
+        loadCourses();
     }, []);
 
-    const fetchUserCourses = async () => {
+    const loadCourses = () => {
         const toastId = toast.loading('Loading courses...');
 
         try {
-            // Use the public courses endpoint instead of the authenticated one
-            const response = await fetch('https://course-management-system-server-woad.vercel.app/api/courses');
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch courses');
-            }
-
-            const data = await response.json();
-
             // Filter out courses that were "deleted" in this session
             const deletedCourseIds = JSON.parse(localStorage.getItem('deletedCourses') || '[]');
-            const filteredData = data.filter(course => !deletedCourseIds.includes(course._id));
+            const filteredData = coursesData.filter(course => !deletedCourseIds.includes(course._id));
 
             setCourses(filteredData);
+            setIsLoading(false);
 
             toast.success(`${filteredData.length} courses loaded successfully!`, { id: toastId });
         } catch (error) {
-            console.error('Error fetching courses:', error);
+            console.error('Error loading courses:', error);
             toast.error('Failed to load courses. Please try again.', { id: toastId });
-        } finally {
             setIsLoading(false);
         }
     };
@@ -86,9 +78,6 @@ const ManageCourses = () => {
             deletedCourseIds.push(courseToDelete._id);
             localStorage.setItem('deletedCourses', JSON.stringify(deletedCourseIds));
 
-            // Simulate successful response
-            const data = { deleted: true, message: 'Course deleted successfully' };
-
             // Only update UI if backend deletion was successful
             setCourses(prevCourses =>
                 prevCourses.filter(course => course._id !== courseToDelete._id)
@@ -134,15 +123,6 @@ const ManageCourses = () => {
             'archived': 'badge-error'
         };
         return `badge ${statusColors[status] || 'badge-neutral'} badge-lg`;
-    };
-
-    const getLevelColor = (level) => {
-        const levelColors = {
-            'Beginner': 'text-success',
-            'Intermediate': 'text-warning',
-            'Advanced': 'text-error'
-        };
-        return levelColors[level] || 'text-info';
     };
 
     if (isLoading) {
