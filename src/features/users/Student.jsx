@@ -16,7 +16,7 @@ import {
   Flame
 } from 'lucide-react';
 
-import { StatsGrid, ProgressBar, Leaderboard, Badges } from '../../components/common';
+import { StatsGrid, ProgressBar, Badges } from '../../components/common';
 import ProgressCard from '../../components/common/ProgressCard';
 import MyEnrolledCourses from '../courses/MyEnrolledCourses';
 
